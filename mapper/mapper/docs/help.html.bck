@@ -1,0 +1,2776 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.2  (Linux)">
+	<META NAME="CREATED" CONTENT="0;0">
+	<META NAME="CHANGEDBY" CONTENT="Scott Cook">
+	<META NAME="CHANGED" CONTENT="20110324;9155400">
+	<META NAME="CHANGEDBY" CONTENT="Scott Cook">
+	<META NAME="CHANGEDBY" CONTENT="Scott Cook">
+	<META NAME="CHANGEDBY" CONTENT="Scott Cook">
+	<META NAME="CHANGEDBY" CONTENT="Scott Cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<META NAME="CHANGEDBY" CONTENT="scot cook">
+	<STYLE TYPE="text/css">
+	<!--
+		P { color: #00143c; font-family: "times" }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-US" TEXT="#00143c" BGCOLOR="#cac8c8" DIR="LTR">
+<P><A NAME="content"></A><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P ALIGN=CENTER><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=7 STYLE="font-size: 32pt"><B>Mapper3</B></FONT></FONT></FONT></P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=CENTER><SPAN CLASS="sd-abs-pos" STYLE="position: absolute; width: 66px"><IMG SRC="mapper.png" NAME="graphics1" WIDTH=66 HEIGHT=67 BORDER=0></SPAN><BR><BR>
+</P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=CENTER><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4 STYLE="font-size: 16pt"><B>Step-by-Step
+Manual</B></FONT></FONT></P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=CENTER><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><B>Scott
+Cook</B></FONT></FONT></P>
+<P ALIGN=CENTER><FONT FACE="DejaVu Sans, sans-serif"><B>April 29,
+2010</B></FONT></P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=CENTER><IMG SRC="tricon_logo.png" NAME="graphics21" ALIGN=BOTTOM WIDTH=232 HEIGHT=63 BORDER=0></P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=CENTER><A HREF="#contents"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><B>go
+to contents</B></FONT></FONT></A></P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=CENTER><IMG SRC="blurulr6.gif" NAME="graphics2" ALIGN=LEFT WIDTH=640 HEIGHT=5 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=CENTER><A NAME="contents"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=6><U><B>Contents</B></U></FONT></FONT></FONT></P>
+<P ALIGN=LEFT><A HREF="#introduction"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>Introduction:</B></U></FONT></FONT></FONT></A></P>
+<P ALIGN=LEFT><A HREF="#history"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>History:</B></U></FONT></FONT></FONT></A></P>
+<P ALIGN=LEFT><A HREF="#step1"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=5><U><B>Step
+1. Read in text files.</B></U></FONT></FONT></FONT></A> 
+</P>
+<UL>
+	<LI><P ALIGN=LEFT><A HREF="#1.a"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>1.A
+	Add Receiver Coordinate File:</B></U></FONT></FONT></FONT></A></P>
+	<LI><P ALIGN=LEFT><A HREF="#1.b"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>1.B
+	Add Shot Point Coordinate File:</B></U></FONT></FONT></FONT></A></P>
+	<LI><P ALIGN=LEFT><A HREF="#1.c"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>1.C
+	Add Relation File:</B></U></FONT></FONT></FONT></A></P>
+	<LI><P ALIGN=LEFT><A HREF="#1.d"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>1.D
+	Check that Data Loaded Correctly:</B></U></FONT></FONT></FONT></A></P>
+	<LI><P ALIGN=LEFT><A HREF="#1.e"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>1.E
+	Check Elevations:</B></U></FONT></FONT></FONT></A></P>
+	<LI><P ALIGN=LEFT><A HREF="#1.f"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>1.F
+	Save Project:</B></U></FONT></FONT></FONT></A></P>
+</UL>
+<P ALIGN=LEFT><A HREF="#step2"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=5><U><B>Step
+2. Run Geometry QC Analysis.</B></U></FONT></FONT></FONT></A></P>
+<UL>
+	<LI><P ALIGN=LEFT><A HREF="#2.a"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.A
+	Fix Relation Spreadsheet:</B></U></FONT></FONT></FONT></A></P>
+	<UL>
+		<LI><P ALIGN=LEFT><A HREF="#2a1"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.A.1
+		Fix DuplicateShotPoint Records:</B></U></FONT></FONT></FONT></A></P>
+		<LI><P ALIGN=LEFT><A HREF="#2a2"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.A.2
+		Fix DuplicateShot Records:</B></U></FONT></FONT></FONT></A></P>
+	</UL>
+	<LI><P ALIGN=LEFT><A HREF="#2.b"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.B
+	Run QC Analysis Again (Second Pass):</B></U></FONT></FONT></FONT></A></P>
+	<LI><P ALIGN=LEFT><A HREF="#2.c"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.C
+	Fix Receivers:</B></U></FONT></FONT></FONT></A></P>
+	<UL>
+		<LI><P ALIGN=LEFT><A HREF="#2c1"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.C.1
+		Check Receiver Distance:</B></U></FONT></FONT></FONT></A></P>
+		<LI><P ALIGN=LEFT><A HREF="#2c2"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.C.2
+		Check Duplicate Receivers:</B></U></FONT></FONT></FONT></A></P>
+		<LI><P ALIGN=LEFT><A HREF="#2c3"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.C.3
+		Check Killed Receivers:</B></U></FONT></FONT></FONT></A></P>
+		<LI><P ALIGN=LEFT><A HREF="#2c4"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.C.4
+		Check UnSurveyed Receivers:</B></U></FONT></FONT></FONT></A></P>
+		<LI><P ALIGN=LEFT><A HREF="#2c5"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.C.5
+		Check UnUsed Receivers:</B></U></FONT></FONT></FONT></A></P>
+		<LI><P ALIGN=LEFT><A HREF="#2c6"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.C.6
+		Check Other Columns:</B></U></FONT></FONT></FONT></A></P>
+	</UL>
+	<LI><P ALIGN=LEFT><A HREF="#2.d"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.D
+	Fix Shot Points:</B></U></FONT></FONT></FONT></A></P>
+	<UL>
+		<LI><P ALIGN=LEFT><A HREF="#2d1"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.D.1
+		Check Shot Point Distance:</B></U></FONT></FONT></FONT></A></P>
+		<LI><P ALIGN=LEFT><A HREF="#2d2"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.D.2
+		Check Duplicate Shot Points:</B></U></FONT></FONT></FONT></A></P>
+		<LI><P ALIGN=LEFT><A HREF="#2d3"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.D.3
+		Check Killed Shot Points:</B></U></FONT></FONT></FONT></A></P>
+		<LI><P ALIGN=LEFT><A HREF="#2d4"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.D.4
+		Check UnSurveyed Shot Points:</B></U></FONT></FONT></FONT></A></P>
+		<LI><P ALIGN=LEFT><A HREF="#2d5"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.D.5
+		Check UnUsed Shot Points:</B></U></FONT></FONT></FONT></A></P>
+		<LI><P ALIGN=LEFT><A HREF="#2d6"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.D.6
+		Check Other Columns:</B></U></FONT></FONT></FONT></A></P>
+	</UL>
+	<LI><P ALIGN=LEFT><A HREF="#2.e"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.E
+	Run QC Analysis (Third Pass):</B></U></FONT></FONT></FONT></A></P>
+	<LI><P ALIGN=LEFT><A HREF="#2.f"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.F
+	Save Project:</B></U></FONT></FONT></FONT></A></P>
+</UL>
+<P ALIGN=LEFT><A HREF="#step3"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=5><U><B>Step
+3. Calculate the Area of the 3D.</B></U></FONT></FONT></FONT></A></P>
+<UL>
+	<LI><P ALIGN=LEFT><A HREF="#3.a"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>3.A
+	Calculate Scatter:</B></U></FONT></FONT></FONT></A></P>
+	<LI><P ALIGN=LEFT><A HREF="#3.b"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>3.B
+	Draw Polygon Around Survey:</B></U></FONT></FONT></FONT></A></P>
+	<LI><P ALIGN=LEFT><A HREF="#3.c"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>3.C
+	Adjust Zoom:</B></U></FONT></FONT></FONT></A></P>
+	<LI><P ALIGN=LEFT><A HREF="#3.d"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>3.D
+	Adjust Units:</B></U></FONT></FONT></FONT></A></P>
+	<LI><P ALIGN=LEFT><A HREF="#3.e"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>3.E
+	Turn Off Polygon/Scatter:</B></U></FONT></FONT></FONT></A></P>
+</UL>
+<P ALIGN=LEFT><A HREF="#step4"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=5><U><B>Step
+4. Output Geometry.</B></U></FONT></FONT></FONT></A></P>
+<UL>
+	<LI><P ALIGN=LEFT><A HREF="#4.a"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>4.A
+	SPS Output:</B></U></FONT></FONT></FONT></A></P>
+	<LI><P ALIGN=LEFT><A HREF="#4.b"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>4.B
+	Focus Output:</B></U></FONT></FONT></FONT></A></P>
+	<LI><P ALIGN=LEFT><A HREF="#4.c"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>4.C
+	GeoBuild Output:</B></U></FONT></FONT></FONT></A></P>
+</UL>
+<P ALIGN=LEFT><A HREF="#a"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=5><U><B>Appendix
+A. Button Overview.</B></U></FONT></FONT></FONT></A></P>
+<UL>
+	<LI><P ALIGN=LEFT><A HREF="#a1"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>A.1
+	Map buttons</B></U></FONT></FONT></FONT></A></P>
+	<UL>
+		<LI><P ALIGN=LEFT><A HREF="#a1a"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>A.1.a
+		Mouse-Mode Buttons:</B></U></FONT></FONT></FONT></A></P>
+		<LI><P ALIGN=LEFT><A HREF="#a1b"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>A.1.b
+		View-Mode Buttons:</B></U></FONT></FONT></FONT></A></P>
+		<LI><P ALIGN=LEFT><A HREF="#a1c"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>A.1.c
+		Mouse Buttons (left, middle, right):</B></U></FONT></FONT></FONT></A></P>
+	</UL>
+	<LI><P ALIGN=LEFT><A HREF="#a2"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>A.2
+	Spreadsheet Buttons:</B></U></FONT></FONT></FONT></A></P>
+	<UL>
+		<LI><P ALIGN=LEFT><A HREF="#a2a"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>A.2.a
+		Column Buttons:</B></U></FONT></FONT></FONT></A></P>
+		<LI><P ALIGN=LEFT><A HREF="#a2b"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>A.2.b
+		Row Buttons:</B></U></FONT></FONT></FONT></A></P>
+	</UL>
+</UL>
+<P ALIGN=LEFT><A HREF="#b"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=5><U><B>Appendix
+B. CDP Grid Definition.</B></U></FONT></FONT></FONT></A></P>
+<UL>
+	<LI><P ALIGN=LEFT><A HREF="#b1"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.1
+	Select the “CDP Binning” tab:</B></U></FONT></FONT></FONT></A></P>
+	<LI><P ALIGN=LEFT><A HREF="#b2"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.2
+	Set Required Parameters:</B></U></FONT></FONT></FONT></A></P>
+	<LI><P ALIGN=LEFT><A HREF="#b3"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.3
+	Choose CDP Definition Method:</B></U></FONT></FONT></FONT></A></P>
+	<UL>
+		<LI><P ALIGN=LEFT><A HREF="#b3a"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.3.a
+		Estimate Grid Definition Method:</B></U></FONT></FONT></FONT></A></P>
+		<LI><P ALIGN=LEFT><A HREF="#b3b"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.3.b
+		Estimate Grid Definition Method – Match Existing Grid:</B></U></FONT></FONT></FONT></A></P>
+		<LI><P ALIGN=LEFT><A HREF="#b3c"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.3.c
+		Corners Method:</B></U></FONT></FONT></FONT></A></P>
+		<LI><P ALIGN=LEFT><A HREF="#b3d"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.3.d
+		Angle Method:</B></U></FONT></FONT></FONT></A></P>
+	</UL>
+	<LI><P ALIGN=LEFT><A HREF="#b4"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.4
+	Display Grid Section:</B></U></FONT></FONT></FONT></A></P>
+	<LI><P ALIGN=LEFT><A HREF="#b5"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.5
+	Scatter Display Section:</B></U></FONT></FONT></FONT></A></P>
+	<LI><P ALIGN=LEFT><A HREF="#b6"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.6
+	Mouse Action Section:</B></U></FONT></FONT></FONT></A></P>
+</UL>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=CENTER><IMG SRC="blurulr6.gif" NAME="graphics85" ALIGN=LEFT WIDTH=640 HEIGHT=5 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="introduction"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>Introduction:</B></U></FONT></FONT></FONT>
+<A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P><FONT FACE="DejaVu Sans, sans-serif"><B>Mapper is a Geometry QC
+program for checking the consistency of 3D land seismic surveys and
+merges. Using an interactively</B></FONT></P>
+<P><FONT FACE="DejaVu Sans, sans-serif"><B>connected set of
+spreadsheets and map, the user can check for errors within the
+geometry before importation into</B></FONT></P>
+<P><FONT FACE="DejaVu Sans, sans-serif"><B>Focus (where it will be a
+applied to the trace headers). </B></FONT>
+</P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="DejaVu Sans, sans-serif"><B>Using the map, the user
+can ensure that the text files (shot point coordinates, receiver
+coordinates, and relation) have been input</B></FONT></P>
+<P><FONT FACE="DejaVu Sans, sans-serif"><B>correctly. The main
+benefit of Mapper is the geometry analysis routine that checks
+relation and coordinate files for inconsistencies. </B></FONT>
+</P>
+<P><FONT FACE="DejaVu Sans, sans-serif"><B>Any problems found can be
+fixed in the spreadsheet, updating the map in real-time to see if the
+fixes also make sense spatially.</B></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="DejaVu Sans, sans-serif"><B>Once the geometry is
+verified, it can be output as text files for input to Focus. </B></FONT>
+</P>
+<P><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="history"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>History:</B></U></FONT></FONT></FONT><B><BR></B><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B>top</B></FONT></A></P>
+<UL>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Mapper 1.0
+	was a simple mapping application. Text files of shot and receiver
+	coordinates were read and plotted on the screen.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Mapper 2.0
+	added the ability to import relation files and became an interactive
+	front-end to GeoBuild (which provided </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>the geometry
+	QC).</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Mapper 3.0
+	is intended to replace GeoBuild by bringing all of the geometry QC
+	code into one program, allowing the user </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>to
+	interactively fix the geometry.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Mapper 4.0
+	the vision is to add a trace viewer, allowing the user to compare
+	geometry changes to actual trace data and thus </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>make better
+	geometry decisions. Direct access to the Focus database may be added
+	as well (bypassing the &quot;input text file&quot; </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>step).</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Mapper 5.0
+	add a first break picker?</B></FONT></P>
+</UL>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=CENTER><IMG SRC="blurulr6.gif" NAME="graphics86" ALIGN=LEFT WIDTH=640 HEIGHT=5 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="step1"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=5><U><B>Step
+1. Read in text files.</B></U></FONT></FONT></FONT> <A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>Getting
+Started:</B></U></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>type
+	&quot;mapper&quot; from a terminal. Example:</B></FONT></FONT></P>
+	<P ALIGN=LEFT><FONT COLOR="#ffffff"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B><SPAN STYLE="background: #000000">daffyduck:/home/donald&gt;mapper</SPAN></B></FONT></FONT></FONT></P>
+	<LI><P ALIGN=LEFT><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B><SPAN STYLE="background: transparent">or
+	double-click the Mapper3 
+	<IMG SRC="mapper.png" NAME="graphics19" ALIGN=BOTTOM WIDTH=43 HEIGHT=43 BORDER=0>
+	icon on your desktop:</SPAN></B></FONT></FONT></FONT></P>
+</UL>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>The
+following window should appear:</B></FONT></FONT></P>
+<P ALIGN=LEFT><IMG SRC="mapper_open.png" NAME="graphics3" ALIGN=LEFT WIDTH=812 HEIGHT=345 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="1.a"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>1.A
+Add Receiver coordinate file:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Click the <FONT COLOR="#000000">
+<IMG SRC="plus.gif" NAME="graphics4" ALIGN=BOTTOM WIDTH=29 HEIGHT=28 BORDER=0>
+</FONT>button in the &quot;Receiver Files&quot; button group to
+browse for a receiver file. </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>(example file
+located in: /trifocus/tricon/java/mapper/test/test.rps)</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Click &quot;Add&quot;.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The following
+window should appear:</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="filekey_dialog.png" NAME="graphics5" ALIGN=LEFT WIDTH=852 HEIGHT=676 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>First and
+Last Line Buttons:</B></U></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To select the
+first line to be read, click the &quot;First Line&quot; button, and
+then click the row from the text file that </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>you want to
+start at. Do the same thing with the &quot;Last Line&quot; button
+(except selecting the last line to be read). </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The default is
+to read the entire file.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>Character
+Key Buttons:</B></U></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Another way to
+control which lines of text are read is through the &quot;Character
+Key&quot; button group. </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Click the
+checkbox to toggle whether this group is used while reading the file.
+</B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>For instance,
+the example file starts with a line of informational text called a
+&quot;header&quot; that starts with &quot;H&quot;.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>By setting the
+Character Key character to &quot;R&quot; and column to &quot;0&quot;,
+only lines of text containing an &quot;R&quot;</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>in the first
+column are read, thus skipping the header text.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Set the
+Character Key by clicking the &quot;Key&quot; button and left-click
+dragging over the character you want to</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>use (if
+multiple characters are selected, only the first one is used).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>Line,
+Station, and coordinate fields:</B></U></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To select the
+column ranges for Line, Station, X, Y, and Z fields, click on the
+appropriate button, then</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>left-click-and-drag
+over the corresponding columns of text. This will automatically set
+the beginning and ending</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>columns to the
+correct range for that field. You may want to give yourself some
+padding with an extra column preceding</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>the values
+shown, in case larger numbers are present later in the file.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>Adding an
+Optional Column:</B></U></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>There may be
+other, case specific, information that you would like to import as
+well. Any numerical information</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>can be imported
+under a column name of your choosing (no alphabetical text).</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To add an extra
+column, click the <FONT COLOR="#000000">
+<IMG SRC="plus.gif" NAME="graphics6" ALIGN=BOTTOM WIDTH=29 HEIGHT=28 BORDER=0>
+</FONT>button.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This will ask
+for the name of the new column, and then add it to the column-range
+group. </B></FONT>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>For example:</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="new_column.png" NAME="graphics7" ALIGN=LEFT WIDTH=297 HEIGHT=117 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Then, select
+the column ranges for the new column:</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><IMG SRC="select_columns.png" NAME="graphics8" ALIGN=MIDDLE WIDTH=744 HEIGHT=148 BORDER=0><FONT FACE="DejaVu Sans, sans-serif"><B><BR></B></FONT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>If you are
+working on a 3D merge, you may want to enter a number for &quot;Add
+to Line:&quot;. This will add a constant to all line</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>numbers, which
+can keep the line numbers unique for all 3Ds in the merge.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>When done,
+click &quot;<FONT COLOR="#008080">OK</FONT>&quot;.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="1.b"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>1.B
+Add Shot Point coordinate file:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Click the 
+<IMG SRC="plus.gif" NAME="graphics87" ALIGN=BOTTOM WIDTH=29 HEIGHT=28 BORDER=0>
+button in the &quot;Shot Point Files&quot; button group.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>(example file
+located in: /trifocus/tricon/java/mapper/test/test.sps)</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Browse to find
+the Shot Point file you want, then click &quot;Add&quot;.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This is exactly
+the same as <A HREF="#1.a">1A</A>, only concerning the Shot Point
+coordinate file instead of the Receiver file.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="1.c"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>1.C
+Add Relation File:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Click the 
+<IMG SRC="plus.gif" NAME="graphics9" ALIGN=BOTTOM WIDTH=29 HEIGHT=28 BORDER=0>
+button in the &quot;Relation Files&quot; button group.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>(example file
+located in: /trifocus/tricon/java/mapper/test/test.xps)</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Click &quot;Add&quot;.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The same dialog
+appears as 1A and 1B, but with the following options:</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="relation_dialog.png" NAME="graphics10" ALIGN=LEFT WIDTH=943 HEIGHT=110 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Instead of
+coordinate information, you select column ranges for the relation
+(pattern) information. Left-clicking and dragging causes</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>the &quot;From&quot;
+and &quot;To&quot; column-range fields to automatically populate as
+before. The button names should be self-explanatory.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>You may want to
+fill out the &quot;Shot Add:&quot;, &quot;Shot Line Add:&quot;, and
+&quot;Rcvr Line Add:&quot; fields if you are working on a 3D Merge. </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The &quot;Shot
+Add:&quot; field can be used to ensure that Shot is a unique number
+across all surveys. </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>&quot;Shot Line
+Add:&quot; and &quot;Rcvr Line Add:&quot; should match exactly with
+the numbers used when importing the coordinate files. </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Not doing so
+will cause Relation information to be out of sync with the coordinate
+information.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>When done,
+click &quot;<FONT COLOR="#008000">OK</FONT>&quot;.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="1.d"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>1.D
+Checking that data loaded correctly:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>You should now
+have a map on the right-hand side that looks something like this:</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="data_loaded.png" NAME="graphics11" ALIGN=LEFT WIDTH=943 HEIGHT=373 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Shot Points are
+plotted as red circles 
+<IMG SRC="shot.png" NAME="graphics12" ALIGN=BOTTOM WIDTH=12 HEIGHT=12 BORDER=0>,
+while receivers are plotted as green triangles 
+<IMG SRC="receiver.png" NAME="graphics13" ALIGN=BOTTOM WIDTH=12 HEIGHT=12 BORDER=0>.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>Potential
+Problem 1 - Map zoomed out:</B></U></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The map may be
+zoomed-out due to some points plotting at zero-zero. This is often
+due to test stations or non-coordinate text </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>that have
+mistakenly been read in as real stations. This can be fixed by using
+the Character Key to select only legitimate </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>coordinates
+(for example, if all good X values start with a &quot;2&quot;, click
+the 
+<IMG SRC="key.png" NAME="graphics88" ALIGN=BOTTOM WIDTH=31 HEIGHT=22 BORDER=0>
+button and then click and drag over the first &quot;2&quot; from a </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>good X
+coordinate). </B></FONT>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>Potential
+Problem 2 - Map distorted:</B></U></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>If the map
+looks distorted, perhaps you selected the wrong column range for the
+X and/or Y values (for instance, you mistakenly</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>included an
+implied decimal, so one of the axes is off by a factor of 10). Simply
+click the 
+<IMG SRC="key.png" NAME="graphics89" ALIGN=BOTTOM WIDTH=31 HEIGHT=22 BORDER=0>
+button and reselect the correct </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>column ranges.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>Potential
+Problem 3 - Relation not meshing with coordinate files:</B></U></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To check if the
+Relation portion loaded correctly, click the 
+<IMG SRC="spread4.png" NAME="graphics14" ALIGN=BOTTOM WIDTH=30 HEIGHT=27 BORDER=0>
+button to change the mouse-mouse to &quot;Select Shot&quot;, then
+click on </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>a Shot Point to
+highlight the associated shot record.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Note: <I>You
+should notice that the text at the bottom of the map (&quot;Mouse
+Help &gt;&gt; .....&quot;) changes when you click the button.</I></B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><I><B>This text
+tells you what left-, middle-, and right-clicking does on the map.
+The text after the &quot;/&quot; slash tells you what</B></I></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><I><B>left-,
+middle-, and right-dragging does. The middle-mouse button
+functionality can also be accessed through the </B></I></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><I><B>&quot;Calculate
+Distance&quot; and &quot;Calculate Area&quot; mouse-mode buttons.</B></I></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The map should
+look like this:<BR></B></FONT><BR><BR>
+</P>
+<P ALIGN=LEFT><IMG SRC="selected_shot.png" NAME="graphics15" ALIGN=LEFT WIDTH=502 HEIGHT=423 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>with the live
+receiver stations of the selected Shot highlighted in white. </B></FONT>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>If you get an
+error like this:</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="selected_shot_error.png" NAME="graphics16" ALIGN=LEFT WIDTH=299 HEIGHT=188 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>it means that:</B></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>You have
+	selected the Line or Station columns incorrectly for Shot Point or
+	Relation files.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>You have
+	clicked on one a Shot Points that is not being used by the Relation
+	file(s).</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>You should go
+back to the Shot Point and Relation file key dialogs and verify that
+you have the columns selected correctly.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>If the Shot
+Point successfully gets selected, but you don't see any receiver
+spread, then the Line and Station columns have been </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>incorrectly
+selected in either the Receiver or Relation file (or the receivers
+have been incorrectly numbered in one of the two files).</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Go back to the
+Receiver and Relation file key dialogs to verify that columns have
+been selected correctly.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To turn off the
+receiver spread highlighting, set the mouse mode back to &quot;Select
+Shot/Receiver&quot; (or double-click on the map to </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>deselect the
+current Shot).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="1.e"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>1.E
+Checking for correct Elevations:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To check if the
+elevations were read correctly, click the &quot;Display:&quot;
+combo-box in the lower-right corner of the map and scroll-down </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>to select &quot;Z&quot;
+as the column to be displayed.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="select_z.png" NAME="graphics17" ALIGN=BOTTOM WIDTH=167 HEIGHT=151 BORDER=0></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The map should
+now look like this:</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="z_map.png" NAME="graphics18" ALIGN=LEFT WIDTH=539 HEIGHT=486 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Check to make
+sure that the elevation range is within expected limits for the
+region. If not, perhaps the elevation column ranges </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>have been
+selected incorrectly (go back to the Shot Point and Receiver file key
+dialogs to fix this).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>If the problem
+is just a few outliers, they can be fixed either by hand or by
+interpolation in the Edit tab spreadsheets.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="1.f"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>1.F
+Save project:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Now that you've
+verified that everything loaded OK, you should save the project. This
+will give you a milestone to fall back on in </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>case you decide
+any future geometry changes were in error.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To save, click
+File -&gt; Save Project</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="file_save.png" NAME="graphics20" ALIGN=BOTTOM WIDTH=256 HEIGHT=168 BORDER=0></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>A File Save
+dialog appears and you can type in the name to save the project as. </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Files saved
+are:</B></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>project_name.mpr3
+	- Mapper3 project (contains geometry and all edits).</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>project_name.mbck
+	- Mapper3 previous project backup (if project already exists, copies
+	previous save to .mbck file)</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>project_name.mpr
+	- Mapper2 format (file key information only, in case .mpr3 file gets
+	corrupted).</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><IMG SRC="blurulr6.gif" NAME="graphics22" ALIGN=LEFT WIDTH=640 HEIGHT=5 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="step2"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=5><U><B>Step
+2. Run Geometry QC Analysis</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Now that the
+geometry information has been successfully loaded, it's time to check
+for potential geometry problems. </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To do this,
+click the 
+<IMG SRC="edit_tab.png" NAME="graphics23" ALIGN=BOTTOM WIDTH=53 HEIGHT=17 BORDER=0>
+tab.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>You should then
+see the following screen:</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="edit_pane.png" NAME="graphics24" ALIGN=LEFT WIDTH=943 HEIGHT=373 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To start the
+analysis, press the 
+<IMG SRC="run_button.png" NAME="graphics25" ALIGN=BOTTOM WIDTH=26 HEIGHT=25 BORDER=0>
+button (we will leave the Interpolate UnSurveyed Stations box
+unchecked for now).</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This may take
+some time. The progress meter will show you approximately how much
+time remains in the job.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>You will end up
+running the QC analysis about 3 times as you continually check your
+progress while fixing the geometry. </B></FONT>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Once the
+analysis completes, you will see a summary of the results in the text
+area (you may have to scroll down to see it):</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="qc_results.png" NAME="graphics26" ALIGN=LEFT WIDTH=943 HEIGHT=615 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>For the
+&quot;Relation:&quot; section, focus mainly on the &quot;DuplicateSP&quot;
+and &quot;Duplicate-Shots&quot; fields. </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>You will need
+to edit the Relation spreadsheet until these two totals come to zero </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>(or you happen
+to know that the field crew actually shot the same SP twice on
+purpose. For instance, if the two shots use a different </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>spread). </B></FONT>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>For the
+Receiver and Shot Point sections, you will want to keep editing the
+geometry until Surveyed-Twice goes to zero. </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>It's OK to have
+UnSurveyed and Unused receivers and shot points, but you will want to
+double-check them to make sure they are </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>correct (i.e.
+if there are a lot of UnUsed Shot Points, perhaps you're missing a
+field tape). </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>UnSurveyed
+stations can be interpolated or extrapolated to provide an accurate
+guess as to the true coordinates.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Fixing the
+geometry is described in detail in the following sections.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2.a"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.A
+Fix the Relation spreadsheet.</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The Relation
+spreadsheet should be fixed <I>before</I> the other spreadsheets.
+That is because some of the UnSurveyed shot points and </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>receivers may
+be irrelevant because they belong to Test or Void Shots. These
+irrelevant stations will disappear once the Test and </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Voided Shots
+have been Killed in the Relation spreadsheet. </B></FONT>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To open the
+relation spreadsheet, click the 
+<IMG SRC="relation_tab.png" NAME="graphics27" ALIGN=BOTTOM WIDTH=89 HEIGHT=18 BORDER=0>
+tab:</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="relation_sheet.png" NAME="graphics28" ALIGN=LEFT WIDTH=943 HEIGHT=610 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The columns
+DuplicateShotPoint, ShotFromDupSP, and DuplicateShot are populated by
+the analysis process and are not editable. </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>All of the
+other fields can be edited. You can double-click in a cell to edit it
+by hand, or select a range of cells and edit them with </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>the
+Extrap/Interp buttons (see the <A HREF="#a2a">Appendix section on
+buttons</A>).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2a1"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.A.1
+Fix DuplicateShotPoint Records</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The first thing
+to fix in the relation sheet is the DuplicateShotPoint records.
+Typically, at least one of the DuplicateShotPoint pair is </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>a Test/Void
+shot or has incorrect Line/Station header information.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To find all of
+the DuplicateShotPoint shots, sort by DuplicateShotPoint by clicking
+the column header: 
+<IMG SRC="dupshotpoint_header.png" NAME="graphics29" ALIGN=BOTTOM WIDTH=157 HEIGHT=18 BORDER=0>.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This will put
+all of the shots at the bottom of the spreadsheet. To put them at the
+top, click one more time.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Your
+spreadsheet should now look something like this:</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="dupshotpoint_sorted.png" NAME="graphics30" ALIGN=BOTTOM WIDTH=943 HEIGHT=551 BORDER=0></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Now you need to
+go through and fix each DuplicateShotPoint one by one. To do this,
+look at the Observer's report and the gather </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>in ViewData to
+see if the Shot is:</B></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Test or
+	Void record. Which needs to be killed using the &quot;Kill&quot;
+	checkbox.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Incorrect
+	Line/Station. Double-Click the ShotLine or ShotStation field to type
+	in the correct Line/Station information.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Good shot.
+	The shot listed under ShotFromDupSP is the one that needs to get
+	fixed. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>(Sometimes you
+	may decide to keep both if they use a different receiver spread, or
+	if you need to wait for further processing </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>to decide what
+	action to take)</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Here is what
+the fixed Relation spreadsheet looked like for the example 3D:</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="relation_fixed.png" NAME="graphics91" ALIGN=LEFT WIDTH=956 HEIGHT=561 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2a2"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><SPAN STYLE="font-style: normal"><U><B>2.A.2
+Fix DuplicateShot Records</B></U></SPAN></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><SPAN STYLE="font-style: normal"><B><BR>top</B></SPAN></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>After fixing
+DuplicateShotPoint's, you need to fix the DuplicateShot column. These
+are shots that are not unique because another </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>shot is using
+the same ID. Focus will get confused and not know how to handle this
+situation. Again, look at Observer's report and </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>ViewData to
+determine if the shot:</B></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Is Test or
+	Void and should be killed.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Is good
+	shot and needs a new Shot/FFID number.</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Again, find
+these records by clicking the column header to sort by DuplicateShot.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Important: You
+will need to write these shots down as they will need to be fixed in
+Focus as well.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2.b"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.B
+Run QC Analysis Again (Second Pass)</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>Now
+that the Relation sheet has been fixed, it's time to run QC Analysis
+again so that the true Receiver and Shot Point problems can </B></FONT></FONT></FONT>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>be
+found.</B></FONT></FONT></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>Because
+Mapper3 automatically adds any UnSurveyed stations that are found in
+the Relation file, some erroneous stations may </B></FONT></FONT></FONT>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>exist
+at this time (stations that were added due to Test/Void Shots and
+are, therefore, not real stations). </B></FONT></FONT></FONT>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>To
+get rid of these fictional stations, go to the Receiver and Shot
+Point spreadsheets and click the &quot;Reload&quot; button </B></FONT></FONT></FONT>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>(&quot;Reload&quot;
+sets the spreadsheet back to the contents of the text file).</B></FONT></FONT></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>Click
+<IMG SRC="receiver_tab.png" NAME="graphics31" ALIGN=BOTTOM WIDTH=84 HEIGHT=15 BORDER=0>
+then 
+<IMG SRC="reload.png" NAME="graphics32" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0>
+(When it asks &quot;Really Reload Table?&quot;, click &quot;Yes&quot;).</B></FONT></FONT></FONT></P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>Click
+<IMG SRC="shotpoint_tab.png" NAME="graphics33" ALIGN=BOTTOM WIDTH=80 HEIGHT=13 BORDER=0>
+then 
+<IMG SRC="reload.png" NAME="graphics34" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0>
+(When it asks &quot;Really Reload Table?&quot;, click &quot;Yes&quot;).</B></FONT></FONT></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>Now
+we have a geometry containing the corrected Relation sheet, but the
+Shot Point and Receiver sheets are set back to their </B></FONT></FONT></FONT>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>original
+state. </B></FONT></FONT></FONT>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>At
+this point, any UnSurveyed stations Mapper finds are going to be
+real, so we want to go ahead and interpolate first-guess</B></FONT></FONT></FONT></P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>coordinates
+for them. To do this, go back to the &quot;Run QC&quot; tab and click
+the Interpolate UnSurveyed Stations checkbox.</B></FONT></FONT></FONT></P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><IMG SRC="interp_stations.png" NAME="graphics35" ALIGN=BOTTOM WIDTH=203 HEIGHT=20 BORDER=0></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>Click
+<IMG SRC="run_button.png" NAME="graphics36" ALIGN=BOTTOM WIDTH=26 HEIGHT=25 BORDER=0>
+to run the analysis again.</B></FONT></FONT></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2.c"></A><FONT COLOR="#000080"><SPAN STYLE="text-decoration: none"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.C
+Fix Receivers</B></U></FONT></FONT></SPAN></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>To
+fix the receivers, click the 
+<IMG SRC="receiver_tab.png" NAME="graphics37" ALIGN=BOTTOM WIDTH=83 HEIGHT=15 BORDER=0>
+tab. The following sheet will appear:</B></FONT></FONT></FONT></P>
+<P ALIGN=LEFT><IMG SRC="receiver_sheet.png" NAME="graphics38" ALIGN=LEFT WIDTH=948 HEIGHT=490 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>The
+UnSurveyed, UnUsed, Duplicate, UsedByShot, and Distance columns are
+populated by the QC Analysis and are uneditable. </B></FONT></FONT></FONT>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>All
+other cells are open for editing.</B></FONT></FONT></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2c1"></A><FONT COLOR="#000080"><SPAN STYLE="text-decoration: none"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.C.1
+Check Receiver Distance</B></U></FONT></FONT></SPAN></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>The
+easiest way to check Receiver stations for problems is by setting the
+Colorbar of the Map to each column of interest. </B></FONT></FONT></FONT>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>In
+the example, we will just work our way down from the top of the list
+in the &quot;Display:&quot; combo-box. The first interesting column
+is</B></FONT></FONT></FONT></P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>Distance.
+This is the distance of one station to the next within a receiver
+line. Stations at the end of a line borrow the distance from </B></FONT></FONT></FONT>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>their
+nearest neighbor (instead of having a zero value).</B></FONT></FONT></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>Click
+the &quot;Display:&quot; combo-box and select &quot;Distance&quot;
+from the pulldown menu. </B></FONT></FONT></FONT>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>Also,
+since all we care about is Receivers at this point, let's turn the
+Shot Points off by clicking the 
+<IMG SRC="shot_toggle.png" NAME="graphics39" ALIGN=BOTTOM WIDTH=26 HEIGHT=25 BORDER=0>toggle
+button.</B></FONT></FONT></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>Here
+is an example Receiver Distance plot:</B></FONT></FONT></FONT></P>
+<P ALIGN=LEFT><IMG SRC="rec_distance.png" NAME="graphics40" ALIGN=LEFT WIDTH=680 HEIGHT=612 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>You
+will want to check for distances that are longer or shorter than
+expected. In this case, we have some zero-offsets that need to be</B></FONT></FONT></FONT></P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>investigated
+(The long offsets are easily explained by the no-permits in the
+middle).</B></FONT></FONT></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>To
+find the zero-offset culprits, we'll sort by Distance in the Receiver
+spreadsheet.</B></FONT></FONT></FONT></P>
+<P ALIGN=LEFT STYLE="text-decoration: none"><FONT COLOR="#000000"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=3><B>This
+is what we find:</B></FONT></FONT></FONT></P>
+<P ALIGN=LEFT><IMG SRC="distance_sort.png" NAME="graphics41" ALIGN=LEFT WIDTH=960 HEIGHT=75 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The errant
+receiver happens to be a &quot;Duplicate&quot; receiver (meaning, it
+was found in the survey file twice, and apparently at the exact</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>same
+coordinates). This can easily be fixed by clicking the &quot;Kill&quot;
+checkbox for receiver 1003/1105, which will cause this station to be</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>ignored by
+subsequent QC Analysis runs as well as prevent it from being output
+to Focus.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Zero-offset
+Receiver Fixed:</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="killed_receiver.png" NAME="graphics42" ALIGN=LEFT WIDTH=960 HEIGHT=33 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2c2"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.C.2
+Check Duplicate Receivers</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Next, set the
+&quot;Display:&quot; combo-box to &quot;Duplicate&quot;.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="rec_duplicate.png" NAME="graphics43" ALIGN=LEFT WIDTH=659 HEIGHT=597 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>We can only see
+one Duplicate Receiver (colored red). </B></FONT>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To investigate
+this Receiver, click on it in the map (you can right-click-drag to
+zoom if you need to).</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Clicking on an
+item in the map causes it to be selected in the spreadsheets to the
+left (whether it's a Receiver, Shot Point,</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>or Shot
+Record).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>After clicking,
+our friend 1003/1105 shows up highlighted, which is the Receiver we
+already killed in 2.C.1.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="killed_receiver.png" NAME="graphics90" ALIGN=LEFT WIDTH=960 HEIGHT=33 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This means that
+the Duplicate Receiver has already been fixed because it had a zero
+Distance value.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This is not
+always the case. Sometimes receivers are surveyed twice because they
+moved part-way through shooting,</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>or simply were
+numbered incorrectly. Whatever the cause, Duplicate Receivers MUST be
+fixed because Focus requires <I>uniquely</I></B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B><I>numbered
+</I>stations for input. Non-unique stations are ignored (only first
+one gets used in Focus).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>How to fix
+Duplicate Receivers:</B></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Duplicates
+	have same coordinates (or only moved slightly, say 10 feet) = Kill
+	one of them.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Duplicates
+	have different coordinates and Shot Gathers/OBs verify that station
+	moved = Renumber one of the stations.</B></FONT></P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>(Relation file
+	will need to be fixed too - best done using HDRMATH and IF in Focus
+	and rerunning SPSOUT).</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Duplicates
+	have different coordinates but Shot Gathers/OBs indicate nothing
+	changed = Investigate to see which one is </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>correct. Kill
+	the other.</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2c3"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.C.3
+Check Killed Receivers</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Set the
+&quot;Display:&quot; combo-box to &quot;Kill&quot; to see the killed
+receivers:</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="rec_kill.png" NAME="graphics44" ALIGN=LEFT WIDTH=669 HEIGHT=604 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Verify that
+only stations you're intending to Kill have been Killed. Also, be
+aware that Killing many stations in a small area</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>can negatively
+impact data quality (local fold).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2c4"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.C.4
+Check UnSurveyed Receivers</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Line, Station,
+and Survey columns are typically not interesting to look at, unless
+you're doing a merge. In our case, we'll move on to</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>&quot;UnSurveyed&quot;.
+(Survey, by the way, is the index within the list of the file that
+each station came from).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Set the
+&quot;Display:&quot; combo-box to UnSurveyed.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="rec_unsurveyed.png" NAME="graphics45" ALIGN=LEFT WIDTH=660 HEIGHT=597 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>You can see
+that there was one Receiver that was missing from the original Segp-1
+file. Mapper has interpolated coordinates for it.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To verify that
+the coordinates are correct, we can zoom-in on the Receiver by
+right-click-dragging a zoom rectangle around it.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="rec_unsurveyed_zooming.png" NAME="graphics46" ALIGN=LEFT WIDTH=527 HEIGHT=381 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Next, we can
+verify the distance to the nearest receiver by clicking the 
+<IMG SRC="ruler.png" NAME="graphics47" ALIGN=BOTTOM WIDTH=27 HEIGHT=29 BORDER=0>
+button.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Click two
+points on the map to find the distance and angle between them. The
+third click hides the distance-measure display.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="rec_distance_unsurveyed.png" NAME="graphics48" ALIGN=BOTTOM WIDTH=655 HEIGHT=591 BORDER=0></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>You can see
+that the calculated distance is &quot;221.8 Feet&quot;, which is very
+close to the 220' specified by the surveyors for the 3D</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>(closer zooming
+to make the click-points more accurate finds that the distance is
+actually 219.15, as also seen in the Distance </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>column of the
+spreadsheet).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Single
+right-click in the map to reset the zoom (zoom out).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2c5"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.C.5
+Check UnUsed Receivers</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Set the
+&quot;Display:&quot; combo-box to &quot;UnUsed&quot;.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="rec_unused.png" NAME="graphics49" ALIGN=LEFT WIDTH=660 HEIGHT=595 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The one (1)
+UnUsed receiver is the Duplicate Receiver, 1003/1105, that we looked
+at before. It will always be the case that at least</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>one of the
+members of a Duplicate Receiver pair will be flagged UnUsed, because
+Mapper only uses the first Line/Station pair </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>matching the
+spread from a Shot in the Relation file (Focus does the same thing).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Not all UnUsed
+Receivers will be from Duplicates. UnUsed receivers can also appear
+when the surveyor adds extraneous stations </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>or when the
+Relation file is incomplete (Examples: the crew hasn't finished
+shooting, not all of the field tapes have been received). </B></FONT>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>In any case, a
+few UnUsed Receivers here or there are rarely of any concern. What <I>is</I>
+of concern is when there are a large number</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>congregating
+together, as that will create a hole in the final stack (fold
+problems). Further investigation is merited in such a case.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2c6"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.C.6
+Check Other Columns</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The remaining
+columns, UsedByShot, X, Y, and Z, are not particularly interesting at
+this point. UsedByShot merely stores the Shot </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>ID of the last
+Shot to use each Receiver. This can be useful when tracking down an
+UnSurveyed Receiver to find out which Shot </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>used it and why
+(for instance, is it a dead trace? If so, perhaps we can ignore it). </B></FONT>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>X and Y are
+very boring columns to look at since you can already see that
+information by looking at the map. They are provided in </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>the list merely
+because they are there.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Z can be
+interesting to look at, but we already did that earlier in the manual
+(<A HREF="#1.e">Section 1.E</A>).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>For your
+amusement, here is the UsedByShot map:</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="rec_usedbyshot.png" NAME="graphics50" ALIGN=LEFT WIDTH=660 HEIGHT=595 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This gives you
+some insight into the order in which the survey was shot. You also
+can see the Duplicate Receiver, which was never</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>used, and
+therefore has a UsedByShot of 0.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2.d"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.D
+Fix Shot Points</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The procedures
+for fixing Shot Points are exactly the same as that for fixing
+Receivers, except for a few minor points.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Firstly, we'll
+set the map to viewing Shot Points instead of Receivers by toggling
+the 
+<IMG SRC="shot_toggle.png" NAME="graphics51" ALIGN=BOTTOM WIDTH=26 HEIGHT=25 BORDER=0>
+and 
+<IMG SRC="receiver_toggle.png" NAME="graphics52" ALIGN=BOTTOM WIDTH=25 HEIGHT=27 BORDER=0>
+buttons.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Then, we go
+through all of the &quot;Display:&quot; options as we did for
+Receivers to find and fix problems.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2d1"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.D.1
+Check Shot Distance</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Set &quot;Display:&quot;
+to &quot;Distance&quot;.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="shot_distance.png" NAME="graphics53" ALIGN=LEFT WIDTH=660 HEIGHT=595 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Again, the
+larger distances are due to the no-permit zones.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2d2"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.D.2
+Check Duplicate Shot Points</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Set &quot;Display:&quot;
+to &quot;Duplicate&quot;.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="shot_duplicate.png" NAME="graphics54" ALIGN=LEFT WIDTH=661 HEIGHT=596 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>When the
+minimum and maximum of a property are the same, the Colorbar grays
+out and you see the above display.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This indicates
+that there are no Duplicate Shot Points, which is a good thing.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2d3"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.D.3
+Check Killed Shot Points.</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>There are no
+killed shot points in the example survey. If there were, the
+procedure would be the same as for Receivers for</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>investigating
+them (<A HREF="#2c3">See 2.C.3</A>).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2d4"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.D.4
+Check UnSurveyed Shot Points</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Set &quot;Display:&quot;
+to &quot;UnSurveyed&quot;.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="shot_unsurveyed.png" NAME="graphics55" ALIGN=LEFT WIDTH=655 HEIGHT=589 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>There are 7
+UnSurveyed Shot Points, as seen in the summary report from the QC
+Analysis.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To investigate
+whether the interpolation went correctly, we will zoom in on the red
+circles (UnSurveyed Shot Points).</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="shot_bad_interp1.png" NAME="graphics56" ALIGN=LEFT WIDTH=540 HEIGHT=400 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Above is an
+example Shot Point that did NOT interpolate correctly. When
+interpolating in the middle of a line, Mapper takes the</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>nearest
+surrounding surveyed Shot Points (by station number) and places the
+new coordinates at the midway point between the </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>two. Doing so
+assumes that the nearest surrounding stations were surveyed on the
+standard grid for the 3D, which isn't always the </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>case. </B></FONT>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>In the above
+example, you can see that the Shot Point northwest of the UnSurveyed
+point was placed off the grid.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Therefore, the
+new coordinates for the UnSurveyed station were also pulled off the
+grid (too far West).</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This could be
+fixed by typing in new coordinates using the Shot Point spreadsheet.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>We'll do it the
+faster way by extrapolating new coordinates from the two Shot Points
+to the southeast.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Click the 
+<IMG SRC="shotpoint_tab.png" NAME="graphics57" ALIGN=BOTTOM WIDTH=80 HEIGHT=13 BORDER=0>
+tab.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Click on the
+UnSurveyed Shot Point in the map to make the spreadsheet jump to the
+station in question.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Us the
+scrollbar to put the station in the middle of the screen.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>By clicking
+stations on the map south of the UnSurveyed point, we find that they
+have smaller station numbers and are actually </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>located above
+the UnSurveyed Shot Point in the spreadsheet.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To extrapolate
+better coordinates, we left-click and drag in the spreadsheet to
+select the X, Y, and Z columns for shot points </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>5101/5064
+through 5101/5066.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="shot_select_range.png" NAME="graphics58" ALIGN=LEFT WIDTH=952 HEIGHT=619 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Now, click the
+<IMG SRC="exrap_down.png" NAME="graphics59" ALIGN=BOTTOM WIDTH=26 HEIGHT=28 BORDER=0>
+button to extrapolate new coordinates for this point.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The map will
+automatically update to show you the new position in relation to the
+other points.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="shot_new_coords.png" NAME="graphics60" ALIGN=LEFT WIDTH=508 HEIGHT=359 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Now the
+UnSurveyed shot point is located on the grid, which is much more
+likely than the previously interpolated coordinates</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>(of course, you
+will want to verify these coordinates in Wayne's 3D Geometry QC
+program in Focus).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Continue the
+same process for all of the other UnSurveyed Shot Points (either
+confirm that they are correctly located or </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>make coordinate
+adjustments).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><I><B>Important:
+After editing the coordinates of UnSurveyed stations, make sure that
+<IMG SRC="interp_stations_off.png" NAME="graphics61" ALIGN=BOTTOM WIDTH=207 HEIGHT=21 BORDER=0>
+is un-checked</B></I></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><I><B>for
+subsequent QC Analysis runs. Otherwise, Mapper will calculate new
+interpolated coordinates and overwrite your fixes.</B></I></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2d5"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.D.5
+Check UnUsed Shot Points</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Set &quot;Display:&quot;
+to &quot;UnUsed&quot;.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>In the example
+3D, there were no UnUsed shot points after editing the Relation
+spreadsheet (originally, there was one, but that</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>was due to
+incorrect Shot Line and Station values from the headers, which were
+subsequently fixed).</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>UnUsed Shot
+Points are typically not a problem, unless there are a lot of them in
+a group, which could create a hole in the stack</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>or indicate
+missing shot records from the field tapes.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2d6"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.D.6
+Check Other Columns</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The remaining
+columns are: UsedByShot, X, Y, and Z. As before, X and Y are
+typically not interesting to look at.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>UsedByShot can
+tell you information about the order in which the 3D was shot.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Z can be
+checked to make sure the elevations are correct (<A HREF="#1.e">See
+Section 1.E</A>).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Here is
+UsedByShot:<BR></B></FONT><BR><BR>
+</P>
+<P ALIGN=LEFT><IMG SRC="shto_usedbyshot.png" NAME="graphics62" ALIGN=LEFT WIDTH=653 HEIGHT=590 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This shows the
+order in which the 3D Survey was shot.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2.e"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.E
+Run QC Analysis (Third Pass):</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Run QC Analysis
+one more time. If the geometry has been fixed correctly, the totals
+for DuplicateSP, Duplicate-Shots,</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>and
+Surveyed-Twice should all be zero. </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>If not, go
+through and fix the remaining problems.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="2.f"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>2.F
+Save Project</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Save the
+project again to preserve your changes. It might be a good idea to
+save the project under a different name than before</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>(e.g.
+project_name_fixed.mpr3), so that you can go back to different
+milestones if you change your mind on something and </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>don't want to
+start over completely.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>(See <A HREF="#1.f">1.F</A>
+for more details on saving projects).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><IMG SRC="blurulr6.gif" NAME="graphics63" ALIGN=LEFT WIDTH=640 HEIGHT=5 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="step3"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4 STYLE="font-size: 16pt"><U><B>Step
+3. Calculate the Area of the 3D.</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Probably the
+most accurate way to calculate the area of a 3D is to count the
+number of live CDP's. However, that requires </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>having dataset
+with geometry already applied. To do this without such a dataset, you
+can use Mapper.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="3.a"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>3.A
+Calculate Scatter:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>First, you need
+to calculate the mid-point scatter by clicking the 
+<IMG SRC="scatter.png" NAME="graphics64" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0>
+button. On larger surveys, this may take some time.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The default is
+to only calculate scatter for every 4th shot record. If you want more
+accurate scatter (and are willing to wait longer)</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>you can set
+this to 1 using Display -&gt;Scatter Shot Increment.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="scatter_select.png" NAME="graphics65" ALIGN=BOTTOM WIDTH=204 HEIGHT=148 BORDER=0></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Set the scatter
+to 1.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="scatter_set.png" NAME="graphics66" ALIGN=BOTTOM WIDTH=268 HEIGHT=117 BORDER=0></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>And click OK.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This will cause
+the scatter to disappear (if it was already showing). </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To make it
+reappear, Click the 
+<IMG SRC="scatter.png" NAME="graphics67" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0>
+button again.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The display
+should now look something like this:</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="map_scatter.png" NAME="graphics68" ALIGN=LEFT WIDTH=655 HEIGHT=589 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="3.b"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>3.B
+Draw Polygon Around Survey:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To start
+calculating the area of the 3D, click the 
+<IMG SRC="area.png" NAME="graphics69" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0>
+button.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Now, just start
+clicking the corner-points of the scatter trend and it will
+automatically update the area calculation as you go.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Note: if it's a
+large 3D, the screen-refresh may be slow because there a lot of
+points that have to be redrawn.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="area_calculated.png" NAME="graphics70" ALIGN=BOTTOM WIDTH=655 HEIGHT=590 BORDER=0></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="3.c"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>3.C
+Adjust Zoom:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>If the area is
+showing off the screen you can either pan the image to the left (by
+left-click dragging) or unzoom:</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Go to Display
+-&gt; Zoom.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="unzoom.png" NAME="graphics71" ALIGN=BOTTOM WIDTH=205 HEIGHT=156 BORDER=0></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Set the zoom to
+150% (less than 100 zooms in, greater than 100 zooms out).</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="zoom_set.png" NAME="graphics72" ALIGN=BOTTOM WIDTH=268 HEIGHT=117 BORDER=0></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Click OK. The
+image should now be zoomed-out.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="zoomed_out.png" NAME="graphics73" ALIGN=BOTTOM WIDTH=655 HEIGHT=588 BORDER=0></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="3.d"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>3.D
+Adjust Units:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The default is
+to calculate the area assuming the units are in feet and convert the
+area to square miles.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>If the survey
+was actually conducted in meters, click the 
+<IMG SRC="units.png" NAME="graphics74" ALIGN=BOTTOM WIDTH=25 HEIGHT=25 BORDER=0>
+button.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Now the area is
+calculated using square kilometers instead.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Also, the scale
+bar at the bottom will now reflect that the units are in meters.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="3.e"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>3.E
+Turn Off Polygon/Scatter:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To turn off the
+scatter (and significantly increase the map redraw speed) click the 
+<IMG SRC="scatter.png" NAME="graphics75" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0>
+button.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The scatter
+points are now hidden.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The scatter
+points are stored in memory, so toggling the scatter but will not
+cause it to be recomputed.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Double-left-click
+on the map while the 
+<IMG SRC="area.png" NAME="graphics76" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0>
+button is highlighted to hide the area polygon display.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Click the 
+<IMG SRC="select.png" NAME="graphics77" ALIGN=BOTTOM WIDTH=25 HEIGHT=27 BORDER=0>
+button to set the mouse-mode back to &quot;Select Shot
+Point/Receiver&quot;.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><IMG SRC="blurulr6.gif" NAME="graphics78" ALIGN=LEFT WIDTH=640 HEIGHT=5 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="step4"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=5><U><B>Step
+4. Output</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Click the 
+<IMG SRC="output_tab.png" NAME="graphics79" ALIGN=BOTTOM WIDTH=97 HEIGHT=24 BORDER=0>
+tab to see the Output options.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>There are 3
+categories: SPS, Focus, and GeoBuild.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="4.a"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>4.A
+SPS Output</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>SPS output is
+the main way of getting your QC'ed geometry back into Focus. It
+creates 3 files: </B></FONT>
+</P>
+<UL>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Receiver
+	coordinates (.rps)</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Shot Point
+	coordinates (.sps)</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Relation
+	information (.xps)</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>You have the
+option to enable Killed Shot Records or Shot Point/Receiver stations
+to be output. </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Killed Shot
+Records should be output if SHOT is a sequential counter in Focus
+(that way, you don't have to create dummy records</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>for the killed
+shots in the SHOT spreadsheet).</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Otherwise, it
+is best to let it default and not output Killed stations and shot
+records.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Click the 
+<IMG SRC="save.png" NAME="graphics80" ALIGN=BOTTOM WIDTH=25 HEIGHT=24 BORDER=0>
+button to select the output root file name (from which extension will
+be added for each file)</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>and click
+&quot;Save&quot;.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>You will import
+these files into Focus using Functions -&gt; Input Text File....</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="4.b"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>4.B
+Focus Output</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The Focus tab
+is intended for Focus specific output. Eventually, it may contain a
+button for saving the geometry directly into to the</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Focus database.
+</B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Until then, it
+is used to output &quot;Kill&quot; information as DISCO EDIT job
+decks.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>When to use:</B></U></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>If you are
+building a geometry in which Shot is an incremental counter, then you
+will need to perform this step (you will want to</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>click the
+check-box to output killed shot records in the SPS output step, so
+that there are no gaps in the Focus SHOT spreadsheet).</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The most
+valuable file will be the *shot_edits.dat file, as that contains the
+shot records to edit. Killed Receivers and Shot Points</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>should probably
+not be output to the SPS files in the first place, so that they are
+automatically killed in the PROSHOT job</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>because they
+are given a CDP of zero.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>When not to
+use:</B></U></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>If you are
+building a geometry in which Shot is not an incremental counter (e.g.
+Shot = FFID), this is not necessary. In this case, you</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>will not output
+killed shot records in the SPS output step, so there is no need to
+kill them directly with EDIT cards (killed records</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>will
+automatically get killed with the EDIT CDP=0 step). It doesn't hurt
+to perform this step, but it's not necessary.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>Output
+description:</B></U></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>(all are in
+DISCO EDIT job format - rows with 8 fields each, 8 characters per
+field)</B></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>*shot_edits.dat
+	- contains shot record edits. Killed by value in Shot column.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>*shtstat_edits.dat
+	- contains shot point edits. Killed by combined shot line and
+	station put together into the new SHTLS </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>header.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>*recstat_edits.dat
+	- contains receiver edits. Killed by combined receiver line and
+	station put together into the new RECLS </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>header.</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Click the 
+<IMG SRC="save.png" NAME="graphics81" ALIGN=BOTTOM WIDTH=25 HEIGHT=24 BORDER=0>
+button to select the output root file name (from which extensions
+will be added for each file)</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>and click
+&quot;Save&quot;.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>You will need
+to import any of the above files into your PROSHOT job in order for
+them to take effect. </B></FONT>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="4.c"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>4.C
+GeoBuild Output </B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This option is
+added as backward compatibility for users who aren't comfortable with
+the new Mapper3 system. </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The main reason
+to use GeoBuild is for the *warning.txt file. All of the same warning
+file information is contained within the </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Mapper3
+spreadsheets. To verify the accuracy of the new Mapper3 system, you
+may run GeoBuild and compare the warning file </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>versus the
+spreadsheets.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To run
+GeoBuild, click the 
+<IMG SRC="browse.png" NAME="graphics82" ALIGN=BOTTOM WIDTH=26 HEIGHT=25 BORDER=0>
+button to select the output directory and root file name.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Next, click the
+<IMG SRC="output_killed_stations_records.png" NAME="graphics83" ALIGN=BOTTOM WIDTH=203 HEIGHT=20 BORDER=0>
+if you would like killed stations and shot records to be output</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>(this will not
+make very much difference, as killed stations/records are output with
+a &quot;K&quot; at the beginning of the line,</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>causing them to
+be ignored by GeoBuild).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Once you are
+ready, click the 
+<IMG SRC="launch.png" NAME="graphics84" ALIGN=BOTTOM WIDTH=26 HEIGHT=24 BORDER=0>
+button to launch GeoBuild in a new window.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The GeoBuild
+output files are explained in detail in the GeoBuild tab.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><IMG SRC="blurulr6.gif" NAME="graphics92" ALIGN=LEFT WIDTH=640 HEIGHT=5 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="a"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=5><U><B>Appendix
+A. Button Overview.</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>In this
+section, we will go into more detail about what each of the buttons
+actually do in the Map and Spreadsheet portions of the</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>program.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="a1"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>A.1
+Map Buttons:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The Map has 2
+main categories of buttons: those that effect mouse behavior, and
+those that effect what's being displayed.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Mouse-behavior
+buttons will be called &quot;Mouse-Mode&quot; buttons, while the
+others are &quot;View-Mode&quot; buttons.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="a1a"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>A.1.a
+Mouse-Mode Buttons:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The mouse modes
+are: &quot;Select Shot Point/Receiver&quot;, &quot;Select Shot&quot;,
+&quot;Calculate Distance/Angle&quot;, and &quot;Calculate Area&quot;.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>All of these
+modes effect what happens when you left-click in the map with your
+mouse. Left-drag always remains the same </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>(pans the map).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>The buttons
+are:</B></U></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><IMG SRC="select.png" NAME="graphics93" ALIGN=BOTTOM WIDTH=25 HEIGHT=27 BORDER=0>
+	<FONT FACE="DejaVu Sans, sans-serif"><B>&quot;Select Shot
+	Point/Receiver&quot; mouse mode. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>In this mode,
+	left-clicking causes the nearest Shot Point and Receiver to the
+	cursor to be selected and highlighted in the</B></FONT></P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>spreadsheets.
+	The spreadsheets will automatically scroll to the selected station.</B></FONT></P>
+	<LI><P ALIGN=LEFT><IMG SRC="spread4.png" NAME="graphics94" ALIGN=BOTTOM WIDTH=19 HEIGHT=17 BORDER=0>
+	<FONT FACE="DejaVu Sans, sans-serif"><B>&quot;Select Shot&quot;
+	mouse mode. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>In this mode,
+	left-clicking selects the nearest Shot Point, Receiver, and the
+	first Shot record encountered that uses the </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>selected Shot
+	Point. All receivers used by that Shot record are painted white. If
+	no Shot record is found, an error message </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>pops up. The
+	selected Shot record also is highlighted and scrolled to in the
+	Relation Spreadsheet (as are the selected Shot </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Point, and
+	nearest Receiver). Selecting any of the other mouse mode buttons
+	will hide the selected Shot display </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>(turn of the
+	Receiver spread highlighting and Shot ID label).</B></FONT></P>
+	<LI><P ALIGN=LEFT><IMG SRC="ruler.png" NAME="graphics95" ALIGN=BOTTOM WIDTH=27 HEIGHT=29 BORDER=0>
+	<FONT FACE="DejaVu Sans, sans-serif"><B>&quot;Calculate
+	Distance/Angle&quot; mouse mode. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>In this mode,
+	left-clicking selects the first point in a Calculate Distance/Angle
+	line. The line stretches and follows your </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>cursor, until
+	you make the second click. The second click finishes the line, so
+	that you can see the distance spanned by </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>the line and
+	it's angle (calculated in degrees, counter-clockwise, from due East,
+	as it is in the area definition for Focus). </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>A third click
+	causes the line to disappear (while a fourth click starts the
+	process all over again, etc.)</B></FONT></P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Note: this
+	functionality can also be performed, regardless of mouse-mode, with
+	the middle mouse button (<A HREF="#a1c">see A.1.c</A>)</B></FONT></P>
+	<LI><P ALIGN=LEFT><IMG SRC="area.png" NAME="graphics96" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0>
+	<FONT FACE="DejaVu Sans, sans-serif"><B>&quot;Calculate Area&quot;
+	mouse mode. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>In this mode,
+	left-clicking adds a new point the the area polygon. As you click,
+	the area calculation is automatically</B></FONT></P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>updated and
+	plotted at the right-most point. The area is calculated using
+	whatever units are currently selected. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>If &quot;feet&quot;
+	are selected, the total is divided by 5280 X 5280 and displayed in
+	square miles. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>If &quot;meters&quot;
+	are selected, the total is divided by 1,000,000 and displayed in
+	square kilometers.</B></FONT></P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To start the
+	polygon over, or hide it when your done, simply double left-click.</B></FONT></P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Note: this
+	functionality can also be performed, regardless of mouse-mode, with
+	the middle mouse button (<A HREF="#a1c">see A.1.c</A>)</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="a1b"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>A.1.b
+View-Mode Buttons:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The view modes
+are: &quot;Toggle Receiver&quot;, &quot;Toggle Shot Point&quot;,
+&quot;Toggle Scatter&quot;, and &quot;Toggle Units&quot;.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>These buttons
+change what is displayed and how things are displayed in the Map.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>The buttons
+are:</B></U></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><IMG SRC="receiver_toggle.png" NAME="graphics97" ALIGN=BOTTOM WIDTH=26 HEIGHT=28 BORDER=0>
+	<FONT FACE="DejaVu Sans, sans-serif"><B>&quot;Toggle Receiver
+	Display&quot;. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Clicking this
+	button hides Receiver stations if they're already displayed (or
+	shows them again if they were hidden).</B></FONT></P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Also, if the
+	display is showing a column value, the Colorbar is reset to the
+	minimum and maximum of the Shot Points only </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>(if they are
+	showing).</B></FONT></P>
+	<LI><P ALIGN=LEFT><IMG SRC="shot_toggle.png" NAME="graphics98" ALIGN=BOTTOM WIDTH=26 HEIGHT=25 BORDER=0>
+	<FONT FACE="DejaVu Sans, sans-serif"><B>&quot;Toggle Shot Point
+	Display&quot;. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Clicking this
+	button hides Shot Point stations if they're already displayed (or
+	shows them again if they were hidden).</B></FONT></P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Also, if the
+	display is showing a column value, the Colorbar is reset to the
+	minimum and maximum of the Receivers only </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>(if they are
+	showing).</B></FONT></P>
+	<LI><P ALIGN=LEFT><IMG SRC="scatter.png" NAME="graphics99" ALIGN=BOTTOM WIDTH=26 HEIGHT=25 BORDER=0>
+	<FONT FACE="DejaVu Sans, sans-serif"><B>&quot;Toggle Scatter
+	Display&quot;. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Clicking this
+	button causes the scatter to be calculated and displayed as small
+	grey &quot;+&quot; signs (or hides them if already </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>showing). As
+	calculating the scatter can take a long time, the points are stored
+	in memory for future use (hiding the scatter </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>doesn't mean
+	you will have to recalculate it in order to show it again). The
+	default is for only every 4th Shot to be used in the </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>calculation.
+	To see scatter from more/fewer shots, use the Display -&gt; Scatter
+	Shot Increment pull-down menu.</B></FONT></P>
+	<LI><P ALIGN=LEFT><IMG SRC="units.png" NAME="graphics100" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0>
+	<FONT FACE="DejaVu Sans, sans-serif"><B>&quot;Toggle Units&quot;. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Clicking this
+	button causes meters to be used for units (or feet if meters are
+	already being used).</B></FONT></P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The units
+	displayed on the scale line will change, as well as the area polygon
+	(if it's showing).</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="a1c"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>A.1.c
+Mouse Buttons (left, middle, right):</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>All 3 buttons
+are be used to perform functions in the Map. </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>As described in
+section A.1.a, the left-click action can perform many different
+things, depending on the current mouse-mode. </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The current
+effect of each mouse button is listed in the &quot;Mouse Help&quot;
+section across the bottom of the Map.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The other
+buttons are unaffected by the current mouse mode, as seen below:</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>Left Mouse:</B></U></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Click -
+	Various different actions, depending on current mouse mode (default
+	is to select nearest Receiver and Shot Point, </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>causing them
+	to be highlighted and scrolled to in the spreadsheets).</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Drag -
+	Pans the Map in the direction of the left-click drag.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Double-Click
+	- Does nothing except in the following mouse-modes:</B></FONT></P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>&quot;Select
+	Shot&quot; mouse-mode: deselects any currently selected Shot record.</B></FONT></P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>&quot;Calculate
+	Area&quot; mouse-mode: erases area polygon.</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>Middle
+Mouse:</B></U></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Click -
+	Adds new point to Area polygon (or starts a new polygon, if one
+	isn't already visible).</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Drag -
+	Draws Distance/Angle line from drag start position to drag end
+	position.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Double-Click
+	- Erases current Area polygon and Distance/Angle line.</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>Right Mouse:</B></U></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Click -
+	Reset zoom to fully zoomed-out (with small margin between edges of
+	survey and Map boundaries).</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Drag -
+	Draw zoom rectangle (map will actually zoom in on selected area when
+	you release the mouse button).</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Double-Click
+	- Same as Click.</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="a2"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>A.2
+Spreadsheet Buttons:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The buttons in
+the spreadsheets allow you to add or remove columns and rows,
+interpolate, extrapolate, and reset the data back to </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>the values
+found in the input file. Column Buttons are found across the top of
+the spreadsheet. Row Buttons are found along the </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>left-hand edge
+of the spreadsheet.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="a2a"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>A.2.a
+Column Buttons:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>All Column
+Buttons are located across the top of the spreadsheet and effect
+whatever cell(s) is currently selected (the currently</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>selected
+cell(s) will have a darker colored background). One exception is that
+new columns are always added at the end of the</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>spreadsheet. </B></FONT>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>The Buttons
+are:</B></U></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><IMG SRC="plus.gif" NAME="graphics101" ALIGN=BOTTOM WIDTH=29 HEIGHT=28 BORDER=0>
+	<FONT FACE="DejaVu Sans, sans-serif"><B>Adds a new column to the end
+	of the spreadsheet. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>You will be
+	asked what to name the new column as well as what type of value it
+	contains.</B></FONT></P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Value types
+	are:</B></FONT></P>
+	<UL>
+		<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Float -
+		Number with a decimal place in it.</B></FONT></P>
+		<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Integer -
+		Whole number without decimal place.</B></FONT></P>
+		<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Text -
+		Non-number (such as comments or anything with letters in it -
+		numbers are accepted, but won't be treated as </B></FONT>
+		</P>
+		<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>such).</B></FONT></P>
+		<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>True_False
+		- Yes or No type values. Values are dislpayed as checkboxes.</B></FONT></P>
+	</UL>
+	<LI><P ALIGN=LEFT><IMG SRC="minus.png" NAME="graphics102" ALIGN=BOTTOM WIDTH=27 HEIGHT=25 BORDER=0>
+	<FONT FACE="DejaVu Sans, sans-serif"><B>Removes column from
+	spreadsheet. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Only
+	non-standard columns (ones that you added yourself) can be removed.</B></FONT></P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This cannot be
+	undone, so you may want to save the project before clicking this
+	button.</B></FONT></P>
+	<LI><P ALIGN=LEFT><IMG SRC="exrap_up.png" NAME="graphics103" ALIGN=BOTTOM WIDTH=26 HEIGHT=28 BORDER=0>
+	<FONT FACE="DejaVu Sans, sans-serif"><B>Extrapolate upwards. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This button
+	becomes enabled when 3 or more rows have been selected. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The bottom two
+	rows remain unchanged, while any rows above that are extrapolated
+	(using the bottom two as the slope for</B></FONT></P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>extrapolation).
+	Multiple columns can be extrapolated at the same time.</B></FONT></P>
+	<LI><P ALIGN=LEFT><IMG SRC="exrap_down.png" NAME="graphics104" ALIGN=BOTTOM WIDTH=26 HEIGHT=28 BORDER=0>
+	<FONT FACE="DejaVu Sans, sans-serif"><B>Extrapolate downward. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This button
+	becomes enabled when 3 or more rows have been selected. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The top two
+	rows remain unchanged, while any rows below that are extrapolated
+	(using the top two as the slope for </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>extrapolation).
+	Multiple columns can be extrapolated at the same time.</B></FONT></P>
+	<LI><P ALIGN=LEFT><IMG SRC="interp.png" NAME="graphics105" ALIGN=BOTTOM WIDTH=26 HEIGHT=28 BORDER=0>
+	<FONT FACE="DejaVu Sans, sans-serif"><B>Interpolate. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This button
+	becomes enabled when 3 or more rows have been selected. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The top and
+	bottom rows remain unchanged, while any rows between them are
+	interpolated. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Multiple
+	columns can be interpolated at the same time.</B></FONT></P>
+	<LI><P ALIGN=LEFT><IMG SRC="reload.png" NAME="graphics106" ALIGN=BOTTOM WIDTH=26 HEIGHT=28 BORDER=0>
+	<FONT FACE="DejaVu Sans, sans-serif"><B>Reload. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>All data is
+	reset to what was stored in the input file. If a column is not
+	contained in the input file, it's values are set to the</B></FONT></P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>defaults. As
+	this step cannot be undone, the user is prompted to make sure this
+	is the correct action before proceeding. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>If you are
+	unsure, it is probably a good idea to save the project before doing
+	this.</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="a2b"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>A.2.b
+Row Buttons:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Row Buttons are
+located along the left-hand side of the spreadsheet and effect
+whatever cell(s) is currently selected (the currently</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>selected
+cell(s) will have a darker colored background). </B></FONT>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>The Buttons
+are:</B></U></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><IMG SRC="plus.gif" NAME="graphics107" ALIGN=BOTTOM WIDTH=29 HEIGHT=28 BORDER=0>
+	<FONT FACE="DejaVu Sans, sans-serif"><B>Adds a new row to the
+	spreadsheet above the currently selected one.</B></FONT></P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Values in the
+	row for each column are defaulted to zero, false, or blank (for Text
+	columns).</B></FONT></P>
+	<LI><P ALIGN=LEFT><IMG SRC="minus.png" NAME="graphics108" ALIGN=BOTTOM WIDTH=27 HEIGHT=25 BORDER=0>
+	<FONT FACE="DejaVu Sans, sans-serif"><B>Removes a row (or rows) from
+	the spreadsheet. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This cannot be
+	undone, so you may want to save the project before doing this. </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>For this
+	reason, the &quot;Kill&quot; column is generally recommended over
+	removing rows, as it has the same effect, but can be undone.</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><IMG SRC="blurulr6.gif" NAME="graphics109" ALIGN=LEFT WIDTH=640 HEIGHT=5 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="a3"></A><A NAME="b"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=5><U><B>Appendix
+B. CDP Grid Definition.</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>In this
+section, we will discuss how to create a CDP binning grid definition
+in Mapper.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="b1"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.1
+Select the “CDP Binning” tab:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Click the “CDP
+Binning” tab to see the following dialog:</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><IMG SRC="cdp_binning_1.jpeg" NAME="graphics110" ALIGN=BOTTOM WIDTH=951 HEIGHT=433 BORDER=0></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="b2"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.2
+Set Required Parameters:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Mapper uses 4
+different methods to define a CDP Grid: Estimate, Corners, Angle, or
+Mouse Adjust. </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>All of these
+methods have the following parameters which need to be defined in
+common:</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="required_parameters.jpeg" NAME="graphics126" ALIGN=BOTTOM WIDTH=742 HEIGHT=88 BORDER=0></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>You must
+define:</B></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>1</B></FONT><SUP><FONT FACE="DejaVu Sans, sans-serif"><B>st</B></FONT></SUP>
+	<FONT FACE="DejaVu Sans, sans-serif"><B>CDP – The first CDP number
+	for sequential counting. (Not used by Mapper, but needed by Focus)</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Inline
+	Spacing – Distance between successive CDP Inlines.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Crossline
+	Spacing - Distance between successive CDP Crosslines.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Inline
+	Label Increment – Amount Inline numbers increase by between
+	Inlines (usually 1).</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Crossline
+	Label Increment – Amount Crossline numbers increase by between
+	Crosslines (usually 1).</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>These numbers
+will be used by all other sections of the CDP Binning window.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>NOTE: Corners
+Method may overwrite some of the above parameters. The Corners method
+assumes both</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Inline and
+Crossline Increments are 1. Inline and Crossline Spacings are
+calculated based on the input</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>corner-point
+information.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="b3"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.3
+Choose CDP Definition Method:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Use the “Grid
+Definition Method” check-boxes to select the Grid Definition Method
+you prefer. </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Your options
+are:</B></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B><A HREF="#b3a">Estimate</A>
+	– Estimates grid Angle and Corner Points using the Receiver and
+	Shot Point Station locations.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B><A HREF="#b3c">Corners</A>
+	– Uses Corner-Points supplied by the user to define the grid. Only
+	3 points are necessary.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B><A HREF="#b3d">Angle</A>
+	– Calculates the Corner Points using the grid Angle, Origin, and
+	number of Inlines and Crosslines.</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The fourth way
+to define the grid is by <A HREF="#b6">clicking-and-dragging with the
+mouse</A>. This can be used to</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>change the
+origin and angle, but not the number of Inlines or Crosslines.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="b3a"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.3.a
+Estimate Grid Definition Method:</B></U></FONT></FONT></FONT><A HREF="#contents"><FONT FACE="DejaVu Sans, sans-serif"><B><BR>top</B></FONT></A></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This method
+uses Receiver Station locations to determine the Angle of the survey.
+Using this Angle,</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>it defines a
+grid big enough to enclose all Receiver and Shot Point Stations, plus
+an optional Buffer of any</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>number of CDP
+bins.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="estimate_method.jpeg" NAME="graphics127" ALIGN=BOTTOM WIDTH=700 HEIGHT=149 BORDER=0></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Parameters to
+set:</B></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Buffer –
+	Number of extra bins to add on each side of the survey (beyond Shot
+	and Receiver Stations).</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Origin
+	Inline – Inline number to assign to the origin point.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Origin
+	Crossline – Crossline number to assign to the origin point.</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Once you have
+the parameters set the way you like, click 
+<IMG SRC="estimate_button.jpeg" NAME="graphics133" ALIGN=BOTTOM WIDTH=87 HEIGHT=27 BORDER=0>
+to kick off the grid estimation job.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>NOTE: Two
+situations can arise that will cause the “Estimate” method to
+fail. You could have</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>a survey in
+which the bin corners are not supposed to land under Receiver
+stations. In this case, you</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>need to click
+“Adjust Origin”<IMG SRC="pan_grid.png" NAME="graphics114" ALIGN=BOTTOM WIDTH=31 HEIGHT=32 BORDER=0>
+under “Mouse Action” to manually move the origin. In the second
+case,</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>you could have
+Receiver lines that aren't straight, causing “Estimate” to get
+the angle wrong.</B></FONT></P>
+<P ALIGN=LEFT>“<FONT FACE="DejaVu Sans, sans-serif"><B>Estimate”
+takes azimuths periodically down Receiver lines, getting the final
+Angle from the median value</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>of those
+azimuths. If there are too many curves in the Receiver lines, the
+median value may not be </B></FONT>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>representative
+of the entire survey. In this case, click “Adjust Angle”<IMG SRC="rotate_grid.png" NAME="graphics115" ALIGN=BOTTOM WIDTH=31 HEIGHT=32 BORDER=0>
+under “Mouse Action” and manually</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>adjust the
+angle to the correct value. Finally, incorrect Inline and/or
+Crossline spacing values will always</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>cause
+“Estimate” to fail.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="b3b"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.3.b
+Estimate Grid Definition Method – Match Existing Grid:<A HREF="#contents"><BR>top</A></B></U></FONT></FONT></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Often times you
+are asked to take an existing CDP grid and expand it to match another
+survey (e.g. merge).</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>In easy cases,
+this can be handled by merely adding Inlines and Crosslines. In more
+difficult cases, a new</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>origin is
+required, which can be time consuming to obtain by hand. This method
+is designed to make the</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>latter case
+much easier to accomplish.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>You give Mapper
+an Angle and CDP Point to match, and it does all of the rest. The
+Angle and CDP Point</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>given will be
+honored, and a grid computed that's large enough to cover all of the
+Receiver and Station</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Points
+available (plus any Buffer specified).</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="estimate_method_matching.jpeg" NAME="graphics128" ALIGN=BOTTOM WIDTH=699 HEIGHT=147 BORDER=0></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Parameters to
+set:</B></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Angle –
+	Angle from due East to the first Inline in degrees (0 – 360, no
+	negative angles) of the</B></FONT></P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>CDP Grid to be
+	matched.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Inline –
+	Inline number of the CDP Point to be matched (usually the grid
+	origin).</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Crossnline
+	– Crossline number of the CDP Point to be matched (usually the
+	grid origin).</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>X – X
+	Coordinate of the CDP Point to be matched (usually the grid origin).</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Y – Y
+	Coordinate of the CDP Point to be matched (usually the grid origin).</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Click  
+<IMG SRC="estimate_button.jpeg" NAME="graphics129" ALIGN=BOTTOM WIDTH=87 HEIGHT=27 BORDER=0>
+button (with “Match Existing Grid” check-box checked) to cause
+Mapper to build a matching</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>CDP Grid. The
+“Origin IL” and “Origin XL” fields of the Estimate section
+will be overwritten with values</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>calculated to
+match the new grid.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Note: If the
+CDP Point being matched lies outside the available survey points, it
+might not be included</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>in the final
+grid. Mapper gives each CDP the correct Inline and Crossline as if
+the grid extended all the</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>way out to the
+given CDP Point, but only defines the Inlines and Crosslines
+necessary to cover all Receiver</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>and Shot Point
+Stations.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="b3c"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.3.c
+Corners Method:<A HREF="#contents"><BR>top</A></B></U></FONT></FONT></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This method is
+for building a CDP Grid from information on a 3D Loading Sheet. It
+can also be used to move</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>the origin to a
+different grid corner.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Four corners
+are available for input: Upper-Left, Upper-Right, Lower-Right, and
+Lower-Left.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Only 3 of these
+corners are necessary to define the grid. To ensure correct results,
+you should leave the</B></FONT></P>
+<P ALIGN=LEFT> <FONT FACE="DejaVu Sans, sans-serif"><B>4</B></FONT><SUP><FONT FACE="DejaVu Sans, sans-serif"><B>th</B></FONT></SUP>
+<FONT FACE="DejaVu Sans, sans-serif"><B>corner (opposite the origin)
+blank.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>Corners From
+Loading Sheet:</B></U></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To fill out the
+corners from a loading sheet, make sure that you match the
+information with the correct</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>corner from the
+map (the Upper-Right corner should be the North-Easterly corner from
+the map,</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>the Upper-Left
+corner the North-Westerly corner, etc.) If you place information in
+the wrong corner,</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Mapper should
+be able to correct your mistake, but it's not guaranteed.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="corners_method.jpeg" NAME="graphics130" ALIGN=BOTTOM WIDTH=692 HEIGHT=201 BORDER=0></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>When you have
+the corners the way you like them, click “Refresh Grid”<IMG SRC="reload.png" NAME="graphics113" ALIGN=BOTTOM WIDTH=36 HEIGHT=36 BORDER=0>.
+This will automatically fill in</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>the 4<SUP>th</SUP>
+corner and other appropriate fields throughout the CDP Binning
+window.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><U><B>Reassigning
+the Origin Corner:</B></U></FONT></P>
+<P ALIGN=LEFT><SPAN STYLE="text-decoration: none"><FONT FACE="DejaVu Sans, sans-serif"><B>To
+reassign the origin to </B></FONT></SPAN><FONT FACE="DejaVu Sans, sans-serif"><B>a
+different corner (for example, if you don't like where the “Estimate”
+button</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>put it), simply
+copy and paste the Inline and Crossline values of the various corners
+to where you would like</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>them to be,
+while leaving the X/Y Coordinates of the corners alone. Again, it's
+probably best to leave the</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>corner opposite
+the origin blank. </B></FONT>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Example: Below
+I move the CDP Origin from the Lower-Right corner to the Lower-Left
+corner, while keeping</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>the Inlines
+going North-South so that they're parallel to the Receiver Lines.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="corners_method1.jpeg" NAME="graphics131" ALIGN=BOTTOM WIDTH=692 HEIGHT=201 BORDER=0></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>When you have
+the corners the way you like them, click “Refresh Grid”<IMG SRC="reload.png" NAME="graphics112" ALIGN=BOTTOM WIDTH=36 HEIGHT=36 BORDER=0>.
+This will automatically fill in</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>the 4<SUP>th</SUP>
+corner and other appropriate fields throughout the CDP Binning
+window.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="b3d"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.3.d
+Angle Method:<A HREF="#contents"><BR>top</A></B></U></FONT></FONT></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Use this method
+to manually create a CDP grid based on the Origin, Angle, and number
+of Inlines and</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Crosslines.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="angle_method.jpeg" NAME="graphics132" ALIGN=BOTTOM WIDTH=704 HEIGHT=156 BORDER=0></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Parameters to
+set:</B></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Angle –
+	Angle counter-clockwise from due East to the first Inline in degrees
+	</B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>(0 – 360, no
+	negative values).</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Inline –
+	Inline number of the Origin.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Crossline
+	– Crossline number of the Origin.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>X – X
+	Coordinate of the Origin.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Y – Y
+	Coordinate of the Origin.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B># Inlines
+	– Total number of Inlines.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B># Xlines –
+	Total number of Crosslines.</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>When you have
+the parameters the way you like them, click “Refresh Grid”<IMG SRC="reload.png" NAME="graphics111" ALIGN=BOTTOM WIDTH=36 HEIGHT=36 BORDER=0>.</B></FONT></P>
+<P ALIGN=LEFT><A NAME="__DdeLink__553_289030591"></A><FONT FACE="DejaVu Sans, sans-serif"><B>This
+will automatically fill in various appropriate fields throughout the
+CDP Binning window and update the</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Station map on
+the right.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="b4"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.4
+Display Grid Section:<A HREF="#contents"><BR>top</A></B></U></FONT></FONT></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This section
+gives you control over the display of the CDP Grid on the Station map
+to the right of</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>the window. You
+can turn the Grid on or off, adjust the number visible Grid lines,
+and the Grid line labeling</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>frequency.</B></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT>“<FONT FACE="DejaVu Sans, sans-serif"><B>Show
+	Grid” 
+	<IMG SRC="grid.png" NAME="graphics118" ALIGN=BOTTOM WIDTH=31 HEIGHT=32 BORDER=0>
+	- Click this button to toggle the CDP Grid display on or off.</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Inline
+	Inc. - How often CDP Inline grid lines are drawn (default is every
+	10<SUP>th</SUP> Inline)</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Xline Inc.
+	- How often CDP Crossline grid lines are drawn (default is every
+	10<SUP>th</SUP> Crossline)</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>IL Label
+	Freq. - How often Inline grid lines are labeled (check-box toggles
+	labeling on and off).</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>XL Label
+	Freq. - How often Crossline grid lines are labeled (check-box
+	toggles labeling on and off).</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>When you have
+the parameters the way you like them, click “Refresh Grid”<IMG SRC="reload.png" NAME="graphics116" ALIGN=BOTTOM WIDTH=36 HEIGHT=36 BORDER=0>
+to update the display</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>(or just roll
+your mouse over the Station map).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="b5"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.5
+Scatter Display Section:<A HREF="#contents"><BR>top</A></B></U></FONT></FONT></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Use this
+section to display the CDP Scatter points on the Station map to the
+right. CDP Scatter points</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>should fall in
+the center of the CDP bins when a CDP Grid has been laid out
+correctly.</B></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT>“<FONT FACE="DejaVu Sans, sans-serif"><B>Show
+	Scatter” 
+	<IMG SRC="scatter.png" NAME="graphics117" ALIGN=BOTTOM WIDTH=31 HEIGHT=32 BORDER=0>
+	- Click this button to toggle the CDP Scatter on or off.</B></FONT></P>
+	<LI><P ALIGN=LEFT>“<FONT FACE="DejaVu Sans, sans-serif"><B>Shot
+	Inc.” - Increment between shots to be used in the Scatter
+	calculation.</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>The first time
+you click 
+<IMG SRC="scatter.png" NAME="graphics119" ALIGN=BOTTOM WIDTH=31 HEIGHT=32 BORDER=0>
+Mapper has to calculate all of the Scatter points, which can take a
+long time.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Set “Shot
+Inc.” to a higher number to increase the calculation speed (causing
+less points to be displayed).</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Use a lower
+“Shot Inc.” value to see more points.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Subsequent 
+<IMG SRC="scatter.png" NAME="graphics122" ALIGN=BOTTOM WIDTH=31 HEIGHT=32 BORDER=0>
+clicks will refresh much more quickly, as the scatter points will be
+drawn from memory</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>and not
+recalculated (unless you change the “Shot Inc.” value).</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A NAME="b6"></A><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.6
+Mouse Action Section:<A HREF="#contents"><BR>top</A></B></U></FONT></FONT></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>This section
+allows you to manually fix the CDP Grid with your mouse. This might
+be necessary, for example,</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>if the Estimate
+Method is off in angle or origin, or the loading sheet from the
+client was off by a bit. By</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>clicking one of
+the buttons below, you can adjust the model with your mouse. As you
+adjust the Grid, the</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Station map
+will update in real-time, letting you quickly ensure that the final
+Grid actually matches the</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>survey's
+natural binning.</B></FONT></P>
+<UL>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Pan Map
+	(normal) 
+	<IMG SRC="pan_icon.png" NAME="graphics120" ALIGN=BOTTOM WIDTH=31 HEIGHT=32 BORDER=0>
+	- Left-click-and-drag to move the entire map (both map and grid move
+	together).</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Adjust
+	Origin 
+	<IMG SRC="pan_grid.png" NAME="graphics123" ALIGN=BOTTOM WIDTH=31 HEIGHT=32 BORDER=0>
+	- Left-click-and-drag to move the CDP grid only (Station map remains
+	fixed).</B></FONT></P>
+	<LI><P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Adjust
+	Angle 
+	<IMG SRC="rotate_grid.png" NAME="graphics124" ALIGN=BOTTOM WIDTH=31 HEIGHT=32 BORDER=0>
+	- Left-click-and-drag to rotate the CDP grid (Station map remains
+	fixed). </B></FONT>
+	</P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Drag to the
+	right to increase the angle. Drag to the left to decrease the angle.
+	Dragging vertically has</B></FONT></P>
+	<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>no effect.
+	Dragging while zoomed-in adjusts more slowly than dragging while
+	zoomed out.</B></FONT></P>
+</UL>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>NOTE: Be sure
+to click Pan Map 
+<IMG SRC="pan_icon.png" NAME="graphics121" ALIGN=BOTTOM WIDTH=31 HEIGHT=32 BORDER=0>
+when you're done so that you don't accidentally alter the grid while</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>panning at a
+later time.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Below is a CDP
+Grid showing the Scatter correctly centered in the middle of the
+bins:</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="cdp_binning_2.jpeg" NAME="graphics125" ALIGN=BOTTOM WIDTH=542 HEIGHT=476 BORDER=0></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><A HREF="#b7"><FONT COLOR="#000080"><FONT FACE="DejaVu Sans, sans-serif"><FONT SIZE=4><U><B>B.7
+Output LINE3D File:top</B></U></FONT></FONT></FONT></A></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Once you're
+done building the CDP Grid, you can output your results to FOCUS
+using the the Output LINE3D</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>File dialog.</B></FONT></P>
+<P ALIGN=LEFT><IMG SRC="output_line3d.jpeg" NAME="graphics138" ALIGN=BOTTOM WIDTH=966 HEIGHT=26 BORDER=0></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Mapper will
+create a standard LINE3D DISCO job that can be check-listed to import
+the CDP Grid into the</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Focus database.</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>To do this,
+first click the 
+<IMG SRC="browse.png" NAME="graphics139" ALIGN=BOTTOM WIDTH=36 HEIGHT=35 BORDER=0>
+button. This opens up a standard Browsing window for setting the
+output path</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>of the LINE3D
+file. You should end the filename with “.dat” so that FOCUS will
+recognize it as a job file.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Next, click
+“Save” in the Browsing window. Mapper will try to create the
+file. If all goes well (which it should)</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>the “Save
+Success!” window will pop up. Just click OK. </B></FONT>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>Finally, open
+the Production window in FOCUS and import your .dat. After importing,
+either run or check-list</B></FONT></P>
+<P ALIGN=LEFT><FONT FACE="DejaVu Sans, sans-serif"><B>the job to save
+the CDP Grid into Focus.</B></FONT></P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<P ALIGN=LEFT><BR><BR>
+</P>
+</BODY>
+</HTML>

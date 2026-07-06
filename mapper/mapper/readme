@@ -1,0 +1,12 @@
+Install:
+run "install"
+this copies the startup script to $BASE_DIR/../bin/mapper
+
+Requirements:
+JRE 1.4 or higher
+program also depends upon C++ program "gbuild" for certain parts of execution
+
+Run:
+type "mapper"
+this executes startup script "mapper" which should be placed in
+$BASE_DIR/../bin/mapper

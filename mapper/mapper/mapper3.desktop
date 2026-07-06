@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=No name
+Type=Application
+Exec=/trifocus/bin/mapper
+TryExec=
+Icon=/trifocus/tricon/java/images/mapper.png
+X-GNOME-DocPath=
+Terminal=false
+Name[en_US]=mapper3
+GenericName[en_US]=mapper3
+Comment[en_US]=

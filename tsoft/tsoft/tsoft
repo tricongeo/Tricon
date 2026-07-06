@@ -1,0 +1,5 @@
+#!/bin/csh
+setenv CLASSPATH  bin:../lib/bin
+setenv INPUTPATH  /trifocus/help
+setenv OUTPUTPATH /trifocus/help
+java -classpath $CLASSPATH  com.tricongeophysics.TSoft $INPUTPATH/tricon_software.txt $OUTPUTPATH/software.html $INPUTPATH/tricon_updates.txt $OUTPUTPATH/updates.html

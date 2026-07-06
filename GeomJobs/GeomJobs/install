@@ -1,0 +1,7 @@
+cd ..
+cvs update .
+cd GeomJobs
+
+javac -target 1.6 -source 1.6 -sourcepath $BASE_DIR/java/GeomJobs/src:$BASE_DIR/java/lib/src -d $BASE_DIR/java/GeomJobs/bin/ src/com/tricongeophysics/GeomJobs.java
+rm -rf geomJobs.jar
+jar -cvfm geomJobs.jar manifest.txt -C bin com -C ../mysql/ com/mysql

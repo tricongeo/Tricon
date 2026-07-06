@@ -1,0 +1,4 @@
+#!/bin/csh
+setenv CLASSPATH  bin
+setenv SOURCEPATH src:../lib/src
+javac -sourcepath $SOURCEPATH -classpath $CLASSPATH  -d bin src/com/tricongeophysics/TSoft.java

@@ -1,0 +1,16 @@
+cd ..
+cvs update .
+
+rm -rf lib/bin/com/tricongeophysics/images
+
+cd mapper
+mkdir bin2
+mkdir bin2/com
+mkdir bin2/com/tricongeophysics
+ln -s ../../../docs bin2/com/tricongeophysics
+
+javac -target 1.6 -source 1.6 -sourcepath $BASE_DIR/java/mapper/source:$BASE_DIR/java/lib/src:$BASE_DIR/java/mapper/docs:$BASE_DIR/java/FocusDbIO/src:$BASE_DIR/java/ParadigmDataSetIO/src -d $BASE_DIR/java/mapper/bin2 source/com/tricongeophysics/Mapper3d.java
+
+rm -rf mapper3d.jar
+
+jar -cvfm mapper3d.jar manifest.txt -C bin2 com -C ../lib/bin/com tricongeophysics -C $BASE_DIR/java images

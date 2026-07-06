@@ -1,0 +1,23 @@
+#..compile java source into java machine code
+#
+# Since most computers seem to only have JRE instead of JDK, we're going to check the jar file
+# (compressed, precompiled code) into CVS as well and distribute it instead of trying to compile/jar everywhere - SWC 3/31/2008
+#
+#
+#..requires javac compiler http://java.sun.com/javase/downloads/index.jsp (click download)
+# (to compile, uncomment the next two lines)
+#cd $BASE_DIR/java/mapper/source
+javac -target 1.6 -source 1.6 -sourcepath $BASE_DIR/java/mapper/source:$BASE_DIR/java/lib/src -d $BASE_DIR/java/mapper/classes source/com/tricongeophysics/Mapper.java
+
+#..get image files
+# (when making from scratch, you need to first copy images over so they can be put into jar file
+#cp -r $BASE_DIR/java/mapper/source/com/tricongeophysics/images $BASE_DIR/java/mapper/classes/com/tricongeophysics/images
+
+#..wrap classes into a jar file for easier excecution
+# (to jar code, uncomment following lines)
+jar -cvfm mapper.jar manifest.txt -C classes com -C ../lib/bin/ com
+
+#copy startup script to bin directory
+rm $BASE_DIR/../bin/mapper
+cp $BASE_DIR/java/mapper/mapper $BASE_DIR/../bin/mapper
+

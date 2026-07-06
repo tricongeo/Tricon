@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="source"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/lib"/>
+	<classpathentry kind="src" path="/ParadigmDataSetIO"/>
+	<classpathentry kind="src" path="/FocusDbIO"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

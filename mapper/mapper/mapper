@@ -1,0 +1,26 @@
+#!/bin/env bash
+if [ -d "$JAVA_HOME/" -a  -x "$JAVA_HOME/bin/java" ] 
+    then
+    JVM=$JAVA_HOME/bin/java 
+else if [ -d "/usr/java/default/bin/"  -a  -x "/usr/java/default/bin/java" ] 
+    then
+    JVM=/usr/java/default/bin/java
+else if [ -d "/usr/java2/bin/"  -a  -x "/usr/java2/bin/java"  ]
+    then
+    JVM=/usr/java2/bin/java
+else if [ -d "/usr/bin/"  -a  -x "/usr/bin/java"  ]
+    then
+    JVM=/usr/bin/java
+else if [ -d "/bin/"  -a  -x "/bin/java"  ]
+    then
+    JVM=/bin/java
+fi
+fi
+fi
+fi
+fi
+
+echo "jvm is $JVM"
+$JVM -version
+
+$JVM -Xmx2048m -Xms512m -jar $BASE_DIR/java/mapper/classes/mapper.jar
