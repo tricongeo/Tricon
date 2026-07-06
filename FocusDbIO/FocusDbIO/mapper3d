@@ -1,0 +1,11 @@
+#!/bin/csh
+echo $0
+setenv BASE_DIR /home/scott/java
+#setenv BASE_DIR /trifocus/tricon
+#setenv PG_ARCH Linux_em64_2.3.2_i9
+#setenv PG_ROOT /disco/Epos3TE/Epos3
+setenv LD_LIBRARY_PATH $BASE_DIR/java/ParadigmDataSetIO:$BASE_DIR/java/FocusDbIO:/disco/Epos3TE/Epos3/p2.0/arch/Linux_em64_2.3.2_i9/lib:/disco/Epos3TE/Epos3/p2.0/arch/Linux_em64_2.3
+.2_i9/lib/rtl:/trifocus/lib54
+
+
+/trifocus/jre/java1_6  -splash:/trifocus/tricon/java/images/mapper.png -Xmx6144m -jar $BASE_DIR/java/mapper/mapper3d.jar $*
