@@ -383,11 +383,12 @@ public class CDPGrid
 
     public boolean is3d()
     {
-        if (surveyType.equals(SurveyType._3D))
-        {
-            return true;
-        }
-        return false;
+//        if (surveyType.equals(SurveyType._3D))
+//        {
+//            return true;
+//        }
+//        return false;
+    	return numInlines > 0;  //survey type does not appear to be reliable, especially when coming from Tsunami SWC 6/18/09
     }
 
 }

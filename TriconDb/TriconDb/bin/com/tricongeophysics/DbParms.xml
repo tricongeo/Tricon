@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.6.0_21" class="java.beans.XMLDecoder"> 
+ <object class="com.tricongeophysics.DbParms"> 
+  <void property="db"> 
+   <string>TriconDb</string> 
+  </void> 
+  <void property="dbTable"> 
+   <string>ReelTab</string> 
+  </void> 
+  <void property="pkeyIndex"> 
+   <int>0</int> 
+  </void> 
+  <void property="pword"> 
+   <string>zbyte</string> 
+  </void> 
+  <void property="adminPWord"> 
+   <string>ghg</string> 
+  </void> 
+  <void property="managerPWord"> 
+   <string>ghg</string> 
+  </void> 
+  <void property="query"> 
+   <string>select * from ReelTab</string> 
+  </void> 
+  <void property="url"> 
+   <string>jdbc:mysql://192.9.200.201</string> 
+  </void> 
+  <void property="user"> 
+   <string>zbyte</string> 
+  </void> 
+ </object> 
+</java> 

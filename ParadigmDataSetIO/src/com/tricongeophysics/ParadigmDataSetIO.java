@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 class ParadigmDataSetIO implements Iterator
 {
-	private DataSet dataSet;
+	private PdsioDataSet dataSet;
 	private boolean endOfGather=false;
 	private boolean endOfDataSet=false;
 	private boolean firstGatherLoaded=false;
@@ -35,14 +35,14 @@ class ParadigmDataSetIO implements Iterator
 		}
 	}
 
-	public ParadigmDataSetIO(DataSet ds){
+	public ParadigmDataSetIO(PdsioDataSet ds){
 		dataSet = ds;
 		trace = new SeismicTrace();
 	}	
 
 	public static void main(String[] args) {
 		//DataSet dataSet = new DataSet("pastunit", "TEST", "zwirn_geom_shts", "/apdata/survey/pastunit_gd/Line_AAAA/0000400600e00bc1.000000.00000003","/apdata/seisdata", "/apdata/seisdata/hds");
-		DataSet dataSet = new DataSet("2droseta", "300", "signalshots", "/isdata/survey/2droseta_gd/Line_AAAB/0000408500a00bc1.000000.0000000b","/ginge/seisdata", "/ginge/seisdata/hds");
+		PdsioDataSet dataSet = new PdsioDataSet("2droseta", "300", "signalshots", "/isdata/survey/2droseta_gd/Line_AAAB/0000408500a00bc1.000000.0000000b","/ginge/seisdata", "/ginge/seisdata/hds");
 //		pdsio.dataSelector.setFileName("cdps");
 //		pdsio.dataSelector.setLineName("TEST");
 //		pdsio.dataSelector.setProjectName("SCOTT2");
@@ -79,7 +79,7 @@ class ParadigmDataSetIO implements Iterator
 		
 
 	//call to C Paradigm IO library through JNI - loads background information about dataset
-	private native DataSet nativeInitializeDataSet(DataSet dataSet);
+	private native PdsioDataSet nativeInitializeDataSet(DataSet dataSet);
 
 	//call to C Paradigm IO library through JNI - loads first trace of particular gather
 	private native SeismicTrace nativeLoadGatherIDFirstTrace(int gatherID, SeismicTrace trace);
@@ -205,7 +205,7 @@ class ParadigmDataSetIO implements Iterator
 		return dataSet;
 	}
 
-	public void setDataSet(DataSet dataSet) {
+	public void setDataSet(PdsioDataSet dataSet) {
 		this.dataSet = dataSet;
 	}
 
