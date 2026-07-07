@@ -443,4 +443,12 @@ public class SEGYReader implements Iterator<Gather>
         t[0x4E] = '+';
         return t;
     }
+    public static void main() {
+    	try {
+			SEGYReader sr = new SEGYReader(null,null);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
 }

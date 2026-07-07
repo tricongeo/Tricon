@@ -10,204 +10,200 @@ import java.util.Iterator;
 //import com.Sts.Utilities.StsMath;
 
 //public class DataSet  implements Comparable<DataSet>, StsDataLineSetFace
-public class DataSet  implements Comparable<DataSet>
-{
+public class DataSet implements Comparable<DataSet> {
 	static public final String CDPX_HEADER = "CDP-X";
-    static public final String CDPY_HEADER = "CDP-Y";
-    static public final String CDP_HEADER = "CDP";
-    
+	static public final String CDPY_HEADER = "CDP-Y";
+	static public final String CDP_HEADER = "CDP";
+
 	private String name;
 	private String projectName;
 	private String lineName;
-	private String path; //full path of file including filesystem, directories, and dataset identifier string
-	private int sampleRate; //(milliseconds per sample)
+	protected String path; // full path of file including filesystem, directories, and dataset identifier
+							// string
+	private int sampleRate; // (milliseconds per sample)
 	private int samplesPerTrace;
-	private int timeZero=0; //time of first sample in trace (milliseconds) - not yet implemented
+	private int timeZero = 0; // time of first sample in trace (milliseconds) - not yet implemented
 	private String dataType;
-	public enum SortOrder { FFID, SHOT, CDP, OFFSET, REC_STAT, SHT_STAT, CDPLBLS, OTHER };
+
+	public enum SortOrder {
+		FFID, SHOT, CDP, OFFSET, REC_STAT, SHT_STAT, CDPLBLS, OTHER
+	};
+
 	private SortOrder primaryKey;
-	private int pkeyIndex;  //array index of primary key value
-	private SortOrder secondaryKey; //not yet implemented
+	private int pkeyIndex; // array index of primary key value
+	private SortOrder secondaryKey; // not yet implemented
 	private int maxntr;
 	private int numTraces;
 	private SeismicTrace trace;
 	private CDPGrid cdpGrid;
-	public enum LineType { INLINE, XLINE }; 
-	private LineType lineType = LineType.INLINE;  //not yet implemented
-	private Gather gather;   
+
+	public enum LineType {
+		INLINE, XLINE
+	};
+
+	private LineType lineType = LineType.INLINE; // not yet implemented
+	private Gather gather;
 //	private StsGatherData stsGatherData;
 	private int sortKeyIndex;
-	private String pgSurveyRoot; //directory that FOCUS projects are found in
-	private String pgSurveyDir; //directory that GeoDepth projects are found in
-	private File pdsFile;
-	private String[] alternateSortOrders = {};
+	protected String[] alternateSortOrders = {};
 	private float maxVal = Gather.INITIALMAX;
 	private float minVal = Gather.INITIALMIN;
-	
+
 	final static String INDEX = ".index";
 	final static String PDS = ".pds";
-	
-	public File getPdsFile() {
-		return pdsFile;
-	}
 
-	public DataSet(String project, String line, String filename, String pdsPath, String psr, String psd){
+	public DataSet(String project, String line, String filename, String filepath) {
 		trace = new SeismicTrace();
 		cdpGrid = new CDPGrid();
-		//pdsio = new ParadigmDataSetIO(this);
+		// pdsio = new ParadigmDataSetIO(this);
 		projectName = project;
 		lineName = line;
 		name = filename;
 		gather = new Gather(this);
-//		stsGatherData = new StsGatherData();
-		pgSurveyRoot = psr;
-		pgSurveyDir = psd;
-		path = pdsPath;
+//		stsGatherData = new StsGatherData();		
+		path = filepath;
 	}
-	
-	public String[] getAlternateSortOrders() {
-		loadAlternateSortOrders();
-		return alternateSortOrders;
-	}
-	
+
 	public String findSortOrder(SortOrder order) {
-		for (int i=0;i<alternateSortOrders.length;i++) {
+		for (int i = 0; i < alternateSortOrders.length; i++) {
 			if (alternateSortOrders[i].contains(order.toString())) {
 				return alternateSortOrders[i];
 			}
 		}
 		return null;
 	}
-	
-	//TODO fix so works without pdsio
-	public boolean setSortOrder (SortOrder order) {
-		loadAlternateSortOrders();
+
+	// TODO fix so works without pdsio
+	public boolean setSortOrder(SortOrder order) {
+//		loadAlternateSortOrders();
 		String matchingOrder = findSortOrder(order);
 		if (matchingOrder == null) {
 			return false;
 		}
-		//pdsio.setSortOrder(matchingOrder);
+		// pdsio.setSortOrder(matchingOrder);
 		return true;
 	}
-	
-	public void loadAlternateSortOrders() {
-		String SEP = ".";
-		ArrayList<String> orders = new ArrayList<String>();
-		if (!pdsFileOK()) {
-			return;
-		}
-		File dir = new File(pdsFile.getParent());
-		String[] contents = dir.list();
-		for (int i=0;i<contents.length;i++) {
-			String[] parts = contents[i].split("\\"+SEP);
-			int nParts = parts.length;
-			if (nParts>2) {
-				String ext = SEP+parts[parts.length-1];
-				String baseName = parts[0]+SEP+parts[1]+SEP+parts[2]; //first 3 segments of filename are basename
-				String order = contents[i].replaceFirst(baseName, "").replaceFirst(ext, "").replaceFirst(SEP, ""); //order is rest of file name
-				if (pdsFile.getName().contains(baseName) && ext.equals(INDEX)) { //test if this is index file for this dataset
-					orders.add(order);
-				}
-			}
-		}
-		alternateSortOrders = orders.toArray(new String[0]);
-	}
-	
+
 	public int getSampleRate() {
 		return sampleRate;
 	}
+
 	public void setSampleRate(int sampleRate) {
 		this.sampleRate = sampleRate;
 	}
+
 	public int getSamplesPerTrace() {
 		return samplesPerTrace;
 	}
+
 	public void setSamplesPerTrace(int samplesPerTrace) {
 		this.samplesPerTrace = samplesPerTrace;
 	}
+
 	public String getDataType() {
 		return dataType;
 	}
+
 	public void setDataType(String dataType) {
 		this.dataType = dataType;
 	}
+
 	public SortOrder getPrimaryKey() {
 		return primaryKey;
 	}
+
 	public void setPrimaryKey(SortOrder primaryKey) {
 		this.primaryKey = primaryKey;
 	}
-	//alternate version of this method allows string input to more easily communicate with C code
+
+	// alternate version of this method allows string input to more easily
+	// communicate with C code
 	public void setPrimaryKey(String primaryKey) {
 		if (primaryKey.toLowerCase().equals(SortOrder.CDP.toString().toLowerCase())) {
 			setPrimaryKey(SortOrder.CDP);
-		}
-		else if (primaryKey.toLowerCase().equals(SortOrder.FFID.toString().toLowerCase())) {
+		} else if (primaryKey.toLowerCase().equals(SortOrder.FFID.toString().toLowerCase())) {
 			setPrimaryKey(SortOrder.FFID);
-		}
-		else if (primaryKey.toLowerCase().equals(SortOrder.SHOT.toString().toLowerCase())) {
+		} else if (primaryKey.toLowerCase().equals(SortOrder.SHOT.toString().toLowerCase())) {
 			setPrimaryKey(SortOrder.SHOT);
-		}
-		else if (primaryKey.toLowerCase().equals(SortOrder.CDPLBLS.toString().toLowerCase())) {
+		} else if (primaryKey.toLowerCase().equals(SortOrder.CDPLBLS.toString().toLowerCase())) {
 			setPrimaryKey(SortOrder.CDPLBLS);
-		}
-		else {
-			System.out.println("Warning: unsupported primary key encountered:"+primaryKey);
+		} else {
+			System.out.println("Warning: unsupported primary key encountered:" + primaryKey);
 			setPrimaryKey(SortOrder.OTHER);
 		}
 	}
+
 	public SortOrder getSecondaryKey() {
 		return secondaryKey;
 	}
+
 	public void setSecondaryKey(SortOrder secondaryKey) {
 		this.secondaryKey = secondaryKey;
 	}
+
 	public int getMaxntr() {
 		return maxntr;
 	}
+
 	public void setMaxntr(int maxntr) {
 		this.maxntr = maxntr;
 	}
+
 	public CDPGrid getCdpGrid() {
 		return cdpGrid;
 	}
+
 	public void setCdpGrid(CDPGrid cdpGrid) {
 		this.cdpGrid = cdpGrid;
 	}
+
 	public LineType getLineType() {
 		return lineType;
 	}
+
 	public void setLineType(LineType lineType) {
 		this.lineType = lineType;
 	}
+
 	public SeismicTrace getTrace() {
 		return trace;
 	}
+
 	public void setTrace(SeismicTrace trace) {
 		this.trace = trace;
 		gather.addTrace(trace);
 	}
-	
+
 	public void clearGather() {
 		gather.clear();
 	}
-	
+
 	public String toString() {
-		if (pdsFileOK()){
+		if (filenameOK()) {
 			return name;
 		} else {
-			return name+" * missing *";
+			return name + " * missing *";
 		}
 	}
+
+	//TODO actually make this work
+	private boolean filenameOK() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 	public int getNumTraces() {
 		return numTraces;
 	}
+
 	public void setNumTraces(int numTraces) {
 		this.numTraces = numTraces;
 	}
+
 	public int getTimeZero() {
 		return timeZero;
 	}
+
 	public void setTimeZero(int timeZero) {
 		this.timeZero = timeZero;
 	}
@@ -236,9 +232,10 @@ public class DataSet  implements Comparable<DataSet>
 		this.pkeyIndex = pkeyIndex;
 	}
 
-	//return names of headers (after converting Focus Header names to STS equivalents)
+	// return names of headers (after converting Focus Header names to STS
+	// equivalents)
 	public String[] getAttributeNames() {
-		boolean hasSOffset = false; //flag for whether focus header contains a signed offset
+		boolean hasSOffset = false; // flag for whether focus header contains a signed offset
 		String[] names = getTrace().getHeaderList();
 //		for (int i=0;i<names.length;i++){
 //			names[i] = names[i].trim(); //names come from FOCUS as always 8 chars (can be blank)
@@ -268,38 +265,39 @@ public class DataSet  implements Comparable<DataSet>
 
 	public String getDescription() {
 		String string;
-		string = "name.........: "+name+"\n"
-		        +"pds file.....: "+pdsFile.getAbsolutePath()+"\n"
-		        +"pkey           ="+primaryKey+"\n";
+		string = "name.........: " + name + "\n"
+//		        +"pds file.....: "+pdsFile.getAbsolutePath()+"\n"
+				+ "pkey           =" + primaryKey + "\n";
 		loadAlternateSortOrders();
 		if (alternateSortOrders.length > 0) {
 			string += "sort orders: ";
-			for (int i=0;i<alternateSortOrders.length;i++) {
+			for (int i = 0; i < alternateSortOrders.length; i++) {
 				string += alternateSortOrders[i] + ", ";
 			}
 			string += "\n";
 		}
 		return string;
 	}
-	
+
+	private void loadAlternateSortOrders() {
+		// TODO Auto-generated method stub
+
+	}
+
 	public String getDescriptionLong() {
 		String string;
-		string = "name           ="+name+"\n"
-		        +"pds file       ="+pdsFile.getAbsolutePath()+"\n"
-				+"path           ="+path+"\n"
-				+"samplerate     ="+sampleRate+" microsec\n"
-				+"samplesPerTrace="+samplesPerTrace+"\n"
-				+"dataType       ="+dataType+"\n"
-				+"maxntr         ="+maxntr+"\n"
-				+"numTraces      ="+numTraces+"\n"
-		        +"pkey           ="+primaryKey+"\n"
-		        +"pkeyindex      ="+pkeyIndex+"\n";
+		string = "name           =" + name + "\n"
+//		        +"pds file       ="+pdsFile.getAbsolutePath()+"\n"
+				+ "path           =" + path + "\n" + "samplerate     =" + sampleRate + " microsec\n"
+				+ "samplesPerTrace=" + samplesPerTrace + "\n" + "dataType       =" + dataType + "\n"
+				+ "maxntr         =" + maxntr + "\n" + "numTraces      =" + numTraces + "\n" + "pkey           ="
+				+ primaryKey + "\n" + "pkeyindex      =" + pkeyIndex + "\n";
 		return string;
 	}
 
-	//TODO fix so works without pdsio
+	// TODO fix so works without pdsio
 	public Iterator getGatherIterator() {
-		//return pdsio;
+		// return pdsio;
 		return null;
 	}
 
@@ -314,10 +312,11 @@ public class DataSet  implements Comparable<DataSet>
 		return getSamplesPerTrace();
 	}
 
-	//total traces for dataset
+	// total traces for dataset
 	public int getNTraces() {
-		//return this.getCdpGrid().getNumInlines()*this.getCdpGrid().getNumXlines(); //rough estimate
-		return this.getNumTraces();  //accurate now!! (gets directly from Focus)
+		// return this.getCdpGrid().getNumInlines()*this.getCdpGrid().getNumXlines();
+		// //rough estimate
+		return this.getNumTraces(); // accurate now!! (gets directly from Focus)
 	}
 
 	public String getStemname() {
@@ -332,34 +331,38 @@ public class DataSet  implements Comparable<DataSet>
 //	}
 
 	/** for sorting */
-	public int compareTo(DataSet ds){
+	public int compareTo(DataSet ds) {
 		return name.toUpperCase().compareTo(ds.toString().toUpperCase());
 	}
 
 	public float getAngle() {
-		return (float)getCdpGrid().getAngle();
+		return (float) getCdpGrid().getAngle();
 	}
 
-	/** get maximum data value
+	/**
+	 * get maximum data value
 	 * 
-	 * returns maximum value of current gather and previous gather (typically the first gather of an inline)
+	 * returns maximum value of current gather and previous gather (typically the
+	 * first gather of an inline)
 	 */
 	public float getDataMax() {
 		maxVal = Math.max(maxVal, gather.getMaxVal());
-		return maxVal; //max sample amplitude
+		return maxVal; // max sample amplitude
 	}
 
-	/** get minimum data value
+	/**
+	 * get minimum data value
 	 * 
-	 * returns minimum value of current gather and previous gather (typically the first gather of an inline)
+	 * returns minimum value of current gather and previous gather (typically the
+	 * first gather of an inline)
 	 */
 	public float getDataMin() {
 		minVal = Math.min(minVal, gather.getMinVal());
-		return minVal; //min sample amplitude
+		return minVal; // min sample amplitude
 	}
 
 	public boolean getIsNMOed() {
-		return false;  //don't know how to get this from Paradigm just yet
+		return false; // don't know how to get this from Paradigm just yet
 	}
 
 	public boolean getIsXLineCCW() {
@@ -374,15 +377,15 @@ public class DataSet  implements Comparable<DataSet>
 	}
 
 	public int getNSlices() {
-		return this.getSamplesPerTrace(); //number of samples per trace
+		return this.getSamplesPerTrace(); // number of samples per trace
 	}
 
 	public float getXInc() {
-		return (float)getCdpGrid().getXLineInterval();
+		return (float) getCdpGrid().getXLineInterval();
 	}
 
 	public float getYInc() {
-		return Math.abs((float)getCdpGrid().getInLineInterval()); //can be negative in Focus
+		return Math.abs((float) getCdpGrid().getInLineInterval()); // can be negative in Focus
 	}
 
 //	public byte getZDomain() {
@@ -391,13 +394,16 @@ public class DataSet  implements Comparable<DataSet>
 //		}
 //		return StsDataLineSetFace.DEPTH;
 //	}
-	
-	/** loads first trace of Focus Dataset to get vital information (e.g. sort order) about dataset before continuing*/
-	//TODO fix so works without pdsio
+
+	/**
+	 * loads first trace of Focus Dataset to get vital information (e.g. sort order)
+	 * about dataset before continuing
+	 */
+	// TODO fix so works without pdsio
 	public void initializeDataSet() {
-		if (pdsFileOK()) {
-			//pdsio.initializeDataSet();
-			setPDSFile();
+		if (filenameOK()) {
+			// pdsio.initializeDataSet();
+//			setPDSFile();
 		}
 	}
 
@@ -410,10 +416,8 @@ public class DataSet  implements Comparable<DataSet>
 	}
 
 	/*
-	public ParadigmDataSetIO getPdsio() {
-		return pdsio;
-	}
-	*/
+	 * public ParadigmDataSetIO getPdsio() { return pdsio; }
+	 */
 
 	public Gather getGather() {
 		return gather;
@@ -440,7 +444,7 @@ public class DataSet  implements Comparable<DataSet>
 //		this.stsGatherData = stsGatherData;
 //	}
 
-	//returns sample rate in milliseconds
+	// returns sample rate in milliseconds
 	public float getZInc() {
 //		if (this.getZDomain() == StsDataLineSetFace.TIME) {
 //			if (this.getTimeUnits() == StsDataLineSetFace.TIME_USECOND){
@@ -461,32 +465,38 @@ public class DataSet  implements Comparable<DataSet>
 		return this.getSampleRate();
 	}
 
-	//nothing magical here.... Zmax = Zmin + number of samples X sample increment
+	// nothing magical here.... Zmax = Zmin + number of samples X sample increment
 	public float getZMax() {
-		return this.getZInc()*this.getNSlices() + this.getZMin();
+		return this.getZInc() * this.getNSlices() + this.getZMin();
 	}
 
-	//minimum Z value... for right now just assuming it's 0 in Depth or Time
-	//can't find this information in Focus headers
+	// minimum Z value... for right now just assuming it's 0 in Depth or Time
+	// can't find this information in Focus headers
 	public float getZMin() {
 		return 0;
 	}
 
-	/** gets cross-line increment from CDP Grid - if CDP grid doesn't exist, just sets it to 1 */
+	/**
+	 * gets cross-line increment from CDP Grid - if CDP grid doesn't exist, just
+	 * sets it to 1
+	 */
 	public float getColNumInc() {
 		int inc = getCdpGrid().getXLineIncrement();
-		if (inc < 1) {  //make sure we don't get bogus increments just because it wasn't saved as 3D!!
-        	inc = 1;
-        }
+		if (inc < 1) { // make sure we don't get bogus increments just because it wasn't saved as 3D!!
+			inc = 1;
+		}
 		return inc;
 	}
 
-	/** gets in-line increment from CDP Grid - if CDP grid doesn't exist, just sets it to 1 */
+	/**
+	 * gets in-line increment from CDP Grid - if CDP grid doesn't exist, just sets
+	 * it to 1
+	 */
 	public float getRowNumInc() {
 		int inc = getCdpGrid().getInLineIncrement();
-		if (inc < 1) {  //make sure we don't get bogus increments just because it wasn't saved as 3D!!
-        	inc = 1;
-        }
+		if (inc < 1) { // make sure we don't get bogus increments just because it wasn't saved as 3D!!
+			inc = 1;
+		}
 		return inc;
 	}
 
@@ -496,24 +506,6 @@ public class DataSet  implements Comparable<DataSet>
 
 	public void setSortKeyIndex(int sortKeyIndex) {
 		this.sortKeyIndex = sortKeyIndex;
-	}
-
-	public String getPgSurveyRoot() {
-		return pgSurveyRoot;
-	}
-
-	public String getPgSurveyDir() {
-		return pgSurveyDir;
-	}
-	
-	public boolean setPDSFile(){
-		pdsFile = new File(path+PDS);
-		return pdsFile.isFile();
-	}
-	
-	//checks to see if pds file can be found
-	public boolean pdsFileOK(){
-		return setPDSFile();
 	}
 
 	public boolean is3d() {

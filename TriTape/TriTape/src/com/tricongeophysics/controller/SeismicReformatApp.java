@@ -1,12 +1,12 @@
-package com.tricongeophysics;
+package com.tricongeophysics.controller;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import com.tricongeophysics.controller.TraceMonitor;
-
-public class TriTape {
-	public static void main(String[] args)
+/** application entry point */
+public class SeismicReformatApp
+{
+    public static void main(String[] args)
     {
         try
         {
@@ -19,5 +19,4 @@ public class TriTape {
 
         SwingUtilities.invokeLater(() -> new TraceMonitor().show());
     }
-
 }
