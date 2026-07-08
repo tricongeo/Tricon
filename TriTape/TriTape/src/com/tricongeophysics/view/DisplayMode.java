@@ -4,7 +4,7 @@ package com.tricongeophysics.view;
 public enum DisplayMode
 {
     VARIABLE_DENSITY("Variable Density"),
-    VAWG("Variable Area Wiggle (VAWG)");
+    VAWG("VAWG");
 
     private final String label;
 
