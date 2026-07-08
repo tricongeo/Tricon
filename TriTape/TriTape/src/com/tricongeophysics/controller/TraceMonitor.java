@@ -43,7 +43,7 @@ public class TraceMonitor
     public TraceMonitor()
     {
         viewer = new TraceViewer();
-        frame = new JFrame("TriTape II");
+        frame = new JFrame("TriTape");
         buildUI();
         inputFileField.setText("/home/scott/Projects/develop/tritape/jetson_test_shots.sgy");
         previewButton.doClick();
