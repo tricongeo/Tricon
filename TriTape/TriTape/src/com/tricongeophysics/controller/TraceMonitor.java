@@ -5,8 +5,9 @@ import com.tricongeophysics.model.BufferedFileReader;
 import com.tricongeophysics.model.FileFormat;
 import com.tricongeophysics.model.ReaderFactory;
 import com.tricongeophysics.model.SegdConfig;
+import com.tricongeophysics.model.SegyBufferedFileReader;
 import com.tricongeophysics.model.SegyConfig;
-import com.tricongeophysics.model.TraceProcessor;
+import com.tricongeophysics.model.SegyHeaderPreview;
 import com.tricongeophysics.model.TraceWriter;
 import com.tricongeophysics.model.WriterConfig;
 import com.tricongeophysics.model.WriterFactory;
@@ -17,6 +18,7 @@ import com.tricongeophysics.view.TraceViewer;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,13 +71,21 @@ public class TraceMonitor
     {
         viewer = new TraceViewer();
 
-        inputSegySettingsPanel = new SegySettingsPanel(readerSegyConfig, this::firstInputFile);
-        inputSegdSettingsPanel = new SegdSettingsPanel(readerSegdConfig);
-        outputSegySettingsPanel = new SegySettingsPanel(writerSegyConfig, () -> outputFileField.getText().trim());
+        outputSegySettingsPanel = new SegySettingsPanel(writerSegyConfig, () -> outputFileField.getText().trim(),
+            preview -> { }, true);
         outputSegdSettingsPanel = new SegdSettingsPanel(writerSegdConfig);
+        inputSegySettingsPanel = new SegySettingsPanel(readerSegyConfig, this::firstInputFile, preview ->
+        {
+            if (outputFormatCombo.getSelectedItem() == FileFormat.SEGY)
+            {
+                outputSegySettingsPanel.showMirroredPreview(preview, "input");
+            }
+        });
+        inputSegdSettingsPanel = new SegdSettingsPanel(readerSegdConfig);
 
         frame = new JFrame("TriTape");
         buildUI();
+        syncOutputSegyDefaultsFromInput();
         inputFileField.setText("/home/scott/Projects/develop/tritape/jetson_test_shots.sgy");
         previewButton.doClick();
     }
@@ -144,6 +154,7 @@ public class TraceMonitor
             FileFormat fmt = (FileFormat) inputFormatCombo.getSelectedItem();
             cardLayout.show(settingsCards, fmt.name());
             if (fmt == FileFormat.SEGY) inputSegySettingsPanel.refresh(); else inputSegdSettingsPanel.refresh();
+            syncOutputSegyDefaultsFromInput();
         });
 
         panel.add(fileControls, BorderLayout.NORTH);
@@ -186,6 +197,7 @@ public class TraceMonitor
             FileFormat fmt = (FileFormat) outputFormatCombo.getSelectedItem();
             cardLayout.show(settingsCards, fmt.name());
             if (fmt == FileFormat.SEGY) outputSegySettingsPanel.refresh(); else outputSegdSettingsPanel.refresh();
+            syncOutputSegyDefaultsFromInput();
         });
 
         panel.add(fileControls, BorderLayout.NORTH);
@@ -269,6 +281,26 @@ public class TraceMonitor
         inputSegdSettingsPanel.commitEdits();
         outputSegySettingsPanel.commitEdits();
         outputSegdSettingsPanel.commitEdits();
+    }
+
+    /**
+     * When both input and output are SEG-Y, defaults the output's byte-offset settings
+     * (binary header offsets, textual/binary/trace header lengths) and trace-header
+     * schema to match the input's - a reasonable starting point for reformatting a file
+     * with the same layout, since the trace data itself is copied through unchanged.
+     * The user can still edit the output's settings independently afterward; this only
+     * runs when the input or output format combo changes, not on every keystroke, so it
+     * never overwrites edits the user has already made.
+     */
+    private void syncOutputSegyDefaultsFromInput()
+    {
+        FileFormat inFmt = (FileFormat) inputFormatCombo.getSelectedItem();
+        FileFormat outFmt = (FileFormat) outputFormatCombo.getSelectedItem();
+        if (inFmt == FileFormat.SEGY && outFmt == FileFormat.SEGY)
+        {
+            writerSegyConfig.copyFrom(readerSegyConfig);
+            outputSegySettingsPanel.refresh();
+        }
     }
 
     // ------------------------------------------------------------------
@@ -376,7 +408,8 @@ public class TraceMonitor
         FileFormat inputFormat = (FileFormat) inputFormatCombo.getSelectedItem();
         FileFormat outputFormat = (FileFormat) outputFormatCombo.getSelectedItem();
         int batchSize = (Integer) batchSizeSpinner.getValue();
-        List<TraceProcessor> processors = viewer.getActiveProcessors();
+        // captured on the EDT since it reads a Swing text component; passed into the background worker below
+        byte[] outputTextualHeaderOverride = outputSegySettingsPanel.getEffectiveTextualHeaderRaw();
 
         setControlsEnabled(false);
         String progressTitle = inputFiles.size() == 1
@@ -399,6 +432,23 @@ public class TraceMonitor
                 {
                     reader.open();
                     WriterConfig config = new WriterConfig(reader.getSampleRateMicros(), reader.getSamplesPerTrace());
+                    if (inputFormat == FileFormat.SEGY && outputFormat == FileFormat.SEGY && !inputFiles.isEmpty())
+                    {
+                        try
+                        {
+                            SegyHeaderPreview inputHeaders = SegyBufferedFileReader.peekHeaders(inputFiles.get(0), readerSegyConfig);
+                            config.binaryHeaderRaw = inputHeaders.binaryHeaderRaw;
+                            // the textual header is user-editable on the Output tab; use whatever's there
+                            // (edited or still the loaded/mirrored default) rather than re-peeking the input,
+                            // falling back to the input's raw bytes only if nothing was ever loaded there
+                            config.textualHeaderRaw = outputTextualHeaderOverride != null
+                                ? outputTextualHeaderOverride : inputHeaders.textualHeaderRaw;
+                        }
+                        catch (IOException ignored)
+                        {
+                            // fall back to the writer's generic default textual/binary header
+                        }
+                    }
                     TraceWriter writer = WriterFactory.create(outputFormat, writerSegyConfig, writerSegdConfig);
                     try
                     {
@@ -412,7 +462,6 @@ public class TraceMonitor
                             }
                             SeismicTrace[] batch = reader.readNextTraces(batchSize);
                             if (batch.length == 0) break;
-                            applyProcessors(batch, processors, reader.getSampleRateMicros());
                             writer.writeTraces(batch);
 
                             long total = Math.max(1, reader.getTotalBytes());
@@ -464,21 +513,6 @@ public class TraceMonitor
             }
         };
         worker.execute();
-    }
-
-    /** applies the view's currently-active processing chain to every trace in place, in order */
-    private static void applyProcessors(SeismicTrace[] traces, List<TraceProcessor> processors, int sampleRateMicros)
-    {
-        if (processors.isEmpty()) return;
-        for (SeismicTrace trace : traces)
-        {
-            float[] samples = trace.getData();
-            for (TraceProcessor p : processors)
-            {
-                samples = p.process(samples, sampleRateMicros);
-            }
-            trace.setData(samples);
-        }
     }
 
     private void setControlsEnabled(boolean enabled)

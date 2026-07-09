@@ -27,6 +27,7 @@ public class SegyBufferedFileReader extends BufferedFileReader
     private final SegyConfig config;
     private RandomAccessFile file;
     private String textualHeader;
+    private byte[] textualHeaderRaw;
     private byte[] binaryHeaderRaw;
     private int dataFormatCode;
     private long firstTraceOffset;
@@ -74,7 +75,7 @@ public class SegyBufferedFileReader extends BufferedFileReader
             int samplesPerTrace = readUShort(binRaw, config.samplesPerTraceByteOffset);
             int formatCode = readUShort(binRaw, config.formatCodeByteOffset);
 
-            return new SegyHeaderPreview(sb.toString(), binRaw, sampleRate, samplesPerTrace, formatCode);
+            return new SegyHeaderPreview(sb.toString(), textRaw, binRaw, sampleRate, samplesPerTrace, formatCode);
         }
     }
 
@@ -145,6 +146,7 @@ public class SegyBufferedFileReader extends BufferedFileReader
     }
 
     public String getTextualHeader() { return textualHeader; }
+    public byte[] getTextualHeaderRaw() { return textualHeaderRaw; }
     public byte[] getBinaryHeaderRaw() { return binaryHeaderRaw; }
     public int getDataFormatCode() { return dataFormatCode; }
 
@@ -161,6 +163,7 @@ public class SegyBufferedFileReader extends BufferedFileReader
         file.seek(0);
         byte[] raw = new byte[config.textualHeaderBytes];
         file.readFully(raw);
+        textualHeaderRaw = raw;
         boolean looksAscii = raw.length > 0 && raw[0] == 'C';
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < raw.length; i++)

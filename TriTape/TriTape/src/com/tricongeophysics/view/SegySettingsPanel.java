@@ -2,12 +2,14 @@ package com.tricongeophysics.view;
 
 import com.tricongeophysics.model.ConfigXmlIO;
 import com.tricongeophysics.model.SegyConfig;
+import com.tricongeophysics.model.SegyHeaderPreview;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -51,10 +53,28 @@ public class SegySettingsPanel extends JPanel
 
     public SegySettingsPanel(SegyConfig config, Supplier<String> fileHintSupplier)
     {
+        this(config, fileHintSupplier, preview -> { });
+    }
+
+    public SegySettingsPanel(SegyConfig config, Supplier<String> fileHintSupplier, Consumer<SegyHeaderPreview> onHeadersLoaded)
+    {
+        this(config, fileHintSupplier, onHeadersLoaded, false);
+    }
+
+    /**
+     * @param editableTextualHeader if true (used for the output tab), the header
+     *                              preview's textual header text area is user-editable
+     *                              and getEffectiveTextualHeaderRaw() will reflect edits;
+     *                              if false (input tab), it's a read-only preview.
+     */
+    public SegySettingsPanel(SegyConfig config, Supplier<String> fileHintSupplier,
+                              Consumer<SegyHeaderPreview> onHeadersLoaded, boolean editableTextualHeader)
+    {
         super(new BorderLayout(4, 4));
         this.config = config;
         this.schemaEditor = new HeaderSchemaEditorPanel(config.traceHeaderSchema);
-        this.headerPreviewPanel = new SegyHeaderPreviewPanel(config, fileHintSupplier, traces -> schemaEditor.setSampleTraces(traces));
+        this.headerPreviewPanel = new SegyHeaderPreviewPanel(config, fileHintSupplier,
+            traces -> schemaEditor.setSampleTraces(traces), onHeadersLoaded, editableTextualHeader);
 
         traceHeaderBytes = boundSpinner(config.traceHeaderBytes, v -> config.traceHeaderBytes = v, false);
         sampleRateOffset = boundSpinner(config.sampleRateByteOffset, v -> config.sampleRateByteOffset = v, true);
@@ -177,6 +197,18 @@ public class SegySettingsPanel extends JPanel
         coordScalarOffset.setValue(config.coordinateScalarByteOffset + 1);
         elevScalarOffset.setValue(config.elevationScalarByteOffset + 1);
         schemaEditor.refresh();
+    }
+
+    /** shows an already-fetched header preview (e.g. from the input tab) without this panel reading its own file */
+    public void showMirroredPreview(SegyHeaderPreview preview, String sourceDescription)
+    {
+        headerPreviewPanel.showMirroredPreview(preview, sourceDescription);
+    }
+
+    /** the textual header bytes to actually write: the user's edits if any, otherwise the loaded/mirrored default, or null if neither has happened yet */
+    public byte[] getEffectiveTextualHeaderRaw()
+    {
+        return headerPreviewPanel.getEffectiveTextualHeaderRaw();
     }
 
     /** commits any in-progress trace-header-schema table cell edit */

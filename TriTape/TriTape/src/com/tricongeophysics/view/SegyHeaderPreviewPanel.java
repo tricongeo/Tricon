@@ -6,6 +6,8 @@ import com.tricongeophysics.model.SegyConfig;
 import com.tricongeophysics.model.SegyHeaderPreview;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -21,12 +23,26 @@ import java.util.function.Supplier;
  * Always reads whichever file is currently in TraceMonitor's input (or
  * output) file field, via fileHintSupplier - there's no separate file picker
  * here, it just follows the file the user already chose for reading/writing.
+ *
+ * showMirroredPreview() lets another instance's already-loaded result be
+ * displayed here without doing its own file read - used so that clicking
+ * "Load Headers" on the Input tab also updates the Output tab's preview to
+ * show what the output file's headers will default to.
+ *
+ * When editableTextualHeader is true (used for the output tab), the textual
+ * header text area can be edited by the user: getEffectiveTextualHeaderRaw()
+ * then returns their edited text (re-encoded to bytes) instead of the raw
+ * default bytes, so a value/binary header is expected to just pass through
+ * unchanged, but the textual header can be interactively customized before
+ * the file is actually written.
  */
 public class SegyHeaderPreviewPanel extends JPanel
 {
     private final SegyConfig config;
     private final Supplier<String> fileHintSupplier;
     private final Consumer<SeismicTrace[]> onTracesLoaded;
+    private final Consumer<SegyHeaderPreview> onHeadersLoaded;
+    private final boolean editableTextualHeader;
 
     private final JLabel fileLabel = new JLabel("File: (none)");
     private final JTextArea textualHeaderArea = new JTextArea();
@@ -34,17 +50,35 @@ public class SegyHeaderPreviewPanel extends JPanel
     private final JTextArea binaryHexArea = new JTextArea();
     private final JLabel statusLabel = new JLabel(" ");
 
+    private byte[] lastRawTextualHeaderBytes;
+    private boolean textualHeaderUserEdited = false;
+    private boolean suppressEditTracking = false;
+
     public SegyHeaderPreviewPanel(SegyConfig config, Supplier<String> fileHintSupplier)
     {
-        this(config, fileHintSupplier, traces -> { });
+        this(config, fileHintSupplier, traces -> { }, preview -> { }, false);
     }
 
     public SegyHeaderPreviewPanel(SegyConfig config, Supplier<String> fileHintSupplier, Consumer<SeismicTrace[]> onTracesLoaded)
+    {
+        this(config, fileHintSupplier, onTracesLoaded, preview -> { }, false);
+    }
+
+    public SegyHeaderPreviewPanel(SegyConfig config, Supplier<String> fileHintSupplier,
+                                   Consumer<SeismicTrace[]> onTracesLoaded, Consumer<SegyHeaderPreview> onHeadersLoaded)
+    {
+        this(config, fileHintSupplier, onTracesLoaded, onHeadersLoaded, false);
+    }
+
+    public SegyHeaderPreviewPanel(SegyConfig config, Supplier<String> fileHintSupplier, Consumer<SeismicTrace[]> onTracesLoaded,
+                                   Consumer<SegyHeaderPreview> onHeadersLoaded, boolean editableTextualHeader)
     {
         super(new BorderLayout(4, 4));
         this.config = config;
         this.fileHintSupplier = fileHintSupplier;
         this.onTracesLoaded = onTracesLoaded;
+        this.onHeadersLoaded = onHeadersLoaded;
+        this.editableTextualHeader = editableTextualHeader;
         setBorder(BorderFactory.createTitledBorder("Header preview"));
         buildUI();
     }
@@ -59,8 +93,17 @@ public class SegyHeaderPreviewPanel extends JPanel
 
         Font mono = new Font(Font.MONOSPACED, Font.PLAIN, 11);
         textualHeaderArea.setFont(mono);
-        textualHeaderArea.setEditable(false);
+        textualHeaderArea.setEditable(editableTextualHeader);
         textualHeaderArea.setRows(11);
+        if (editableTextualHeader)
+        {
+            textualHeaderArea.getDocument().addDocumentListener(new DocumentListener()
+            {
+                @Override public void insertUpdate(DocumentEvent e) { markEdited(); }
+                @Override public void removeUpdate(DocumentEvent e) { markEdited(); }
+                @Override public void changedUpdate(DocumentEvent e) { markEdited(); }
+            });
+        }
         binarySummaryArea.setFont(mono);
         binarySummaryArea.setEditable(false);
         binarySummaryArea.setRows(3);
@@ -69,7 +112,8 @@ public class SegyHeaderPreviewPanel extends JPanel
         binaryHexArea.setRows(11);
 
         JPanel textPanel = new JPanel(new BorderLayout());
-        textPanel.setBorder(BorderFactory.createTitledBorder("Textual header"));
+        textPanel.setBorder(BorderFactory.createTitledBorder(
+            editableTextualHeader ? "Textual header (editable - this is what gets written)" : "Textual header"));
         textPanel.add(new JScrollPane(textualHeaderArea), BorderLayout.CENTER);
 
         JPanel binaryPanel = new JPanel(new BorderLayout(2, 2));
@@ -87,6 +131,42 @@ public class SegyHeaderPreviewPanel extends JPanel
         add(statusLabel, BorderLayout.SOUTH);
     }
 
+    private void markEdited()
+    {
+        if (!suppressEditTracking)
+        {
+            textualHeaderUserEdited = true;
+        }
+    }
+
+    /** replaces the textual header area's content programmatically, without counting it as a user edit */
+    private void setTextualHeaderDefault(String displayText, byte[] rawBytes)
+    {
+        suppressEditTracking = true;
+        textualHeaderArea.setText(displayText);
+        textualHeaderArea.setCaretPosition(0);
+        suppressEditTracking = false;
+        lastRawTextualHeaderBytes = rawBytes;
+        textualHeaderUserEdited = false;
+    }
+
+    /**
+     * The textual header bytes that should actually be written: the user's edited text
+     * (re-encoded to bytes, with the display-only line breaks stripped back out) if
+     * they've changed the text area since it was last set programmatically; otherwise
+     * the exact raw bytes of whatever default was loaded/mirrored in. Returns null if
+     * nothing has been loaded/mirrored here yet and the user hasn't typed anything.
+     */
+    public byte[] getEffectiveTextualHeaderRaw()
+    {
+        if (textualHeaderUserEdited)
+        {
+            String concatenated = textualHeaderArea.getText().replace("\n", "").replace("\r", "");
+            return concatenated.getBytes();
+        }
+        return lastRawTextualHeaderBytes;
+    }
+
     /** re-loads headers for the current file (from fileHintSupplier) using the config's latest offsets; no-op if none set */
     public void reloadIfFileSet()
     {
@@ -94,6 +174,31 @@ public class SegyHeaderPreviewPanel extends JPanel
         {
             loadHeaders();
         }
+    }
+
+    /**
+     * Displays an already-fetched preview (from another panel's loadHeaders() call) without
+     * reading any file itself - used to mirror the input file's actual headers into the output
+     * tab's preview, showing what the output will actually default to.
+     */
+    public void showMirroredPreview(SegyHeaderPreview preview, String sourceDescription)
+    {
+        fileLabel.setText("File: (defaulted from " + sourceDescription + ")");
+        setTextualHeaderDefault(preview.textualHeader, preview.textualHeaderRaw);
+
+        StringBuilder summary = new StringBuilder();
+        summary.append("Sample rate: ").append(preview.sampleRateMicros).append(" microseconds\n");
+        summary.append("Samples/trace: ").append(preview.samplesPerTrace).append("\n");
+        summary.append("Format code: ").append(preview.formatCode)
+            .append(" (").append(formatCodeName(preview.formatCode)).append(")\n");
+        binarySummaryArea.setText(summary.toString());
+        binarySummaryArea.setCaretPosition(0);
+
+        binaryHexArea.setText(hexDump(preview.binaryHeaderRaw));
+        binaryHexArea.setCaretPosition(0);
+
+        statusLabel.setText("Defaulted from the " + sourceDescription + " file."
+            + (editableTextualHeader ? " Edit the textual header above if you'd like to change it." : ""));
     }
 
     private void loadHeaders()
@@ -109,8 +214,7 @@ public class SegyHeaderPreviewPanel extends JPanel
         try
         {
             SegyHeaderPreview preview = SegyBufferedFileReader.peekHeaders(filename, config);
-            textualHeaderArea.setText(preview.textualHeader);
-            textualHeaderArea.setCaretPosition(0);
+            setTextualHeaderDefault(preview.textualHeader, preview.textualHeaderRaw);
 
             StringBuilder summary = new StringBuilder();
             summary.append("Sample rate (offset ").append(config.sampleRateByteOffset).append("): ")
@@ -127,6 +231,7 @@ public class SegyHeaderPreviewPanel extends JPanel
 
             SeismicTrace[] sampleTraces = readSampleTraces(filename, 3);
             onTracesLoaded.accept(sampleTraces);
+            onHeadersLoaded.accept(preview);
 
             statusLabel.setText("Loaded headers" + (sampleTraces.length > 0
                 ? " and " + sampleTraces.length + " sample trace(s)." : "."));
