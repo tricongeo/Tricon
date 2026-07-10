@@ -106,6 +106,7 @@ public final class ConfigXmlIO
             appendLength(doc, root, "generalHeaderBlockBytes", config.generalHeaderBlockBytes);
             appendLength(doc, root, "traceHeaderBytes", config.traceHeaderBytes);
             appendLength(doc, root, "traceHeaderExtensionBytes", config.traceHeaderExtensionBytes);
+            appendText(doc, root, "version", config.version.name());
             appendOffset(doc, root, "fileNumberByteOffset", config.fileNumberByteOffset);
             appendOffset(doc, root, "formatCodeByteOffset", config.formatCodeByteOffset);
             appendOffset(doc, root, "channelSetsPerScanTypeByteOffset", config.channelSetsPerScanTypeByteOffset);
@@ -114,6 +115,13 @@ public final class ConfigXmlIO
             appendOffset(doc, root, "traceHeaderExtensionCountByteOffset", config.traceHeaderExtensionCountByteOffset);
             appendOffset(doc, root, "extendedHeaderBlocksByteOffsetInHeader2", config.extendedHeaderBlocksByteOffsetInHeader2);
             appendOffset(doc, root, "externalHeaderBlocksByteOffsetInHeader2", config.externalHeaderBlocksByteOffsetInHeader2);
+            appendOffset(doc, root, "rev3AdditionalBlocksCountByteOffsetInHeader2", config.rev3AdditionalBlocksCountByteOffsetInHeader2);
+            appendOffset(doc, root, "rev3DominantSamplingIntervalByteOffsetInHeader2", config.rev3DominantSamplingIntervalByteOffsetInHeader2);
+            appendOffset(doc, root, "rev3ExtendedHeaderBlocksByteOffsetInHeader2", config.rev3ExtendedHeaderBlocksByteOffsetInHeader2);
+            appendOffset(doc, root, "rev3ExternalHeaderBlocksByteOffsetInHeader2", config.rev3ExternalHeaderBlocksByteOffsetInHeader2);
+            appendOffset(doc, root, "rev3HeaderSizeByteOffsetInHeader3", config.rev3HeaderSizeByteOffsetInHeader3);
+            appendOffset(doc, root, "rev3TraceHeaderExtensionCountByteOffset", config.rev3TraceHeaderExtensionCountByteOffset);
+            appendOffset(doc, root, "rev3NumSamplesByteOffsetInTraceHeaderExt1", config.rev3NumSamplesByteOffsetInTraceHeaderExt1);
             appendOffset(doc, root, "samplesFieldByteOffsetInChannelSetDescriptor", config.samplesFieldByteOffsetInChannelSetDescriptor);
             appendSchema(doc, root, config.traceHeaderSchema);
 
@@ -134,6 +142,7 @@ public final class ConfigXmlIO
             config.generalHeaderBlockBytes = readLength(root, "generalHeaderBlockBytes", config.generalHeaderBlockBytes);
             config.traceHeaderBytes = readLength(root, "traceHeaderBytes", config.traceHeaderBytes);
             config.traceHeaderExtensionBytes = readLength(root, "traceHeaderExtensionBytes", config.traceHeaderExtensionBytes);
+            config.version = parseEnumSafe(SegdVersion.class, childText(root, "version", null), config.version);
             config.fileNumberByteOffset = readOffset(root, "fileNumberByteOffset", config.fileNumberByteOffset);
             config.formatCodeByteOffset = readOffset(root, "formatCodeByteOffset", config.formatCodeByteOffset);
             config.channelSetsPerScanTypeByteOffset = readOffset(root, "channelSetsPerScanTypeByteOffset", config.channelSetsPerScanTypeByteOffset);
@@ -142,6 +151,13 @@ public final class ConfigXmlIO
             config.traceHeaderExtensionCountByteOffset = readOffset(root, "traceHeaderExtensionCountByteOffset", config.traceHeaderExtensionCountByteOffset);
             config.extendedHeaderBlocksByteOffsetInHeader2 = readOffset(root, "extendedHeaderBlocksByteOffsetInHeader2", config.extendedHeaderBlocksByteOffsetInHeader2);
             config.externalHeaderBlocksByteOffsetInHeader2 = readOffset(root, "externalHeaderBlocksByteOffsetInHeader2", config.externalHeaderBlocksByteOffsetInHeader2);
+            config.rev3AdditionalBlocksCountByteOffsetInHeader2 = readOffset(root, "rev3AdditionalBlocksCountByteOffsetInHeader2", config.rev3AdditionalBlocksCountByteOffsetInHeader2);
+            config.rev3DominantSamplingIntervalByteOffsetInHeader2 = readOffset(root, "rev3DominantSamplingIntervalByteOffsetInHeader2", config.rev3DominantSamplingIntervalByteOffsetInHeader2);
+            config.rev3ExtendedHeaderBlocksByteOffsetInHeader2 = readOffset(root, "rev3ExtendedHeaderBlocksByteOffsetInHeader2", config.rev3ExtendedHeaderBlocksByteOffsetInHeader2);
+            config.rev3ExternalHeaderBlocksByteOffsetInHeader2 = readOffset(root, "rev3ExternalHeaderBlocksByteOffsetInHeader2", config.rev3ExternalHeaderBlocksByteOffsetInHeader2);
+            config.rev3HeaderSizeByteOffsetInHeader3 = readOffset(root, "rev3HeaderSizeByteOffsetInHeader3", config.rev3HeaderSizeByteOffsetInHeader3);
+            config.rev3TraceHeaderExtensionCountByteOffset = readOffset(root, "rev3TraceHeaderExtensionCountByteOffset", config.rev3TraceHeaderExtensionCountByteOffset);
+            config.rev3NumSamplesByteOffsetInTraceHeaderExt1 = readOffset(root, "rev3NumSamplesByteOffsetInTraceHeaderExt1", config.rev3NumSamplesByteOffsetInTraceHeaderExt1);
             config.samplesFieldByteOffsetInChannelSetDescriptor = readOffset(root, "samplesFieldByteOffsetInChannelSetDescriptor", config.samplesFieldByteOffsetInChannelSetDescriptor);
             HeaderSchema schema = readSchema(root);
             if (schema != null) config.traceHeaderSchema = schema;
@@ -172,6 +188,7 @@ public final class ConfigXmlIO
             appendText(doc, fieldEl, "byteOffset", String.valueOf(f.getByteOffset() + 1)); // 1-based
             appendText(doc, fieldEl, "type", f.getType().name());
             appendText(doc, fieldEl, "scalarType", f.getScalarType().name());
+            appendText(doc, fieldEl, "scaleDivisor", String.valueOf(f.getScaleDivisor()));
             schemaEl.appendChild(fieldEl);
         }
     }
@@ -193,7 +210,8 @@ public final class ConfigXmlIO
                 childText(fieldEl, "type", "INT32"), HeaderFieldDef.FieldType.INT32);
             HeaderFieldDef.ScalarType scalar = parseEnumSafe(HeaderFieldDef.ScalarType.class,
                 childText(fieldEl, "scalarType", "NONE"), HeaderFieldDef.ScalarType.NONE);
-            fields.add(new HeaderFieldDef(name, offset, type, scalar));
+            double scaleDivisor = parseDoubleSafe(childText(fieldEl, "scaleDivisor", "1.0"), 1.0);
+            fields.add(new HeaderFieldDef(name, offset, type, scalar, scaleDivisor));
         }
         return new HeaderSchema(fields);
     }
@@ -269,6 +287,13 @@ public final class ConfigXmlIO
     {
         if (text == null || text.isEmpty()) return fallback;
         try { return Integer.parseInt(text.trim()); }
+        catch (NumberFormatException ex) { return fallback; }
+    }
+
+    private static double parseDoubleSafe(String text, double fallback)
+    {
+        if (text == null || text.isEmpty()) return fallback;
+        try { return Double.parseDouble(text.trim()); }
         catch (NumberFormatException ex) { return fallback; }
     }
 

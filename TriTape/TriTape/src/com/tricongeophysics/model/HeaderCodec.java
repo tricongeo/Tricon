@@ -12,6 +12,13 @@ final class HeaderCodec
 
     static double decode(byte[] buf, HeaderFieldDef field)
     {
+        double raw = decodeRaw(buf, field);
+        double scale = field.getScaleDivisor();
+        return (scale != 1.0 && scale != 0.0) ? raw / scale : raw;
+    }
+
+    private static double decodeRaw(byte[] buf, HeaderFieldDef field)
+    {
         int off = field.getByteOffset();
         switch (field.getType())
         {
@@ -19,8 +26,11 @@ final class HeaderCodec
             case UINT8:  return buf[off] & 0xFF;
             case INT16:  return (short) (((buf[off] & 0xFF) << 8) | (buf[off + 1] & 0xFF));
             case UINT16: return ((buf[off] & 0xFF) << 8) | (buf[off + 1] & 0xFF);
+            case UINT24: return readInt24(buf, off);
             case INT32:  return readInt32(buf, off);
             case UINT32: return readInt32(buf, off) & 0xFFFFFFFFL;
+            case UINT40: return readInt40(buf, off);
+            case BCD1:   return bcdToInt(buf, off, 1);
             case BCD2:   return bcdToInt(buf, off, 2);
             case BCD3:   return bcdToInt(buf, off, 3);
             case BCD4:   return bcdToInt(buf, off, 4);
@@ -30,16 +40,21 @@ final class HeaderCodec
 
     static void encode(byte[] buf, HeaderFieldDef field, double value)
     {
+        double scale = field.getScaleDivisor();
+        double raw = (scale != 1.0 && scale != 0.0) ? value * scale : value;
         int off = field.getByteOffset();
-        long v = Math.round(value);
+        long v = Math.round(raw);
         switch (field.getType())
         {
             case INT8:
             case UINT8:  buf[off] = (byte) v; break;
             case INT16:
             case UINT16: buf[off] = (byte) (v >> 8); buf[off + 1] = (byte) v; break;
+            case UINT24: writeInt24(buf, off, (int) v); break;
             case INT32:
             case UINT32: writeInt32(buf, off, (int) v); break;
+            case UINT40: writeInt40(buf, off, v); break;
+            case BCD1:   writeBcd(buf, off, 1, (int) v); break;
             case BCD2:   writeBcd(buf, off, 2, (int) v); break;
             case BCD3:   writeBcd(buf, off, 3, (int) v); break;
             case BCD4:   writeBcd(buf, off, 4, (int) v); break;
@@ -54,6 +69,35 @@ final class HeaderCodec
     static void writeInt32(byte[] b, int off, int v)
     {
         b[off] = (byte) (v >>> 24); b[off + 1] = (byte) (v >>> 16); b[off + 2] = (byte) (v >>> 8); b[off + 3] = (byte) v;
+    }
+
+    static int readInt24(byte[] b, int off)
+    {
+        return ((b[off] & 0xFF) << 16) | ((b[off + 1] & 0xFF) << 8) | (b[off + 2] & 0xFF);
+    }
+
+    static void writeInt24(byte[] b, int off, int v)
+    {
+        b[off] = (byte) (v >>> 16); b[off + 1] = (byte) (v >>> 8); b[off + 2] = (byte) v;
+    }
+
+    static long readInt40(byte[] b, int off)
+    {
+        long v = 0;
+        for (int i = 0; i < 5; i++)
+        {
+            v = (v << 8) | (b[off + i] & 0xFFL);
+        }
+        return v;
+    }
+
+    static void writeInt40(byte[] b, int off, long v)
+    {
+        for (int i = 4; i >= 0; i--)
+        {
+            b[off + i] = (byte) v;
+            v >>>= 8;
+        }
     }
 
     /** decodes numBytes of packed binary-coded-decimal (2 digits per byte) into an int */

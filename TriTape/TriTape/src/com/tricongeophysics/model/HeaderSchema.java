@@ -146,15 +146,49 @@ public class HeaderSchema
         return new HeaderSchema(f);
     }
 
-    /** default trace-header field mapping for the simplified SEG-D layout used by SegdBufferedFileReader */
+    /**
+     * Default trace-header field mapping, per Sercel's "Nodal Data Format Manual"
+     * (SEG-D Rev 3.1): the 20-byte Demultiplexed Trace Header, plus (for Rev 3.1)
+     * fields from the 32-byte Trace Header Extension #1 that follows it, addressed
+     * here as offsets 20-51 within the combined 52-byte buffer SegdBufferedFileReader
+     * builds for Rev 3.1 (see its class javadoc). The Rev 1/2 code path only ever
+     * has the 20-byte header available, so fields at offset >=20 simply won't
+     * resolve there (SegdBufferedFileReader.readOneTrace() skips any field whose
+     * offset+width falls outside whatever buffer is actually available, rather
+     * than erroring). Also a reasonable starting point for Rev 1/2 files for the
+     * first six fields, since the core concepts (file number, scan type, channel
+     * set) carry the same meaning even where exact byte packing differs by
+     * revision/vendor.
+     */
     public static HeaderSchema defaultSegdSchema()
     {
         List<HeaderFieldDef> f = new ArrayList<HeaderFieldDef>();
-        f.add(new HeaderFieldDef("FFID", 0, HeaderFieldDef.FieldType.BCD3));
-        f.add(new HeaderFieldDef("SCAN_TYPE", 3, HeaderFieldDef.FieldType.UINT8));
-        f.add(new HeaderFieldDef("CHANNEL_SET", 4, HeaderFieldDef.FieldType.UINT8));
-        f.add(new HeaderFieldDef("CHANNEL_NUMBER", 5, HeaderFieldDef.FieldType.UINT16));
-        f.add(new HeaderFieldDef("TRACE_EDIT", 10, HeaderFieldDef.FieldType.UINT8));
+        // Demultiplexed Trace Header (20 bytes)
+        f.add(new HeaderFieldDef("FFID", 0, HeaderFieldDef.FieldType.BCD2));
+        f.add(new HeaderFieldDef("SCAN_TYPE", 2, HeaderFieldDef.FieldType.BCD1));
+        f.add(new HeaderFieldDef("CHANNEL_SET", 3, HeaderFieldDef.FieldType.BCD1));
+        f.add(new HeaderFieldDef("TRACE_NUM", 4, HeaderFieldDef.FieldType.BCD2));
+        f.add(new HeaderFieldDef("TRACE_HDR_EXT_COUNT", 9, HeaderFieldDef.FieldType.UINT8));
+        f.add(new HeaderFieldDef("SAMPLE_SKEW", 10, HeaderFieldDef.FieldType.UINT8));
+        f.add(new HeaderFieldDef("TRACE_EDIT", 11, HeaderFieldDef.FieldType.UINT8));
+        f.add(new HeaderFieldDef("EXT_CHANNEL_SET", 15, HeaderFieldDef.FieldType.UINT16));
+        // Trace Header Extension #1 (32 bytes, Rev 3.1 only; offsets are 20 + the manual's own 0-based offset).
+        // NOTE: the plain "Receiver line/point number" fields (offset 20/23, 3 bytes) are Sercel sentinels
+        // that always read 0xFFFFFF - the real, per-trace values live in the "Extended receiver line/point
+        // number" fields (5 bytes each) instead, which is what REC_LINE/REC_POINT point at below. Confirmed
+        // against a real file that these are 24.16 fixed-point (24-bit integer part + 16-bit fraction packed
+        // into the 5-byte integer), so the raw value is divided by 65536 (2^16) to get the human-readable
+        // line/point number (e.g. raw 458752000 / 65536 = 7000.0).
+        f.add(new HeaderFieldDef("REC_LINE", 30, HeaderFieldDef.FieldType.UINT40, 65536.0));
+        f.add(new HeaderFieldDef("REC_POINT", 35, HeaderFieldDef.FieldType.UINT40, 65536.0));
+        f.add(new HeaderFieldDef("REC_POINT_INDEX", 26, HeaderFieldDef.FieldType.UINT8));
+        f.add(new HeaderFieldDef("RESHOOT_INDEX", 27, HeaderFieldDef.FieldType.UINT8));
+        f.add(new HeaderFieldDef("GROUP_INDEX", 28, HeaderFieldDef.FieldType.UINT8));
+        f.add(new HeaderFieldDef("DEPTH_INDEX", 29, HeaderFieldDef.FieldType.UINT8));
+        f.add(new HeaderFieldDef("SENSOR_TYPE", 40, HeaderFieldDef.FieldType.UINT8));
+        f.add(new HeaderFieldDef("EXT_TRACE_NUM", 41, HeaderFieldDef.FieldType.UINT24));
+        f.add(new HeaderFieldDef("NUM_SAMPLES", 44, HeaderFieldDef.FieldType.UINT32));
+        f.add(new HeaderFieldDef("SENSOR_MOVING", 48, HeaderFieldDef.FieldType.UINT8));
         return new HeaderSchema(f);
     }
 }

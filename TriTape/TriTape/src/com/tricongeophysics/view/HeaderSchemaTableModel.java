@@ -8,17 +8,18 @@ import javax.swing.table.AbstractTableModel;
 
 /**
  * Editable JTable model backing a HeaderSchema: name / byte offset / type /
- * scalar, plus three read-only "sample value" columns showing what each
- * header actually decodes to for the first 3 traces of a file - populated by
- * setSampleTraces(), called after "Load Headers" reads a batch of traces.
+ * scalar / scale divisor, plus three read-only "sample value" columns
+ * showing what each header actually decodes to for the first 3 traces of a
+ * file - populated by setSampleTraces(), called after "Load Headers" reads a
+ * batch of traces.
  */
 public class HeaderSchemaTableModel extends AbstractTableModel
 {
     private static final String[] COLUMNS = {
-        "Header Name", "Byte Offset (1-based)", "Type", "Scalar (SEG-Y only)",
+        "Header Name", "Byte Offset (1-based)", "Type", "Scalar (SEG-Y only)", "Scale Divisor",
         "Trace 1", "Trace 2", "Trace 3"
     };
-    private static final int FIRST_SAMPLE_COLUMN = 4;
+    private static final int FIRST_SAMPLE_COLUMN = 5;
 
     private final HeaderSchema schema;
     private SeismicTrace[] sampleTraces = new SeismicTrace[0];
@@ -42,6 +43,7 @@ public class HeaderSchemaTableModel extends AbstractTableModel
             case 1: return Integer.class;
             case 2: return HeaderFieldDef.FieldType.class;
             case 3: return HeaderFieldDef.ScalarType.class;
+            case 4: return Double.class;
             default: return String.class; // sample-value columns are display-only formatted text
         }
     }
@@ -56,6 +58,7 @@ public class HeaderSchemaTableModel extends AbstractTableModel
             case 1: return f.getByteOffset() + 1;
             case 2: return f.getType();
             case 3: return f.getScalarType();
+            case 4: return f.getScaleDivisor();
             default:
                 int traceIndex = col - FIRST_SAMPLE_COLUMN;
                 return sampleValueText(f.getName(), traceIndex);
@@ -86,6 +89,10 @@ public class HeaderSchemaTableModel extends AbstractTableModel
             case 1: f.setByteOffset(Math.max(1, ((Number) value).intValue()) - 1); break;
             case 2: f.setType((HeaderFieldDef.FieldType) value); break;
             case 3: f.setScalarType((HeaderFieldDef.ScalarType) value); break;
+            case 4:
+                double divisor = ((Number) value).doubleValue();
+                f.setScaleDivisor(divisor == 0.0 ? 1.0 : divisor); // guard against divide-by-zero
+                break;
             default: break;
         }
         fireTableCellUpdated(row, col);

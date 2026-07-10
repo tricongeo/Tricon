@@ -73,7 +73,7 @@ public class TraceMonitor
 
         outputSegySettingsPanel = new SegySettingsPanel(writerSegyConfig, () -> outputFileField.getText().trim(),
             preview -> { }, true);
-        outputSegdSettingsPanel = new SegdSettingsPanel(writerSegdConfig);
+        outputSegdSettingsPanel = new SegdSettingsPanel(writerSegdConfig, () -> outputFileField.getText().trim());
         inputSegySettingsPanel = new SegySettingsPanel(readerSegyConfig, this::firstInputFile, preview ->
         {
             if (outputFormatCombo.getSelectedItem() == FileFormat.SEGY)
@@ -81,12 +81,14 @@ public class TraceMonitor
                 outputSegySettingsPanel.showMirroredPreview(preview, "input");
             }
         });
-        inputSegdSettingsPanel = new SegdSettingsPanel(readerSegdConfig);
+        inputSegdSettingsPanel = new SegdSettingsPanel(readerSegdConfig, this::firstInputFile);
 
         frame = new JFrame("TriTape");
         buildUI();
         syncOutputSegyDefaultsFromInput();
-        inputFileField.setText("/home/scott/Projects/develop/tritape/jetson_test_shots.sgy");
+//        inputFileField.setText("/home/scott/Projects/develop/tritape/jetson_test_shots.sgy");
+        inputFileField.setText("/bdata/proc/koloma_test/data/Accel data/LinearSweep_corr/CRG_Year-2026_Jday-145_Vibro_vibro4_LN-7003_PN-2396_PI-1_SN-4774477_02-28UTC_01.segd");
+        inputFormatCombo.setSelectedItem(FileFormat.SEGD);
         previewButton.doClick();
     }
 
