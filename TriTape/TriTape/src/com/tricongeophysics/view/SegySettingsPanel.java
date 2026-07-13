@@ -36,6 +36,7 @@ public class SegySettingsPanel extends JPanel
 {
     private final SegyConfig config;
     private final SegyHeaderPreviewPanel headerPreviewPanel;
+    private final boolean editableTextualHeader;
 
     private final JSpinner traceHeaderBytes;
     private final JSpinner sampleRateOffset;
@@ -44,6 +45,7 @@ public class SegySettingsPanel extends JPanel
     private final JSpinner numSamplesThisTraceOffset;
     private final JSpinner coordScalarOffset;
     private final JSpinner elevScalarOffset;
+    private final JSpinner outputSamplesPerTraceField; //writer-only; see SegyConfig.outputSamplesPerTrace
     private final HeaderSchemaEditorPanel schemaEditor;
 
     public SegySettingsPanel(SegyConfig config)
@@ -65,16 +67,34 @@ public class SegySettingsPanel extends JPanel
      * @param editableTextualHeader if true (used for the output tab), the header
      *                              preview's textual header text area is user-editable
      *                              and getEffectiveTextualHeaderRaw() will reflect edits;
-     *                              if false (input tab), it's a read-only preview.
+     *                              if false (input tab), it's a read-only preview. Also
+     *                              gates whether the "Output file length (samples)" field
+     *                              is shown - it's writer-only, so only relevant for the
+     *                              output tab's instance of this panel.
      */
     public SegySettingsPanel(SegyConfig config, Supplier<String> fileHintSupplier,
                               Consumer<SegyHeaderPreview> onHeadersLoaded, boolean editableTextualHeader)
     {
+        this(config, fileHintSupplier, onHeadersLoaded, editableTextualHeader, () -> { });
+    }
+
+    /**
+     * @param onLoadHeadersClicked fires whenever this panel's own "Load Headers" button is clicked
+     *                              (see SegyHeaderPreviewPanel's matching parameter for why this is
+     *                              separate from onHeadersLoaded) - TraceMonitor uses this on the
+     *                              output tab's instance to trigger a background scan of the INPUT
+     *                              file for its max trace length, defaulting the new output-length
+     *                              field to it (see refreshOutputSamplesPerTraceDefault()).
+     */
+    public SegySettingsPanel(SegyConfig config, Supplier<String> fileHintSupplier, Consumer<SegyHeaderPreview> onHeadersLoaded,
+                              boolean editableTextualHeader, Runnable onLoadHeadersClicked)
+    {
         super(new BorderLayout(4, 4));
         this.config = config;
+        this.editableTextualHeader = editableTextualHeader;
         this.schemaEditor = new HeaderSchemaEditorPanel(config.traceHeaderSchema);
         this.headerPreviewPanel = new SegyHeaderPreviewPanel(config, fileHintSupplier,
-            traces -> schemaEditor.setSampleTraces(traces), onHeadersLoaded, editableTextualHeader);
+            traces -> schemaEditor.setSampleTraces(traces), onHeadersLoaded, editableTextualHeader, onLoadHeadersClicked);
 
         traceHeaderBytes = boundSpinner(config.traceHeaderBytes, v -> config.traceHeaderBytes = v, false);
         sampleRateOffset = boundSpinner(config.sampleRateByteOffset, v -> config.sampleRateByteOffset = v, true);
@@ -83,6 +103,11 @@ public class SegySettingsPanel extends JPanel
         numSamplesThisTraceOffset = boundSpinner(config.numSamplesThisTraceByteOffset, v -> config.numSamplesThisTraceByteOffset = v, true);
         coordScalarOffset = boundSpinner(config.coordinateScalarByteOffset, v -> config.coordinateScalarByteOffset = v, true);
         elevScalarOffset = boundSpinner(config.elevationScalarByteOffset, v -> config.elevationScalarByteOffset = v, true);
+
+        // large max (well beyond any plausible byte-offset spinner above) since this holds a sample
+        // count, not an offset - continuous-mode recordings can run to very large sample counts
+        outputSamplesPerTraceField = new JSpinner(new SpinnerNumberModel(config.outputSamplesPerTrace, 0, 100_000_000, 1));
+        outputSamplesPerTraceField.addChangeListener(e -> config.outputSamplesPerTrace = (Integer) outputSamplesPerTraceField.getValue());
 
         JButton saveButton = new JButton("Save Settings...");
         saveButton.addActionListener(e -> saveSettings());
@@ -106,12 +131,28 @@ public class SegySettingsPanel extends JPanel
         fieldsAndButtons.add(saveLoadRow, BorderLayout.NORTH);
         fieldsAndButtons.add(fields, BorderLayout.CENTER);
 
+        if (editableTextualHeader)
+        {
+            // output tab only - every output trace gets padded/truncated to this length (see
+            // SegyConfig.outputSamplesPerTrace); "Load Headers" below defaults it to the input
+            // file's actual max trace length, but the person can type a smaller value to truncate
+            JPanel outputLengthRow = new JPanel(new GridLayout(0, 2, 4, 4));
+            outputLengthRow.setBorder(BorderFactory.createTitledBorder(
+                "Output trace length (0 = use input file's max automatically; \"Load Headers\" below fills this in)"));
+            addRow(outputLengthRow, "Output file length (samples):", outputSamplesPerTraceField);
+            JPanel fieldsButtonsAndLength = new JPanel(new BorderLayout());
+            fieldsButtonsAndLength.add(fieldsAndButtons, BorderLayout.NORTH);
+            fieldsButtonsAndLength.add(outputLengthRow, BorderLayout.CENTER);
+            fieldsAndButtons = fieldsButtonsAndLength;
+        }
+
         JPanel left = new JPanel(new BorderLayout(4, 4));
         left.add(fieldsAndButtons, BorderLayout.NORTH);
         left.add(headerPreviewPanel, BorderLayout.CENTER);
 
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, schemaEditor);
-        split.setResizeWeight(0.5);
+        split.setResizeWeight(0.35);
+        split.setDividerLocation(360);
 
         add(split, BorderLayout.CENTER);
     }
@@ -196,7 +237,24 @@ public class SegySettingsPanel extends JPanel
         numSamplesThisTraceOffset.setValue(config.numSamplesThisTraceByteOffset + 1);
         coordScalarOffset.setValue(config.coordinateScalarByteOffset + 1);
         elevScalarOffset.setValue(config.elevationScalarByteOffset + 1);
+        outputSamplesPerTraceField.setValue(config.outputSamplesPerTrace);
         schemaEditor.refresh();
+    }
+
+    /**
+     * Called by TraceMonitor (output tab only) after a background scan of the input file finds its
+     * max trace length, to fill in the "Output file length" field as a default the person can then
+     * edit down (or leave alone) before Submit. Sets the field directly rather than going through
+     * refresh()'s full resync, since this can be called from a background-scan completion callback
+     * where only this one value is known to have changed. No-op if this instance isn't the output
+     * tab's (editableTextualHeader == false), since the field doesn't exist there.
+     */
+    public void refreshOutputSamplesPerTraceDefault(int maxSamplesInInputFile)
+    {
+        if (editableTextualHeader)
+        {
+            outputSamplesPerTraceField.setValue(maxSamplesInInputFile);
+        }
     }
 
     /** shows an already-fetched header preview (e.g. from the input tab) without this panel reading its own file */

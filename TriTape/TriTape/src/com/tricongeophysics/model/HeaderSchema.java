@@ -41,8 +41,16 @@ public class HeaderSchema
      * 0-based). This is essentially every field in the spec that maps to a
      * single numeric value; the one exception is "Source Energy Direction"
      * (bytes 219-224), a packed 3-component compound field that doesn't fit
-     * this schema's one-value-per-field model, so it's omitted, along with
-     * the 8 unassigned bytes at the end of the header (233-240).
+     * this schema's one-value-per-field model, so it's omitted. Several
+     * fields are named to line up exactly with defaultSegdSchema() (FFID,
+     * CHAN, REC_X, REC_Y already matched; SOURCE_X/Y -> SHOT_X/Y,
+     * ELEV_SOURCE -> SHOT_ELEV, ELEV_REC -> REC_ELEV, INLINE -> RECLINE,
+     * CROSSLINE -> RECSTN, SHOTPOINT -> SHOTSTN, YEAR/DAY_OF_YEAR/HOUR/
+     * MINUTE/SECOND -> SHOT_YEAR/SHOT_DAY/SHOT_HOUR/SHOT_MIN/SHOT_SEC), so a
+     * SEG-D -> SEG-Y reformat carries these straight through by name without
+     * any extra configuration - the writer looks up each output field by
+     * name in whatever headers the input trace actually has. SHOTLINE uses
+     * previously-unassigned tail bytes since rev1 has no natural slot for it.
      */
     public static HeaderSchema defaultSegySchema()
     {
@@ -65,8 +73,8 @@ public class HeaderSchema
         f.add(new HeaderFieldDef("NSUM_HORZ", 32, I16));
         f.add(new HeaderFieldDef("DATA_USE", 34, I16));
         f.add(new HeaderFieldDef("OFFSET", 36, I32));
-        f.add(new HeaderFieldDef("ELEV_REC", 40, I32, ELEV));
-        f.add(new HeaderFieldDef("ELEV_SOURCE", 44, I32, ELEV));
+        f.add(new HeaderFieldDef("REC_ELEV", 40, I32, ELEV));
+        f.add(new HeaderFieldDef("SHOT_ELEV", 44, I32, ELEV));
         f.add(new HeaderFieldDef("SOURCE_DEPTH", 48, I32, ELEV));
         f.add(new HeaderFieldDef("DATUM_ELEV_REC", 52, I32, ELEV));
         f.add(new HeaderFieldDef("DATUM_ELEV_SOURCE", 56, I32, ELEV));
@@ -74,8 +82,8 @@ public class HeaderSchema
         f.add(new HeaderFieldDef("WATER_DEPTH_GROUP", 64, I32, ELEV));
         f.add(new HeaderFieldDef("ELEV_SCALAR", 68, I16));
         f.add(new HeaderFieldDef("COORD_SCALAR", 70, I16));
-        f.add(new HeaderFieldDef("SOURCE_X", 72, I32, COORD));
-        f.add(new HeaderFieldDef("SOURCE_Y", 76, I32, COORD));
+        f.add(new HeaderFieldDef("SHOT_X", 72, I32, COORD));
+        f.add(new HeaderFieldDef("SHOT_Y", 76, I32, COORD));
         f.add(new HeaderFieldDef("REC_X", 80, I32, COORD));
         f.add(new HeaderFieldDef("REC_Y", 84, I32, COORD));
         f.add(new HeaderFieldDef("COORD_UNITS", 88, I16));
@@ -112,11 +120,11 @@ public class HeaderSchema
         f.add(new HeaderFieldDef("HIGH_CUT_FREQ", 150, I16));
         f.add(new HeaderFieldDef("LOW_CUT_SLOPE", 152, I16));
         f.add(new HeaderFieldDef("HIGH_CUT_SLOPE", 154, I16));
-        f.add(new HeaderFieldDef("YEAR", 156, I16));
-        f.add(new HeaderFieldDef("DAY_OF_YEAR", 158, I16));
-        f.add(new HeaderFieldDef("HOUR", 160, I16));
-        f.add(new HeaderFieldDef("MINUTE", 162, I16));
-        f.add(new HeaderFieldDef("SECOND", 164, I16));
+        f.add(new HeaderFieldDef("SHOT_YEAR", 156, I16));
+        f.add(new HeaderFieldDef("SHOT_DAY", 158, I16));
+        f.add(new HeaderFieldDef("SHOT_HOUR", 160, I16));
+        f.add(new HeaderFieldDef("SHOT_MIN", 162, I16));
+        f.add(new HeaderFieldDef("SHOT_SEC", 164, I16));
         f.add(new HeaderFieldDef("TIME_BASIS_CODE", 166, I16));
         f.add(new HeaderFieldDef("TRACE_WEIGHT", 168, I16));
         f.add(new HeaderFieldDef("GEOPHONE_GRP_ROLL1", 170, I16));
@@ -126,9 +134,9 @@ public class HeaderSchema
         f.add(new HeaderFieldDef("OVER_TRAVEL", 178, I16));
         f.add(new HeaderFieldDef("CDP_X", 180, I32, COORD));
         f.add(new HeaderFieldDef("CDP_Y", 184, I32, COORD));
-        f.add(new HeaderFieldDef("INLINE", 188, I32));
-        f.add(new HeaderFieldDef("CROSSLINE", 192, I32));
-        f.add(new HeaderFieldDef("SHOTPOINT", 196, I32));
+        f.add(new HeaderFieldDef("RECLINE", 188, I32));
+        f.add(new HeaderFieldDef("RECSTN", 192, I32));
+        f.add(new HeaderFieldDef("SHOTSTN", 196, I32));
         f.add(new HeaderFieldDef("SHOTPOINT_SCALAR", 200, I16));
         f.add(new HeaderFieldDef("TRACE_VALUE_UNIT", 202, I16));
         f.add(new HeaderFieldDef("TRANSDUCTION_MANTISSA", 204, I32));
@@ -142,7 +150,9 @@ public class HeaderSchema
         f.add(new HeaderFieldDef("SOURCE_MEASURE_MANTISSA", 224, I32));
         f.add(new HeaderFieldDef("SOURCE_MEASURE_EXPONENT", 228, I16));
         f.add(new HeaderFieldDef("SOURCE_MEASURE_UNIT", 230, I16));
-        // bytes 233-240 (offset 232): unassigned
+        // bytes 233-236 (offset 232) were unassigned in the standard - used here for SHOTLINE so a SEG-D
+        // reformat has somewhere to put it by default; move it if you need those bytes for something else
+        f.add(new HeaderFieldDef("SHOTLINE", 232, I32));
         return new HeaderSchema(f);
     }
 
@@ -163,15 +173,17 @@ public class HeaderSchema
     public static HeaderSchema defaultSegdSchema()
     {
         List<HeaderFieldDef> f = new ArrayList<HeaderFieldDef>();
-        // Demultiplexed Trace Header (20 bytes)
-        f.add(new HeaderFieldDef("FFID", 0, HeaderFieldDef.FieldType.BCD2));
+        // Demultiplexed Trace Header (20 bytes). NOTE: like RECLINE/RECSTN below, the plain "File number"
+        // (offset 0, BCD) and "Channel Set Number" (offset 3, BCD) fields are Sercel sentinels that always
+        // read FFFF/FF - confirmed against a real file (old FFID mapping decoded as garbage 16665, since FF
+        // isn't a valid BCD digit). FFID below points at the real "Extended file number" instead; CHAN
+        // already pointed at the real "Extended channel set number".
+        f.add(new HeaderFieldDef("FFID", 17, HeaderFieldDef.FieldType.UINT24));
         f.add(new HeaderFieldDef("SCAN_TYPE", 2, HeaderFieldDef.FieldType.BCD1));
-        f.add(new HeaderFieldDef("CHANNEL_SET", 3, HeaderFieldDef.FieldType.BCD1));
-        f.add(new HeaderFieldDef("TRACE_NUM", 4, HeaderFieldDef.FieldType.BCD2));
         f.add(new HeaderFieldDef("TRACE_HDR_EXT_COUNT", 9, HeaderFieldDef.FieldType.UINT8));
         f.add(new HeaderFieldDef("SAMPLE_SKEW", 10, HeaderFieldDef.FieldType.UINT8));
         f.add(new HeaderFieldDef("TRACE_EDIT", 11, HeaderFieldDef.FieldType.UINT8));
-        f.add(new HeaderFieldDef("EXT_CHANNEL_SET", 15, HeaderFieldDef.FieldType.UINT16));
+        f.add(new HeaderFieldDef("CHAN", 15, HeaderFieldDef.FieldType.UINT16));
         // Trace Header Extension #1 (32 bytes, Rev 3.1 only; offsets are 20 + the manual's own 0-based offset).
         // NOTE: the plain "Receiver line/point number" fields (offset 20/23, 3 bytes) are Sercel sentinels
         // that always read 0xFFFFFF - the real, per-trace values live in the "Extended receiver line/point
@@ -179,8 +191,8 @@ public class HeaderSchema
         // against a real file that these are 24.16 fixed-point (24-bit integer part + 16-bit fraction packed
         // into the 5-byte integer), so the raw value is divided by 65536 (2^16) to get the human-readable
         // line/point number (e.g. raw 458752000 / 65536 = 7000.0).
-        f.add(new HeaderFieldDef("REC_LINE", 30, HeaderFieldDef.FieldType.UINT40, 65536.0));
-        f.add(new HeaderFieldDef("REC_POINT", 35, HeaderFieldDef.FieldType.UINT40, 65536.0));
+        f.add(new HeaderFieldDef("RECLINE", 30, HeaderFieldDef.FieldType.UINT40, 65536.0));
+        f.add(new HeaderFieldDef("RECSTN", 35, HeaderFieldDef.FieldType.UINT40, 65536.0));
         f.add(new HeaderFieldDef("REC_POINT_INDEX", 26, HeaderFieldDef.FieldType.UINT8));
         f.add(new HeaderFieldDef("RESHOOT_INDEX", 27, HeaderFieldDef.FieldType.UINT8));
         f.add(new HeaderFieldDef("GROUP_INDEX", 28, HeaderFieldDef.FieldType.UINT8));

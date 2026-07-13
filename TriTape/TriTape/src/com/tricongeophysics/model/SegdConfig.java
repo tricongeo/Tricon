@@ -33,6 +33,18 @@ public class SegdConfig
     public int baseScanIntervalByteOffset = 27;              //1 byte, value/16 = ms
     public int traceHeaderExtensionCountByteOffset = 29;     //1 byte (Rev 1/2 only; Rev 3.1 reads this per-trace instead)
 
+    /**
+     * Record timestamp, within General Header block 1 (Rev 3.1). Year/hour/minute/second are
+     * each a single BCD byte; the Julian day is a 3-BCD-digit field split across two bytes - the
+     * hundreds digit is the LOW nibble of the SAME byte as additionalGeneralHeaderBlocksByteOffset
+     * (whose HIGH nibble is the additional-block count), and the tens+ones digits are their own byte.
+     */
+    public int recordYearByteOffset = 10;
+    public int recordJulianDayByteOffset = 12; //tens+ones digits; hundreds digit comes from the low nibble of additionalGeneralHeaderBlocksByteOffset's byte
+    public int recordHourByteOffset = 13;
+    public int recordMinuteByteOffset = 14;
+    public int recordSecondByteOffset = 15;
+
     /** offsets are within General Header block 2 - used only when version == REV1_REV2 */
     public int extendedHeaderBlocksByteOffsetInHeader2 = 8;
     public int externalHeaderBlocksByteOffsetInHeader2 = 9;
@@ -76,6 +88,11 @@ public class SegdConfig
         c.additionalGeneralHeaderBlocksByteOffset = additionalGeneralHeaderBlocksByteOffset;
         c.baseScanIntervalByteOffset = baseScanIntervalByteOffset;
         c.traceHeaderExtensionCountByteOffset = traceHeaderExtensionCountByteOffset;
+        c.recordYearByteOffset = recordYearByteOffset;
+        c.recordJulianDayByteOffset = recordJulianDayByteOffset;
+        c.recordHourByteOffset = recordHourByteOffset;
+        c.recordMinuteByteOffset = recordMinuteByteOffset;
+        c.recordSecondByteOffset = recordSecondByteOffset;
         c.extendedHeaderBlocksByteOffsetInHeader2 = extendedHeaderBlocksByteOffsetInHeader2;
         c.externalHeaderBlocksByteOffsetInHeader2 = externalHeaderBlocksByteOffsetInHeader2;
         c.rev3AdditionalBlocksCountByteOffsetInHeader2 = rev3AdditionalBlocksCountByteOffsetInHeader2;
@@ -103,6 +120,11 @@ public class SegdConfig
         this.additionalGeneralHeaderBlocksByteOffset = other.additionalGeneralHeaderBlocksByteOffset;
         this.baseScanIntervalByteOffset = other.baseScanIntervalByteOffset;
         this.traceHeaderExtensionCountByteOffset = other.traceHeaderExtensionCountByteOffset;
+        this.recordYearByteOffset = other.recordYearByteOffset;
+        this.recordJulianDayByteOffset = other.recordJulianDayByteOffset;
+        this.recordHourByteOffset = other.recordHourByteOffset;
+        this.recordMinuteByteOffset = other.recordMinuteByteOffset;
+        this.recordSecondByteOffset = other.recordSecondByteOffset;
         this.extendedHeaderBlocksByteOffsetInHeader2 = other.extendedHeaderBlocksByteOffsetInHeader2;
         this.externalHeaderBlocksByteOffsetInHeader2 = other.externalHeaderBlocksByteOffsetInHeader2;
         this.rev3AdditionalBlocksCountByteOffsetInHeader2 = other.rev3AdditionalBlocksCountByteOffsetInHeader2;

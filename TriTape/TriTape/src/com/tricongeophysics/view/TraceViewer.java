@@ -268,7 +268,10 @@ public class TraceViewer extends JPanel {
 	}
 
 	private static double clampZoomValue(double z) {
-		return Math.max(0.1, Math.min(z, 20.0));
+		// widened from (0.1, 20.0) - 0.1 wasn't low enough to fit a full record's worth of samples
+		// in the viewport for at least one real file (needed ~0.07); until we know the real range
+		// needed across files, use generous headroom on both ends rather than re-guess a tight bound
+		return Math.max(0.01, Math.min(z, 200.0));
 	}
 
 	/** switches between Pan (hand cursor, drag to scroll) and Zoom (magnifying-glass cursor, drag/click to zoom) */
@@ -298,6 +301,23 @@ public class TraceViewer extends JPanel {
 		refreshAvailableHeaderNames();
 		invalidateCacheAndRepaint();
 		refreshAllPanels();
+	}
+
+	/**
+	 * The longest sample count among all currently-loaded traces - this is the true full extent of
+	 * the current preview batch, and what canvas/axis height must be based on. NOTE: don't use
+	 * traces[0].getData().length for this - traces in a batch can have different lengths (e.g. an
+	 * aux/pilot channel trace vs a "live" data channel trace), and whichever trace happens to be
+	 * first isn't necessarily the longest one. (This was the bug behind "unzoom" appearing to cap
+	 * out short of the actual full record length: the Y-axis ruler was drawing ticks only out to
+	 * traces[0]'s length, while the canvas underneath was already correctly sized off the max.)
+	 */
+	private int maxSamplesAcrossTraces() {
+		int maxSamples = 0;
+		for (SeismicTrace t : traces) {
+			maxSamples = Math.max(maxSamples, t.getData().length);
+		}
+		return maxSamples;
 	}
 
 	/** rebuilds the list of header names available to pick from, based on the current batch of traces */
@@ -687,10 +707,7 @@ public class TraceViewer extends JPanel {
 		public Dimension getPreferredSize() {
 			int spacing = currentPixelsPerTrace();
 			int width = traces.length * spacing;
-			int maxSamples = 0;
-			for (SeismicTrace t : traces) {
-				maxSamples = Math.max(maxSamples, t.getData().length);
-			}
+			int maxSamples = maxSamplesAcrossTraces();
 			int height = (int) Math.round(maxSamples * BASE_PIXELS_PER_SAMPLE * zoomY) + 10;
 			return new Dimension(Math.max(width, 200), Math.max(height, 200));
 		}
@@ -940,10 +957,7 @@ public class TraceViewer extends JPanel {
 
 		@Override
 		public Dimension getPreferredSize() {
-			int maxSamples = 0;
-			for (SeismicTrace t : traces) {
-				maxSamples = Math.max(maxSamples, t.getData().length);
-			}
+			int maxSamples = maxSamplesAcrossTraces();
 			int height = (int) Math.round(maxSamples * BASE_PIXELS_PER_SAMPLE * zoomY) + 10;
 			return new Dimension(LEFT_MARGIN, Math.max(height, 1));
 		}
@@ -962,7 +976,11 @@ public class TraceViewer extends JPanel {
 			g2.setColor(Color.DARK_GRAY);
 			FontMetrics fm = g2.getFontMetrics();
 
-			int length = traces[0].getData().length;
+			// use the longest trace in the batch, not traces[0] - traces can have different sample
+			// counts (e.g. aux/pilot channel vs "live" data channel), and ticks need to cover the
+			// full canvas height (which is already sized off the max - see maxSamplesAcrossTraces()),
+			// not just whatever trace happens to be first
+			int length = maxSamplesAcrossTraces();
 			for (int i = 0; i < length; i += 50) {
 				int ipixels = (int) (i * pixelsPerSample);
 				int time = i * sampleRateMicros / 1000;

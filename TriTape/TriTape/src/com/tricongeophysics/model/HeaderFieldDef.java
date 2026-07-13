@@ -15,7 +15,7 @@ public class HeaderFieldDef
 {
     public enum FieldType
     {
-        INT8(1), UINT8(1), INT16(2), UINT16(2), UINT24(3), INT32(4), UINT32(4), UINT40(5), BCD1(1), BCD2(2), BCD3(3), BCD4(4);
+        INT8(1), UINT8(1), INT16(2), UINT16(2), UINT24(3), INT32(4), UINT32(4), FLOAT32(4), UINT40(5), BCD1(1), BCD2(2), BCD3(3), BCD4(4), DOUBLE64(8), UINT64(8);
 
         public final int byteLength;
 

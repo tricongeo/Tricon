@@ -155,7 +155,8 @@ public class SegdSettingsPanel extends JPanel
         left.add(headerPreviewPanel, BorderLayout.CENTER);
 
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, schemaEditor);
-        split.setResizeWeight(0.55);
+        split.setResizeWeight(0.35);
+        split.setDividerLocation(360);
 
         add(split, BorderLayout.CENTER);
     }

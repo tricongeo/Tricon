@@ -29,7 +29,10 @@ final class HeaderCodec
             case UINT24: return readInt24(buf, off);
             case INT32:  return readInt32(buf, off);
             case UINT32: return readInt32(buf, off) & 0xFFFFFFFFL;
+            case FLOAT32: return Float.intBitsToFloat(readInt32(buf, off));
             case UINT40: return readInt40(buf, off);
+            case UINT64: return readInt64(buf, off); // exact for the foreseeable range of GPS-epoch microsecond timestamps
+            case DOUBLE64: return Double.longBitsToDouble(readInt64(buf, off));
             case BCD1:   return bcdToInt(buf, off, 1);
             case BCD2:   return bcdToInt(buf, off, 2);
             case BCD3:   return bcdToInt(buf, off, 3);
@@ -53,7 +56,10 @@ final class HeaderCodec
             case UINT24: writeInt24(buf, off, (int) v); break;
             case INT32:
             case UINT32: writeInt32(buf, off, (int) v); break;
+            case FLOAT32: writeInt32(buf, off, Float.floatToIntBits((float) raw)); break;
             case UINT40: writeInt40(buf, off, v); break;
+            case UINT64: writeInt64(buf, off, v); break;
+            case DOUBLE64: writeInt64(buf, off, Double.doubleToLongBits(raw)); break;
             case BCD1:   writeBcd(buf, off, 1, (int) v); break;
             case BCD2:   writeBcd(buf, off, 2, (int) v); break;
             case BCD3:   writeBcd(buf, off, 3, (int) v); break;
@@ -94,6 +100,25 @@ final class HeaderCodec
     static void writeInt40(byte[] b, int off, long v)
     {
         for (int i = 4; i >= 0; i--)
+        {
+            b[off + i] = (byte) v;
+            v >>>= 8;
+        }
+    }
+
+    static long readInt64(byte[] b, int off)
+    {
+        long v = 0;
+        for (int i = 0; i < 8; i++)
+        {
+            v = (v << 8) | (b[off + i] & 0xFFL);
+        }
+        return v;
+    }
+
+    static void writeInt64(byte[] b, int off, long v)
+    {
+        for (int i = 7; i >= 0; i--)
         {
             b[off + i] = (byte) v;
             v >>>= 8;

@@ -123,6 +123,11 @@ public final class ConfigXmlIO
             appendOffset(doc, root, "rev3TraceHeaderExtensionCountByteOffset", config.rev3TraceHeaderExtensionCountByteOffset);
             appendOffset(doc, root, "rev3NumSamplesByteOffsetInTraceHeaderExt1", config.rev3NumSamplesByteOffsetInTraceHeaderExt1);
             appendOffset(doc, root, "samplesFieldByteOffsetInChannelSetDescriptor", config.samplesFieldByteOffsetInChannelSetDescriptor);
+            appendOffset(doc, root, "recordYearByteOffset", config.recordYearByteOffset);
+            appendOffset(doc, root, "recordJulianDayByteOffset", config.recordJulianDayByteOffset);
+            appendOffset(doc, root, "recordHourByteOffset", config.recordHourByteOffset);
+            appendOffset(doc, root, "recordMinuteByteOffset", config.recordMinuteByteOffset);
+            appendOffset(doc, root, "recordSecondByteOffset", config.recordSecondByteOffset);
             appendSchema(doc, root, config.traceHeaderSchema);
 
             writeDocument(doc, file);
@@ -159,6 +164,11 @@ public final class ConfigXmlIO
             config.rev3TraceHeaderExtensionCountByteOffset = readOffset(root, "rev3TraceHeaderExtensionCountByteOffset", config.rev3TraceHeaderExtensionCountByteOffset);
             config.rev3NumSamplesByteOffsetInTraceHeaderExt1 = readOffset(root, "rev3NumSamplesByteOffsetInTraceHeaderExt1", config.rev3NumSamplesByteOffsetInTraceHeaderExt1);
             config.samplesFieldByteOffsetInChannelSetDescriptor = readOffset(root, "samplesFieldByteOffsetInChannelSetDescriptor", config.samplesFieldByteOffsetInChannelSetDescriptor);
+            config.recordYearByteOffset = readOffset(root, "recordYearByteOffset", config.recordYearByteOffset);
+            config.recordJulianDayByteOffset = readOffset(root, "recordJulianDayByteOffset", config.recordJulianDayByteOffset);
+            config.recordHourByteOffset = readOffset(root, "recordHourByteOffset", config.recordHourByteOffset);
+            config.recordMinuteByteOffset = readOffset(root, "recordMinuteByteOffset", config.recordMinuteByteOffset);
+            config.recordSecondByteOffset = readOffset(root, "recordSecondByteOffset", config.recordSecondByteOffset);
             HeaderSchema schema = readSchema(root);
             if (schema != null) config.traceHeaderSchema = schema;
             return config;

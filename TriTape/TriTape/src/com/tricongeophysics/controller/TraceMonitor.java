@@ -72,7 +72,7 @@ public class TraceMonitor
         viewer = new TraceViewer();
 
         outputSegySettingsPanel = new SegySettingsPanel(writerSegyConfig, () -> outputFileField.getText().trim(),
-            preview -> { }, true);
+            preview -> { }, true, this::scanInputMaxSamplesAndUpdateOutputField);
         outputSegdSettingsPanel = new SegdSettingsPanel(writerSegdConfig, () -> outputFileField.getText().trim());
         inputSegySettingsPanel = new SegySettingsPanel(readerSegyConfig, this::firstInputFile, preview ->
         {
@@ -305,6 +305,100 @@ public class TraceMonitor
         }
     }
 
+    /**
+     * Triggered by the output tab's "Load Headers" button (see the Runnable passed into
+     * outputSegySettingsPanel's constructor). Scans the WHOLE current input file in the background
+     * to find its longest trace, then fills that in as the default "Output file length (samples)"
+     * field on the output tab - see SegyConfig.outputSamplesPerTrace and SegyWriter for why every
+     * output trace must be padded/truncated to a single fixed length. Silently does nothing if no
+     * valid input file is currently selected (the person hasn't gotten that far yet); any read error
+     * is surfaced in statusLabel rather than a dialog, since this runs from what's otherwise a
+     * "preview settings" action, not an explicit file operation.
+     */
+    private void scanInputMaxSamplesAndUpdateOutputField()
+    {
+        List<String> inputFiles = currentInputFiles();
+        if (inputFiles.isEmpty()) return;
+
+        commitSettingsEdits();
+        FileFormat format = (FileFormat) inputFormatCombo.getSelectedItem();
+        statusLabel.setText("Scanning input file for maximum trace length...");
+
+        SwingWorker<Integer, Void> worker = new SwingWorker<Integer, Void>()
+        {
+            private Exception error;
+
+            @Override
+            protected Integer doInBackground()
+            {
+                try
+                {
+                    return scanMaxSamplesPerTrace(format, inputFiles);
+                }
+                catch (Exception ex)
+                {
+                    error = ex;
+                    return 0;
+                }
+            }
+
+            @Override
+            protected void done()
+            {
+                if (error != null)
+                {
+                    statusLabel.setText("Error scanning input file for max trace length: " + error.getMessage());
+                    return;
+                }
+                try
+                {
+                    int max = get();
+                    outputSegySettingsPanel.refreshOutputSamplesPerTraceDefault(max);
+                    statusLabel.setText("Output file length defaulted to " + max
+                        + " samples (the input file's longest trace). Edit the field if you want a shorter output.");
+                }
+                catch (Exception ex)
+                {
+                    statusLabel.setText("Error scanning input file for max trace length: " + ex.getMessage());
+                }
+            }
+        };
+        worker.execute();
+    }
+
+    /**
+     * Reads every trace in the given input file(s) (via a throwaway reader, independent of
+     * previewReader) purely to find the longest one's sample count - used both interactively (see
+     * scanInputMaxSamplesAndUpdateOutputField()) and as a submitReformat() safety net when the
+     * person never explicitly set an output length. This is a full second pass over the input file
+     * beyond the actual reformat pass, so it's only worth doing for formats where trace length can
+     * genuinely vary (SEG-D Rev 3.1 - see SegdBufferedFileReader's class javadoc); SEG-Y input is
+     * already fixed-length by construction (every trace was written against one binary-header
+     * samples/trace value), so reader.getSamplesPerTrace() alone is trustworthy there without a scan.
+     */
+    private int scanMaxSamplesPerTrace(FileFormat format, List<String> inputFiles) throws IOException
+    {
+        try (BufferedFileReader reader = ReaderFactory.create(format, inputFiles, readerSegyConfig, readerSegdConfig))
+        {
+            reader.open();
+            if (format == FileFormat.SEGY)
+            {
+                return reader.getSamplesPerTrace(); //already fixed/uniform - no need to scan every trace
+            }
+            int max = 0;
+            while (reader.hasMoreTraces())
+            {
+                SeismicTrace[] batch = reader.readNextTraces(BufferedFileReader.DEFAULT_BATCH_SIZE);
+                if (batch.length == 0) break;
+                for (SeismicTrace t : batch)
+                {
+                    max = Math.max(max, t.getData().length);
+                }
+            }
+            return max;
+        }
+    }
+
     // ------------------------------------------------------------------
     // preview: read one batch of traces and hand them to the view
     // ------------------------------------------------------------------
@@ -410,8 +504,9 @@ public class TraceMonitor
         FileFormat inputFormat = (FileFormat) inputFormatCombo.getSelectedItem();
         FileFormat outputFormat = (FileFormat) outputFormatCombo.getSelectedItem();
         int batchSize = (Integer) batchSizeSpinner.getValue();
-        // captured on the EDT since it reads a Swing text component; passed into the background worker below
+        // captured on the EDT since it reads Swing components; passed into the background worker below
         byte[] outputTextualHeaderOverride = outputSegySettingsPanel.getEffectiveTextualHeaderRaw();
+        int outputSamplesPerTraceOverride = writerSegyConfig.outputSamplesPerTrace; //0 = not set, auto-resolve below
 
         setControlsEnabled(false);
         String progressTitle = inputFiles.size() == 1
@@ -433,7 +528,18 @@ public class TraceMonitor
                 try (BufferedFileReader reader = ReaderFactory.create(inputFormat, inputFiles, readerSegyConfig, readerSegdConfig))
                 {
                     reader.open();
-                    WriterConfig config = new WriterConfig(reader.getSampleRateMicros(), reader.getSamplesPerTrace());
+                    // SEG-Y output must be fixed-length across every trace (see SegyWriter/
+                    // SegyConfig.outputSamplesPerTrace) - reader.getSamplesPerTrace() alone is only
+                    // trustworthy for that when the FORMAT already guarantees uniform length (SEG-Y
+                    // input); for SEG-D Rev 3.1 input (which can genuinely vary trace-to-trace) it's
+                    // only an initial estimate from the first trace, so fall back to a full scan
+                    // (scanMaxSamplesPerTrace, a second independent pass) unless the person already
+                    // set an explicit override via the output tab's "Output file length" field.
+                    int targetSamplesPerTrace = outputFormat == FileFormat.SEGY
+                        ? (outputSamplesPerTraceOverride > 0 ? outputSamplesPerTraceOverride
+                            : scanMaxSamplesPerTrace(inputFormat, inputFiles))
+                        : reader.getSamplesPerTrace();
+                    WriterConfig config = new WriterConfig(reader.getSampleRateMicros(), targetSamplesPerTrace);
                     if (inputFormat == FileFormat.SEGY && outputFormat == FileFormat.SEGY && !inputFiles.isEmpty())
                     {
                         try

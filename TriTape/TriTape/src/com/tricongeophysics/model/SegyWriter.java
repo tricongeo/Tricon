@@ -26,6 +26,12 @@ public class SegyWriter implements TraceWriter
     private final SegyConfig config;
     private RandomAccessFile file;
     private int traceCounter = 0;
+    // fixed samples/trace every output trace is padded/truncated to - see open(); SEG-Y rev 1 (which
+    // is what this writer produces) assumes fixed-length trace records, so writing traces of
+    // differing lengths (as SEG-D Rev 3.1 input can supply - see SegdBufferedFileReader) corrupts
+    // the file for any reader beyond the first trace whose actual length differs from what the
+    // binary header declares
+    private int fixedSamplesPerTrace;
 
     public SegyWriter()
     {
@@ -40,8 +46,17 @@ public class SegyWriter implements TraceWriter
     @Override
     public void open(String filename, WriterConfig writerConfig) throws IOException
     {
+        if (writerConfig.samplesPerTrace <= 0)
+        {
+            throw new IOException("SegyWriter: samplesPerTrace must be a positive, fully-resolved value "
+                + "(the fixed length every output trace will be padded/truncated to) - got "
+                + writerConfig.samplesPerTrace + ". This should have been resolved by the caller "
+                + "(e.g. TraceMonitor scanning the input file, or an explicit output-length override) "
+                + "before calling open().");
+        }
         file = new RandomAccessFile(filename, "rw");
         file.setLength(0); //overwrite if it already exists
+        fixedSamplesPerTrace = writerConfig.samplesPerTrace;
         writeTextualHeader(writerConfig);
         writeBinaryHeader(writerConfig);
     }
@@ -119,15 +134,23 @@ public class SegyWriter implements TraceWriter
             double value = findHeaderValue(names, values, f.getName());
             HeaderCodec.encode(hdr, f, value);
         }
-        writeUShort(hdr, config.numSamplesThisTraceByteOffset, trace.getData().length);
+        // every trace record must be the same size (see fixedSamplesPerTrace javadoc above), so the
+        // header always declares fixedSamplesPerTrace here - NOT trace.getData().length, which is
+        // this trace's own actual (possibly different) sample count before padding/truncation below
+        writeUShort(hdr, config.numSamplesThisTraceByteOffset, fixedSamplesPerTrace);
         file.write(hdr);
 
         float[] data = trace.getData();
-        byte[] samples = new byte[data.length * 4];
-        for (int i = 0; i < data.length; i++)
+        byte[] samples = new byte[fixedSamplesPerTrace * 4];
+        int samplesToCopy = Math.min(data.length, fixedSamplesPerTrace);
+        for (int i = 0; i < samplesToCopy; i++)
         {
             writeInt(samples, i * 4, Float.floatToIntBits(data[i]));
         }
+        // any remaining bytes (data.length < fixedSamplesPerTrace) are already zero from the fresh
+        // byte[] allocation above - that's the zero-padding; data.length > fixedSamplesPerTrace is a
+        // silent truncation, per the person's own request to allow a shorter output length than the
+        // input's longest trace
         file.write(samples);
     }
 

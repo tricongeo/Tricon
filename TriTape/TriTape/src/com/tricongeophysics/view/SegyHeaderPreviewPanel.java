@@ -42,6 +42,7 @@ public class SegyHeaderPreviewPanel extends JPanel
     private final Supplier<String> fileHintSupplier;
     private final Consumer<SeismicTrace[]> onTracesLoaded;
     private final Consumer<SegyHeaderPreview> onHeadersLoaded;
+    private final Runnable onLoadHeadersClicked;
     private final boolean editableTextualHeader;
 
     private final JLabel fileLabel = new JLabel("File: (none)");
@@ -73,11 +74,28 @@ public class SegyHeaderPreviewPanel extends JPanel
     public SegyHeaderPreviewPanel(SegyConfig config, Supplier<String> fileHintSupplier, Consumer<SeismicTrace[]> onTracesLoaded,
                                    Consumer<SegyHeaderPreview> onHeadersLoaded, boolean editableTextualHeader)
     {
+        this(config, fileHintSupplier, onTracesLoaded, onHeadersLoaded, editableTextualHeader, () -> { });
+    }
+
+    /**
+     * @param onLoadHeadersClicked fires every time the "Load Headers" button is clicked, before the
+     *                              button's own file read is attempted - unlike onHeadersLoaded (which
+     *                              only fires after successfully reading THIS panel's own file), this
+     *                              always fires, so it's used (on the output tab) to also trigger a
+     *                              background scan of the INPUT file for its max trace length, even
+     *                              though the output file the button itself reads usually doesn't
+     *                              exist yet at that point in the workflow.
+     */
+    public SegyHeaderPreviewPanel(SegyConfig config, Supplier<String> fileHintSupplier, Consumer<SeismicTrace[]> onTracesLoaded,
+                                   Consumer<SegyHeaderPreview> onHeadersLoaded, boolean editableTextualHeader,
+                                   Runnable onLoadHeadersClicked)
+    {
         super(new BorderLayout(4, 4));
         this.config = config;
         this.fileHintSupplier = fileHintSupplier;
         this.onTracesLoaded = onTracesLoaded;
         this.onHeadersLoaded = onHeadersLoaded;
+        this.onLoadHeadersClicked = onLoadHeadersClicked;
         this.editableTextualHeader = editableTextualHeader;
         setBorder(BorderFactory.createTitledBorder("Header preview"));
         buildUI();
@@ -88,7 +106,7 @@ public class SegyHeaderPreviewPanel extends JPanel
         JPanel fileRow = new JPanel(new BorderLayout(4, 4));
         fileRow.add(fileLabel, BorderLayout.CENTER);
         JButton load = new JButton("Load Headers");
-        load.addActionListener(e -> loadHeaders());
+        load.addActionListener(e -> { onLoadHeadersClicked.run(); loadHeaders(); });
         fileRow.add(load, BorderLayout.EAST);
 
         Font mono = new Font(Font.MONOSPACED, Font.PLAIN, 11);
