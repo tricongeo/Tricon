@@ -5,6 +5,7 @@ import com.tricongeophysics.model.BufferedFileReader;
 import com.tricongeophysics.model.FileFormat;
 import com.tricongeophysics.model.ReaderFactory;
 import com.tricongeophysics.model.SegdConfig;
+import com.tricongeophysics.model.SegdVersion;
 import com.tricongeophysics.model.SegyBufferedFileReader;
 import com.tricongeophysics.model.SegyConfig;
 import com.tricongeophysics.model.SegyHeaderPreview;
@@ -16,6 +17,8 @@ import com.tricongeophysics.view.SegySettingsPanel;
 import com.tricongeophysics.view.TraceViewer;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -72,7 +75,7 @@ public class TraceMonitor
         viewer = new TraceViewer();
 
         outputSegySettingsPanel = new SegySettingsPanel(writerSegyConfig, () -> outputFileField.getText().trim(),
-            preview -> { }, true, this::scanInputMaxSamplesAndUpdateOutputField);
+            preview -> { }, true);
         outputSegdSettingsPanel = new SegdSettingsPanel(writerSegdConfig, () -> outputFileField.getText().trim());
         inputSegySettingsPanel = new SegySettingsPanel(readerSegyConfig, this::firstInputFile, preview ->
         {
@@ -89,6 +92,8 @@ public class TraceMonitor
 //        inputFileField.setText("/home/scott/Projects/develop/tritape/jetson_test_shots.sgy");
         inputFileField.setText("/bdata/proc/koloma_test/data/Accel data/LinearSweep_corr/CRG_Year-2026_Jday-145_Vibro_vibro4_LN-7003_PN-2396_PI-1_SN-4774477_02-28UTC_01.segd");
         inputFormatCombo.setSelectedItem(FileFormat.SEGD);
+        this.inputSegdSettingsPanel.setVersion(SegdVersion.REV3_1);
+        this.outputFileField.setText("/bdata/proc/koloma_test/test_out.sgy");
         previewButton.doClick();
     }
 
@@ -157,7 +162,14 @@ public class TraceMonitor
             cardLayout.show(settingsCards, fmt.name());
             if (fmt == FileFormat.SEGY) inputSegySettingsPanel.refresh(); else inputSegdSettingsPanel.refresh();
             syncOutputSegyDefaultsFromInput();
+            autoReloadInputSegyHeaders();
+            scanInputMaxSamplesAndUpdateOutputField();
         });
+        // header preview is a cheap read (just the textual/binary header) so it's fine to redo on
+        // every keystroke; the output tab's max-trace-length scan is a full pass over the input file,
+        // so it only runs once the person is done editing this field (focus lost), not per keystroke
+        onTextChange(inputFileField, this::autoReloadInputSegyHeaders);
+        inputFileField.addFocusListener(onFocusLost(this::scanInputMaxSamplesAndUpdateOutputField));
 
         panel.add(fileControls, BorderLayout.NORTH);
         panel.add(settingsCards, BorderLayout.CENTER);
@@ -171,7 +183,11 @@ public class TraceMonitor
 
         JPanel fileControls = new JPanel(new GridBagLayout());
         JButton browseOutput = new JButton("Browse...");
-        browseOutput.addActionListener(e -> browseFor(outputFileField, true));
+        browseOutput.addActionListener(e ->
+        {
+            browseFor(outputFileField, true);
+            autoReloadOutputSegyHeaders();
+        });
         outputFormatCombo.setSelectedItem(FileFormat.SEGY);
 
         GridBagConstraints c = new GridBagConstraints();
@@ -200,7 +216,10 @@ public class TraceMonitor
             cardLayout.show(settingsCards, fmt.name());
             if (fmt == FileFormat.SEGY) outputSegySettingsPanel.refresh(); else outputSegdSettingsPanel.refresh();
             syncOutputSegyDefaultsFromInput();
+            autoReloadOutputSegyHeaders();
+            scanInputMaxSamplesAndUpdateOutputField();
         });
+        onTextChange(outputFileField, this::autoReloadOutputSegyHeaders);
 
         panel.add(fileControls, BorderLayout.NORTH);
         panel.add(settingsCards, BorderLayout.CENTER);
@@ -225,6 +244,10 @@ public class TraceMonitor
     private void browseFor(JTextField field, boolean saveDialog)
     {
         JFileChooser chooser = new JFileChooser();
+        if (!this.outputFileField.getText().isBlank()) {
+        	chooser.setSelectedFile(new File(outputFileField.getText()));
+        }
+        
         int result = saveDialog ? chooser.showSaveDialog(frame) : chooser.showOpenDialog(frame);
         if (result == JFileChooser.APPROVE_OPTION)
         {
@@ -238,8 +261,11 @@ public class TraceMonitor
         JFileChooser chooser = new JFileChooser();
         chooser.setMultiSelectionEnabled(true);
         chooser.setDialogTitle("Select one or more input files");
+        if (!this.inputFileField.getText().isBlank()) {
+        	chooser.setSelectedFile(new File(inputFileField.getText()));
+        }
         if (chooser.showOpenDialog(frame) != JFileChooser.APPROVE_OPTION) return;
-
+        
         File[] files = chooser.getSelectedFiles();
         if (files.length == 0) return;
         StringBuilder sb = new StringBuilder();
@@ -249,6 +275,8 @@ public class TraceMonitor
             sb.append(files[i].getAbsolutePath());
         }
         inputFileField.setText(sb.toString());
+        autoReloadInputSegyHeaders();
+        scanInputMaxSamplesAndUpdateOutputField();
     }
 
     /** splits inputFileField's text (semicolon-separated) into individual, trimmed, non-empty file paths */
@@ -305,15 +333,53 @@ public class TraceMonitor
         }
     }
 
+    /** re-reads the Input tab's SEG-Y header preview for whatever file is currently selected; no-op if input format isn't SEG-Y or no file is set */
+    private void autoReloadInputSegyHeaders()
+    {
+        if (inputFormatCombo.getSelectedItem() == FileFormat.SEGY)
+        {
+            inputSegySettingsPanel.reloadHeaderPreview();
+        }
+    }
+
+    /** re-reads the Output tab's SEG-Y header preview for whatever file is currently selected; no-op if output format isn't SEG-Y or no file is set */
+    private void autoReloadOutputSegyHeaders()
+    {
+        if (outputFormatCombo.getSelectedItem() == FileFormat.SEGY)
+        {
+            outputSegySettingsPanel.reloadHeaderPreview();
+        }
+    }
+
+    /** attaches a listener that fires action (on the EDT) any time the field's text changes, including via setText() */
+    private static void onTextChange(JTextField field, Runnable action)
+    {
+        field.getDocument().addDocumentListener(new DocumentListener()
+        {
+            @Override public void insertUpdate(DocumentEvent e) { action.run(); }
+            @Override public void removeUpdate(DocumentEvent e) { action.run(); }
+            @Override public void changedUpdate(DocumentEvent e) { action.run(); }
+        });
+    }
+
+    /** builds a FocusListener that runs action only on focus-lost - used for expensive operations that shouldn't repeat on every keystroke */
+    private static java.awt.event.FocusListener onFocusLost(Runnable action)
+    {
+        return new java.awt.event.FocusAdapter()
+        {
+            @Override public void focusLost(java.awt.event.FocusEvent e) { action.run(); }
+        };
+    }
+
     /**
-     * Triggered by the output tab's "Load Headers" button (see the Runnable passed into
-     * outputSegySettingsPanel's constructor). Scans the WHOLE current input file in the background
-     * to find its longest trace, then fills that in as the default "Output file length (samples)"
-     * field on the output tab - see SegyConfig.outputSamplesPerTrace and SegyWriter for why every
-     * output trace must be padded/truncated to a single fixed length. Silently does nothing if no
-     * valid input file is currently selected (the person hasn't gotten that far yet); any read error
-     * is surfaced in statusLabel rather than a dialog, since this runs from what's otherwise a
-     * "preview settings" action, not an explicit file operation.
+     * Triggered whenever the input file or input format changes (see buildInputPane() and
+     * browseInputFiles()). Scans the WHOLE current input file in the background to find its longest
+     * trace, then fills that in as the default "Output file length (samples)" field on the output
+     * tab - see SegyConfig.outputSamplesPerTrace and SegyWriter for why every output trace must be
+     * padded/truncated to a single fixed length. Silently does nothing if no valid input file is
+     * currently selected (the person hasn't gotten that far yet); any read error is surfaced in
+     * statusLabel rather than a dialog, since this runs as a side effect of editing input settings,
+     * not an explicit file operation.
      */
     private void scanInputMaxSamplesAndUpdateOutputField()
     {

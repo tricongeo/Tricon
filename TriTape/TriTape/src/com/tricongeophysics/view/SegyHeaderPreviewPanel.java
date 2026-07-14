@@ -21,13 +21,16 @@ import java.util.function.Supplier;
  * byte-offset fields that decode it, so there's no separate window to open.
  *
  * Always reads whichever file is currently in TraceMonitor's input (or
- * output) file field, via fileHintSupplier - there's no separate file picker
- * here, it just follows the file the user already chose for reading/writing.
+ * output) file field, via fileHintSupplier - there's no file picker or
+ * filename label here (the Browse section above already shows the chosen
+ * file), and no "Load Headers" button either: TraceMonitor calls
+ * reloadIfFileSet() automatically whenever the relevant file field or format
+ * combo changes, so this panel just reflects whatever's currently selected.
  *
  * showMirroredPreview() lets another instance's already-loaded result be
- * displayed here without doing its own file read - used so that clicking
- * "Load Headers" on the Input tab also updates the Output tab's preview to
- * show what the output file's headers will default to.
+ * displayed here without doing its own file read - used so that reloading
+ * the Input tab's preview also updates the Output tab's preview to show what
+ * the output file's headers will default to.
  *
  * When editableTextualHeader is true (used for the output tab), the textual
  * header text area can be edited by the user: getEffectiveTextualHeaderRaw()
@@ -42,10 +45,8 @@ public class SegyHeaderPreviewPanel extends JPanel
     private final Supplier<String> fileHintSupplier;
     private final Consumer<SeismicTrace[]> onTracesLoaded;
     private final Consumer<SegyHeaderPreview> onHeadersLoaded;
-    private final Runnable onLoadHeadersClicked;
     private final boolean editableTextualHeader;
 
-    private final JLabel fileLabel = new JLabel("File: (none)");
     private final JTextArea textualHeaderArea = new JTextArea();
     private final JTextArea binarySummaryArea = new JTextArea();
     private final JTextArea binaryHexArea = new JTextArea();
@@ -74,28 +75,11 @@ public class SegyHeaderPreviewPanel extends JPanel
     public SegyHeaderPreviewPanel(SegyConfig config, Supplier<String> fileHintSupplier, Consumer<SeismicTrace[]> onTracesLoaded,
                                    Consumer<SegyHeaderPreview> onHeadersLoaded, boolean editableTextualHeader)
     {
-        this(config, fileHintSupplier, onTracesLoaded, onHeadersLoaded, editableTextualHeader, () -> { });
-    }
-
-    /**
-     * @param onLoadHeadersClicked fires every time the "Load Headers" button is clicked, before the
-     *                              button's own file read is attempted - unlike onHeadersLoaded (which
-     *                              only fires after successfully reading THIS panel's own file), this
-     *                              always fires, so it's used (on the output tab) to also trigger a
-     *                              background scan of the INPUT file for its max trace length, even
-     *                              though the output file the button itself reads usually doesn't
-     *                              exist yet at that point in the workflow.
-     */
-    public SegyHeaderPreviewPanel(SegyConfig config, Supplier<String> fileHintSupplier, Consumer<SeismicTrace[]> onTracesLoaded,
-                                   Consumer<SegyHeaderPreview> onHeadersLoaded, boolean editableTextualHeader,
-                                   Runnable onLoadHeadersClicked)
-    {
         super(new BorderLayout(4, 4));
         this.config = config;
         this.fileHintSupplier = fileHintSupplier;
         this.onTracesLoaded = onTracesLoaded;
         this.onHeadersLoaded = onHeadersLoaded;
-        this.onLoadHeadersClicked = onLoadHeadersClicked;
         this.editableTextualHeader = editableTextualHeader;
         setBorder(BorderFactory.createTitledBorder("Header preview"));
         buildUI();
@@ -103,12 +87,6 @@ public class SegyHeaderPreviewPanel extends JPanel
 
     private void buildUI()
     {
-        JPanel fileRow = new JPanel(new BorderLayout(4, 4));
-        fileRow.add(fileLabel, BorderLayout.CENTER);
-        JButton load = new JButton("Load Headers");
-        load.addActionListener(e -> { onLoadHeadersClicked.run(); loadHeaders(); });
-        fileRow.add(load, BorderLayout.EAST);
-
         Font mono = new Font(Font.MONOSPACED, Font.PLAIN, 11);
         textualHeaderArea.setFont(mono);
         textualHeaderArea.setEditable(editableTextualHeader);
@@ -144,7 +122,6 @@ public class SegyHeaderPreviewPanel extends JPanel
 
         statusLabel.setForeground(Color.DARK_GRAY);
 
-        add(fileRow, BorderLayout.NORTH);
         add(split, BorderLayout.CENTER);
         add(statusLabel, BorderLayout.SOUTH);
     }
@@ -201,7 +178,6 @@ public class SegyHeaderPreviewPanel extends JPanel
      */
     public void showMirroredPreview(SegyHeaderPreview preview, String sourceDescription)
     {
-        fileLabel.setText("File: (defaulted from " + sourceDescription + ")");
         setTextualHeaderDefault(preview.textualHeader, preview.textualHeaderRaw);
 
         StringBuilder summary = new StringBuilder();
@@ -222,7 +198,6 @@ public class SegyHeaderPreviewPanel extends JPanel
     private void loadHeaders()
     {
         String filename = fileHintSupplier.get().trim();
-        fileLabel.setText("File: " + (filename.isEmpty() ? "(none)" : filename));
 
         if (filename.isEmpty() || !new File(filename).isFile())
         {

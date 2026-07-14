@@ -47,6 +47,8 @@ public class SegySettingsPanel extends JPanel
     private final JSpinner elevScalarOffset;
     private final JSpinner outputSamplesPerTraceField; //writer-only; see SegyConfig.outputSamplesPerTrace
     private final HeaderSchemaEditorPanel schemaEditor;
+    private final JPanel advancedFields; //the byte-offset rows, shown in a pop-up (see showAdvancedDialog()) rather than inline
+    private JDialog advancedDialog; //built lazily on first "Advanced" click, once this panel has a real Window ancestor
 
     public SegySettingsPanel(SegyConfig config)
     {
@@ -75,26 +77,12 @@ public class SegySettingsPanel extends JPanel
     public SegySettingsPanel(SegyConfig config, Supplier<String> fileHintSupplier,
                               Consumer<SegyHeaderPreview> onHeadersLoaded, boolean editableTextualHeader)
     {
-        this(config, fileHintSupplier, onHeadersLoaded, editableTextualHeader, () -> { });
-    }
-
-    /**
-     * @param onLoadHeadersClicked fires whenever this panel's own "Load Headers" button is clicked
-     *                              (see SegyHeaderPreviewPanel's matching parameter for why this is
-     *                              separate from onHeadersLoaded) - TraceMonitor uses this on the
-     *                              output tab's instance to trigger a background scan of the INPUT
-     *                              file for its max trace length, defaulting the new output-length
-     *                              field to it (see refreshOutputSamplesPerTraceDefault()).
-     */
-    public SegySettingsPanel(SegyConfig config, Supplier<String> fileHintSupplier, Consumer<SegyHeaderPreview> onHeadersLoaded,
-                              boolean editableTextualHeader, Runnable onLoadHeadersClicked)
-    {
         super(new BorderLayout(4, 4));
         this.config = config;
         this.editableTextualHeader = editableTextualHeader;
         this.schemaEditor = new HeaderSchemaEditorPanel(config.traceHeaderSchema);
         this.headerPreviewPanel = new SegyHeaderPreviewPanel(config, fileHintSupplier,
-            traces -> schemaEditor.setSampleTraces(traces), onHeadersLoaded, editableTextualHeader, onLoadHeadersClicked);
+            traces -> schemaEditor.setSampleTraces(traces), onHeadersLoaded, editableTextualHeader);
 
         traceHeaderBytes = boundSpinner(config.traceHeaderBytes, v -> config.traceHeaderBytes = v, false);
         sampleRateOffset = boundSpinner(config.sampleRateByteOffset, v -> config.sampleRateByteOffset = v, true);
@@ -109,41 +97,43 @@ public class SegySettingsPanel extends JPanel
         outputSamplesPerTraceField = new JSpinner(new SpinnerNumberModel(config.outputSamplesPerTrace, 0, 100_000_000, 1));
         outputSamplesPerTraceField.addChangeListener(e -> config.outputSamplesPerTrace = (Integer) outputSamplesPerTraceField.getValue());
 
-        JButton saveButton = new JButton("Save Settings...");
+        JButton saveButton = new JButton("Save...");
         saveButton.addActionListener(e -> saveSettings());
-        JButton loadButton = new JButton("Load Settings...");
+        JButton loadButton = new JButton("Load...");
         loadButton.addActionListener(e -> loadSettings());
+        JButton advancedButton = new JButton("Advanced...");
+        advancedButton.setToolTipText("Byte offsets that rarely need to change (trace header length, binary-header field offsets)");
+        advancedButton.addActionListener(e -> showAdvancedDialog());
         JPanel saveLoadRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
         saveLoadRow.add(saveButton);
         saveLoadRow.add(loadButton);
+        saveLoadRow.add(advancedButton);
 
-        JPanel fields = new JPanel(new GridLayout(0, 2, 4, 4));
-        fields.setBorder(BorderFactory.createTitledBorder("SEG-Y byte offsets (1-based)"));
-        addRow(fields, "Trace header length (bytes):", traceHeaderBytes);
-        addRow(fields, "Sample rate offset:", sampleRateOffset);
-        addRow(fields, "Samples/trace offset:", samplesPerTraceOffset);
-        addRow(fields, "Format code offset:", formatCodeOffset);
-        addRow(fields, "Samples-this-trace offset:", numSamplesThisTraceOffset);
-        addRow(fields, "Coordinate scalar offset:", coordScalarOffset);
-        addRow(fields, "Elevation scalar offset:", elevScalarOffset);
+        // these rows rarely need to change day-to-day, so they live in the "Advanced..." pop-up
+        // (showAdvancedDialog()) instead of taking up space in the main panel
+        advancedFields = new JPanel(new GridLayout(0, 2, 4, 4));
+        advancedFields.setBorder(BorderFactory.createTitledBorder("SEG-Y byte offsets (1-based)"));
+        addRow(advancedFields, "Trace header length (bytes):", traceHeaderBytes);
+        addRow(advancedFields, "Sample rate offset:", sampleRateOffset);
+        addRow(advancedFields, "Samples/trace offset:", samplesPerTraceOffset);
+        addRow(advancedFields, "Format code offset:", formatCodeOffset);
+        addRow(advancedFields, "Samples-this-trace offset:", numSamplesThisTraceOffset);
+        addRow(advancedFields, "Coordinate scalar offset:", coordScalarOffset);
+        addRow(advancedFields, "Elevation scalar offset:", elevScalarOffset);
 
         JPanel fieldsAndButtons = new JPanel(new BorderLayout());
         fieldsAndButtons.add(saveLoadRow, BorderLayout.NORTH);
-        fieldsAndButtons.add(fields, BorderLayout.CENTER);
 
         if (editableTextualHeader)
         {
             // output tab only - every output trace gets padded/truncated to this length (see
-            // SegyConfig.outputSamplesPerTrace); "Load Headers" below defaults it to the input
+            // SegyConfig.outputSamplesPerTrace); the header preview below defaults it to the input
             // file's actual max trace length, but the person can type a smaller value to truncate
             JPanel outputLengthRow = new JPanel(new GridLayout(0, 2, 4, 4));
             outputLengthRow.setBorder(BorderFactory.createTitledBorder(
-                "Output trace length (0 = use input file's max automatically; \"Load Headers\" below fills this in)"));
+                "Output trace length (0 = use input file's max automatically)"));
             addRow(outputLengthRow, "Output file length (samples):", outputSamplesPerTraceField);
-            JPanel fieldsButtonsAndLength = new JPanel(new BorderLayout());
-            fieldsButtonsAndLength.add(fieldsAndButtons, BorderLayout.NORTH);
-            fieldsButtonsAndLength.add(outputLengthRow, BorderLayout.CENTER);
-            fieldsAndButtons = fieldsButtonsAndLength;
+            fieldsAndButtons.add(outputLengthRow, BorderLayout.CENTER);
         }
 
         JPanel left = new JPanel(new BorderLayout(4, 4));
@@ -155,6 +145,27 @@ public class SegySettingsPanel extends JPanel
         split.setDividerLocation(360);
 
         add(split, BorderLayout.CENTER);
+    }
+
+    /**
+     * Builds (once, lazily - needs a real Window ancestor, which this panel doesn't have yet at
+     * construction time) and shows the modeless "Advanced" dialog containing the byte-offset rows
+     * moved out of the main panel. Modeless so it can be left open alongside the rest of the UI;
+     * edits still write straight through to the SegyConfig via the same spinners/listeners as before.
+     */
+    private void showAdvancedDialog()
+    {
+        if (advancedDialog == null)
+        {
+            Window owner = SwingUtilities.getWindowAncestor(this);
+            advancedDialog = new JDialog(owner, "Advanced SEG-Y byte offsets", Dialog.ModalityType.MODELESS);
+            advancedDialog.setLayout(new BorderLayout());
+            advancedDialog.add(advancedFields, BorderLayout.CENTER);
+            advancedDialog.pack();
+            advancedDialog.setLocationRelativeTo(this);
+        }
+        advancedDialog.setVisible(true);
+        advancedDialog.toFront();
     }
 
     private void saveSettings()
@@ -261,6 +272,17 @@ public class SegySettingsPanel extends JPanel
     public void showMirroredPreview(SegyHeaderPreview preview, String sourceDescription)
     {
         headerPreviewPanel.showMirroredPreview(preview, sourceDescription);
+    }
+
+    /**
+     * Re-reads the header preview for whatever file is currently in the bound file field (input or
+     * output, depending on which instance this is) - called by TraceMonitor whenever that file field
+     * or the corresponding format combo changes, since there's no "Load Headers" button anymore to
+     * trigger this manually. No-op if the file field is currently empty.
+     */
+    public void reloadHeaderPreview()
+    {
+        headerPreviewPanel.reloadIfFileSet();
     }
 
     /** the textual header bytes to actually write: the user's edits if any, otherwise the loaded/mirrored default, or null if neither has happened yet */

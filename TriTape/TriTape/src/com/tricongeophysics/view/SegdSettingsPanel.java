@@ -259,4 +259,9 @@ public class SegdSettingsPanel extends JPanel
     {
         schemaEditor.commitEdits();
     }
+
+	public void setVersion(SegdVersion version) {
+		this.versionCombo.setSelectedItem(version);
+		
+	}
 }

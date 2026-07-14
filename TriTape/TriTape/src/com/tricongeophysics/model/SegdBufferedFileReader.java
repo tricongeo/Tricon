@@ -5,6 +5,9 @@ import com.tricongeophysics.SeismicTrace;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,15 +60,18 @@ import java.util.List;
  *     getSamplesPerTrace() before the first trace is read). Everything up
  *     through Extension #1 is decoded via the static, user-editable schema
  *     (see HeaderSchema.defaultSegdSchema()), but REC_X/REC_Y/REC_ELEV,
- *     SHOT_X/SHOT_Y/SHOT_ELEV, and SHOT_VPID cannot be, since the Position
- *     (§6.4.7/6.4.8) and VP-ID (§6.4.3) blocks that carry them sit after a
- *     variable-length, variable-content extension chain whose layout is NOT
- *     constant across traces or channel types - readOneTrace() instead walks
- *     that chain block-by-block, dispatching on each block's own type byte;
- *     see decodePositionAndVpFields() for the full details and the real-file
- *     evidence behind it. "aux" channel traces have a much shorter extension
- *     chain and never reach a Position block at all, so these fields simply
- *     read back as 0.0 (unresolved) for them - expected, not an error.
+ *     SHOT_X/SHOT_Y/SHOT_ELEV, SHOT_VPID, and SHOT_YEAR/DAY/HOUR/MIN/
+ *     SEC cannot be, since the Position (§6.4.7/6.4.8), VP-ID (§6.4.3), and
+ *     Timestamp (§6.4.2) blocks that carry them sit after a variable-length,
+ *     variable-content extension chain whose layout is NOT constant across
+ *     traces or channel types - readOneTrace() instead walks that chain
+ *     block-by-block, dispatching on each block's own type byte; see
+ *     decodePositionAndVpFields() and decodeShotTimestamp() for the full
+ *     details and the real-file evidence behind them. "aux" channel traces
+ *     have a much shorter extension chain but were confirmed on a real file
+ *     to still carry their own Timestamp block; they never reach a Position
+ *     block at all though, so REC_/SHOT_X/Y/ELEV/SHOT_VPID simply read back
+ *     as 0.0 (unresolved) for them - expected, not an error.
  *   trace samples (thisTraceSamples * 4 bytes, per this trace's own count)
  *
  * SEG-D varies significantly by revision and recording-system vendor, and
@@ -88,10 +94,15 @@ public class SegdBufferedFileReader extends BufferedFileReader
     private int channelSetsPerScanType;
     private int fileNumber;
     private long firstTraceOffset;
-    // REV3_1 only: this record's start timestamp, decoded once from General Header block 1 and
-    // appended to every trace's headers as SHOT_YEAR/SHOT_JULIAN_DAY/SHOT_HOUR/SHOT_MIN/SHOT_SEC -
-    // approximate for an individual shot within a long continuous recording (see readOneTrace()),
-    // but the exact GPS time of each shot event is also available via SHOT_TIME_GPS_US in the schema
+    // REV1/REV2 only: this is the correct (and only) source for shot timing on those simpler
+    // revisions, decoded once from General Header block 1 at file-open. REV3_1 must NOT use these
+    // for SHOT_YEAR/DAY/HOUR/MIN/SEC - §6.4.2's Timestamp Header block (type 0x42, present in
+    // every trace's own extension chain - confirmed on real files, including short "aux"-channel
+    // chains) carries this trace's own actual GPS timestamp, which can genuinely differ trace-to-
+    // trace within a long continuous recording; the General Header value is file/record-level only
+    // and was previously (incorrectly) reused for every trace regardless of version. These fields are
+    // kept only as REV3_1's fallback for the rare trace whose chain doesn't contain a Timestamp block
+    // at all (see decodeShotTimestamp()) - see readOneTrace() for the actual per-trace decode.
     private int recordYear;
     private int recordJulianDay;
     private int recordHour;
@@ -391,7 +402,7 @@ public class SegdBufferedFileReader extends BufferedFileReader
         // that follows it, so schema fields can address any offset within that combined buffer
         byte[] combined = allExtensions == null ? th : concat(th, allExtensions);
         List<HeaderFieldDef> fields = config.traceHeaderSchema.getFields();
-        int recordFieldCount = config.version == SegdVersion.REV3_1 ? 5 : 0; //SHOT_YEAR/JULIAN_DAY/HOUR/MIN/SEC, appended below
+        int recordFieldCount = config.version == SegdVersion.REV3_1 ? 5 : 0; //SHOT_YEAR/DAY/HOUR/MIN/SEC (field named SHOT_DAY, not SHOT_JULIAN_DAY - must match defaultSegySchema()'s name for SEG-D->SEG-Y pass-through), appended below
         // REC_X/REC_Y/REC_ELEV, SHOT_X/SHOT_Y/SHOT_ELEV, SHOT_VPID, SHOTLINE, SHOTSTN - see
         // decodePositionAndVpFields(); these can't be static-offset schema fields since the
         // Position/VP-ID/Source-Description blocks that carry them sit after a variable-length,
@@ -412,14 +423,19 @@ public class SegdBufferedFileReader extends BufferedFileReader
         }
         if (recordFieldCount > 0)
         {
-            // these come from General Header block 1 (read once at file-open), not this trace's own
-            // buffer, so they're appended directly rather than going through the offset-based schema
+            // §6.4.2 Timestamp Header block, from THIS trace's own extension chain - the correct
+            // source for REV3_1 (see decodeShotTimestamp() and the class javadoc for why the
+            // record-level General Header timestamp below is wrong for this version: it's the same
+            // single value for every trace in the file, but Sercel's continuous-recording files carry
+            // a genuine, distinct GPS timestamp per trace). Falls back to the record-level fields
+            // only if this particular trace's chain doesn't contain a Timestamp block at all.
+            int[] shotTime = decodeShotTimestamp(allExtensions);
             int i = fields.size();
-            names[i] = "SHOT_YEAR"; values[i] = recordYear;
-            names[i + 1] = "SHOT_JULIAN_DAY"; values[i + 1] = recordJulianDay;
-            names[i + 2] = "SHOT_HOUR"; values[i + 2] = recordHour;
-            names[i + 3] = "SHOT_MIN"; values[i + 3] = recordMinute;
-            names[i + 4] = "SHOT_SEC"; values[i + 4] = recordSecond;
+            names[i] = "SHOT_YEAR";        values[i] = shotTime != null ? shotTime[0] : recordYear;
+            names[i + 1] = "SHOT_DAY";      values[i + 1] = shotTime != null ? shotTime[1] : recordJulianDay;
+            names[i + 2] = "SHOT_HOUR";     values[i + 2] = shotTime != null ? shotTime[2] : recordHour;
+            names[i + 3] = "SHOT_MIN";      values[i + 3] = shotTime != null ? shotTime[3] : recordMinute;
+            names[i + 4] = "SHOT_SEC";      values[i + 4] = shotTime != null ? shotTime[4] : recordSecond;
         }
         if (positionFieldCount > 0)
         {
@@ -575,6 +591,57 @@ public class SegdBufferedFileReader extends BufferedFileReader
     private static boolean isFiniteTuple(double[] xyz)
     {
         return Double.isFinite(xyz[0]) && Double.isFinite(xyz[1]) && Double.isFinite(xyz[2]);
+    }
+
+    private static final Instant GPS_EPOCH = Instant.parse("1980-01-06T00:00:00Z");
+    // current cumulative GPS-UTC leap second offset; GPS time itself never inserts leap seconds, so
+    // this only needs to change if the international timekeeping bodies schedule a new one (none
+    // since 2016) - a one-second-per-leap-second error here doesn't affect which trace a shot belongs
+    // to, only the displayed SHOT_SEC value, so it's not worth making this runtime-configurable
+    private static final int GPS_UTC_LEAP_SECONDS = 18;
+
+    /**
+     * Walks this trace's own extension-block chain for the Timestamp Header block (§6.4.2, type
+     * 0x42) and decodes its GPS time (bytes 1-8, big-endian microseconds since the GPS epoch) into
+     * calendar components. Confirmed on real files (both a 25-extension "live" channel trace and a
+     * 6-extension "aux" channel trace) that this block is present and is the SECOND block in the
+     * chain, right after Extension #1 - but this still walks type-byte-by-type-byte rather than
+     * assuming that fixed position, consistent with decodePositionAndVpFields() and for the same
+     * reason: block order past Extension #1 isn't guaranteed constant.
+     * <p>
+     * This is what REV3_1 must use for SHOT_YEAR/DAY/HOUR/MIN/SEC - unlike REV1_REV2, where
+     * General Header block 1's record-level timestamp (recordYear/recordJulianDay/etc., read once at
+     * file-open) is the only timestamp SEG-D provides at all. Using that same file/record-level value
+     * for every trace in a REV3_1 file (as this reader incorrectly did previously) silently discards
+     * the fact that Sercel's continuous-recording files carry a genuine, distinct GPS timestamp per
+     * trace in this block.
+     *
+     * @param allExtensions this trace's full concatenated extension-block chain (may be null)
+     * @return {year, dayOfYear, hour, minute, second} in UTC, or null if this trace's chain doesn't
+     *         contain a Timestamp block at all (caller should fall back to the record-level fields
+     *         in that case, per the class javadoc)
+     */
+    private static int[] decodeShotTimestamp(byte[] allExtensions)
+    {
+        if (allExtensions == null) return null;
+
+        final int BLOCK = 32;
+        int i = 0;
+        while (i + BLOCK <= allExtensions.length)
+        {
+            int type = allExtensions[i + BLOCK - 1] & 0xFF;
+            if (type == 0x42)
+            {
+                long gpsMicros = HeaderCodec.readInt64(allExtensions, i);
+                long gpsSeconds = Math.floorDiv(gpsMicros, 1_000_000L);
+                long nanosRemainder = Math.floorMod(gpsMicros, 1_000_000L) * 1_000L;
+                Instant utc = GPS_EPOCH.plusSeconds(gpsSeconds - GPS_UTC_LEAP_SECONDS).plusNanos(nanosRemainder);
+                ZonedDateTime z = utc.atZone(ZoneOffset.UTC);
+                return new int[] { z.getYear(), z.getDayOfYear(), z.getHour(), z.getMinute(), z.getSecond() };
+            }
+            i += BLOCK;
+        }
+        return null; //no Timestamp block in this trace's chain - caller falls back to the record-level value
     }
 
     private static byte[] concat(byte[] a, byte[] b)
