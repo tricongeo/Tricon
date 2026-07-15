@@ -36,6 +36,94 @@ public class HeaderSchema
     }
 
     /**
+     * Generates a human-readable SEG-Y textual header describing this schema's own fields (name,
+     * 1-based byte offset, type) - used by SegyWriter as the output's textual header when there's no
+     * real source textual header to carry through byte-for-byte (SEG-D has no equivalent concept at
+     * all, so this is always the case for SEG-D -> SEG-Y). Since this schema is the WRITER's own (the
+     * output SEG-Y file's actual trace-header layout, not the input's), the generated header
+     * documents exactly how to interpret each trace's header bytes in the file being produced - which
+     * is what a SEG-Y textual header is conventionally for anyway.
+     * <p>
+     * Formatted as standard SEG-Y "C" records: one field per line, each padded/truncated to exactly
+     * 80 characters and prefixed with its 1-based line number ("C 1 ", "C 2 ", ...), for as many
+     * lines as textualHeaderBytes actually allows (3200 bytes = the SEG-Y rev 1 standard 40 lines;
+     * unused trailing lines are left blank). If there are more fields than fit, the remaining ones are
+     * simply not listed rather than overflowing - this is documentation, not the authoritative source
+     * of the layout (the trace headers' own bytes are), so a truncated list isn't a correctness issue.
+     * <p>
+     * Returns plain text (one String, not yet split into 80-char lines as an array) - the caller is
+     * responsible for encoding it to whatever the output actually needs (SegyWriter uses EBCDIC, via
+     * SegyEbcdic, matching the SEG-Y standard's own convention for textual headers).
+     */
+    public String describeAsTextualHeader(int textualHeaderBytes)
+    {
+        final int LINE_WIDTH = 80;
+        int maxLines = Math.max(1, textualHeaderBytes / LINE_WIDTH);
+
+        List<String> content = new ArrayList<String>();
+        content.add("REFORMATTED TO SEG-Y - NO SOURCE TEXTUAL HEADER WAS AVAILABLE, E.G. SEG-D INPUT");
+        content.add("TRACE HEADER FIELD MAP FOR THIS FILE - NAME, 1-BASED BYTE OFFSET, TYPE:");
+        for (HeaderFieldDef f : fields)
+        {
+            if (content.size() >= maxLines) break;
+            content.add(String.format("%-24s BYTE %-6d %s", f.getName(), f.getByteOffset() + 1, f.getType().name()));
+        }
+
+        StringBuilder sb = new StringBuilder(maxLines * LINE_WIDTH);
+        for (int i = 0; i < maxLines; i++)
+        {
+            String body = i < content.size() ? content.get(i) : "";
+            String numbered = String.format("C%2d %s", i + 1, body);
+            if (numbered.length() > LINE_WIDTH) numbered = numbered.substring(0, LINE_WIDTH);
+            sb.append(String.format("%-" + LINE_WIDTH + "s", numbered));
+        }
+        return sb.toString();
+    }
+
+    /**
+     * describeAsTextualHeader(), reformatted for on-screen display: a '\n' inserted after every
+     * 80-character record, so a JTextArea shows it as 40 separate lines instead of one 3200-character
+     * blob - confirmed as a real problem on a real file: showing it as one unbroken line made it look
+     * (and be) essentially impossible for a person to hand-edit without misaligning the underlying
+     * 80-byte record grid, since there was no visual indication of where each record boundary was.
+     * <p>
+     * NEVER pass this to SegyEbcdic.toEbcdic()/write it to a file directly - the inserted '\n'
+     * characters aren't part of the actual SEG-Y textual header content (which is raw fixed-width
+     * text with NO embedded record delimiters at all - a reader is expected to just chop it into
+     * 80-byte chunks positionally), and EBCDIC-encoding them would eat a content byte per line for a
+     * character that isn't in SegyEbcdic's conversion table, silently shifting every later record's
+     * byte alignment by one. SegyHeaderPreviewPanel already strips '\n'/'\r' back out before encoding
+     * a person's edits (see getEffectiveTextualHeaderRaw()), which is exactly why that round-trips
+     * correctly - this method's output should only ever reach a JTextArea, never SegyEbcdic directly.
+     * describeAsTextualHeaderEbcdic() correctly uses the newline-free describeAsTextualHeader()
+     * instead, precisely to avoid this trap.
+     */
+    public String describeAsTextualHeaderForDisplay(int textualHeaderBytes)
+    {
+        final int LINE_WIDTH = 80;
+        String raw = describeAsTextualHeader(textualHeaderBytes);
+        StringBuilder sb = new StringBuilder(raw.length() + raw.length() / LINE_WIDTH + 1);
+        for (int i = 0; i < raw.length(); i += LINE_WIDTH)
+        {
+            sb.append(raw, i, Math.min(i + LINE_WIDTH, raw.length()));
+            sb.append('\n');
+        }
+        return sb.toString();
+    }
+
+    /**
+     * describeAsTextualHeader(), EBCDIC-encoded (via SegyEbcdic) into raw bytes ready to write - the
+     * single source of truth for this schema's generated default textual header, used both by
+     * SegyWriter (the actual written bytes) and by the output tab's SegyHeaderPreviewPanel (so the
+     * person can see, and edit, the same default before submitting - see TraceMonitor's
+     * syncOutputSegyDefaultsFromInput()) rather than it only being generated invisibly at write time.
+     */
+    public byte[] describeAsTextualHeaderEbcdic(int textualHeaderBytes)
+    {
+        return SegyEbcdic.toEbcdic(describeAsTextualHeader(textualHeaderBytes), textualHeaderBytes);
+    }
+
+    /**
      * Default trace-header field mapping covering the full SEG-Y rev 1
      * standard trace header (bytes 1-240 per the standard, offsets here
      * 0-based). This is essentially every field in the spec that maps to a
@@ -176,14 +264,23 @@ public class HeaderSchema
         // Demultiplexed Trace Header (20 bytes). NOTE: like RECLINE/RECSTN below, the plain "File number"
         // (offset 0, BCD) and "Channel Set Number" (offset 3, BCD) fields are Sercel sentinels that always
         // read FFFF/FF - confirmed against a real file (old FFID mapping decoded as garbage 16665, since FF
-        // isn't a valid BCD digit). FFID below points at the real "Extended file number" instead; CHAN
-        // already pointed at the real "Extended channel set number".
-        f.add(new HeaderFieldDef("FFID", 17, HeaderFieldDef.FieldType.UINT24));
+        // isn't a valid BCD digit). The "Extended file number" at offset 17 (bytes 18-20, 1-based) that
+        // used to live here as FFID was confirmed unused (always reads as sentinel/garbage) for REV3_1 -
+        // FFID is instead decoded dynamically for REV3_1 from the SERCEL VP Identification Block's VP
+        // uuid (§6.4.3), replacing what used to be exposed separately as SHOT_VPID - see
+        // SegdBufferedFileReader.decodePositionAndVpFields() and readOneTrace(). REV1_REV2 files don't
+        // reach that block at all (position/VP-ID fields are REV3_1-only - see the class javadoc), so
+        // they won't get an FFID from this schema at all now; add a fixed-offset "FFID" field back via
+        // the schema editor UI if a specific REV1/REV2 file has one at a known offset.
+        // CHAN_SET points at the real "Extended channel set number" - this identifies which channel SET
+        // (a group of channels sharing acquisition parameters) a trace belongs to, NOT which individual
+        // channel/receiver it is, so it deliberately does NOT match a SEG-Y output field name (unlike
+        // CHAN below, which does): a SEG-D->SEG-Y reformat should not carry CHAN_SET through as CHAN.
         f.add(new HeaderFieldDef("SCAN_TYPE", 2, HeaderFieldDef.FieldType.BCD1));
         f.add(new HeaderFieldDef("TRACE_HDR_EXT_COUNT", 9, HeaderFieldDef.FieldType.UINT8));
         f.add(new HeaderFieldDef("SAMPLE_SKEW", 10, HeaderFieldDef.FieldType.UINT8));
         f.add(new HeaderFieldDef("TRACE_EDIT", 11, HeaderFieldDef.FieldType.UINT8));
-        f.add(new HeaderFieldDef("CHAN", 15, HeaderFieldDef.FieldType.UINT16));
+        f.add(new HeaderFieldDef("CHAN_SET", 15, HeaderFieldDef.FieldType.UINT16));
         // Trace Header Extension #1 (32 bytes, Rev 3.1 only; offsets are 20 + the manual's own 0-based offset).
         // NOTE: the plain "Receiver line/point number" fields (offset 20/23, 3 bytes) are Sercel sentinels
         // that always read 0xFFFFFF - the real, per-trace values live in the "Extended receiver line/point
@@ -198,7 +295,10 @@ public class HeaderSchema
         f.add(new HeaderFieldDef("GROUP_INDEX", 28, HeaderFieldDef.FieldType.UINT8));
         f.add(new HeaderFieldDef("DEPTH_INDEX", 29, HeaderFieldDef.FieldType.UINT8));
         f.add(new HeaderFieldDef("SENSOR_TYPE", 40, HeaderFieldDef.FieldType.UINT8));
-        f.add(new HeaderFieldDef("EXT_TRACE_NUM", 41, HeaderFieldDef.FieldType.UINT24));
+        // §6.4.2 bytes 22-24 (1-based) of Extension #1 - this trace's own channel number, which IS what
+        // should map to SEG-Y's CHAN field on output (unlike CHAN_SET above); named EXT_TRACE_NUM until
+        // this rename made that mapping explicit and matched to defaultSegySchema()'s "CHAN" field name.
+        f.add(new HeaderFieldDef("CHAN", 41, HeaderFieldDef.FieldType.UINT24));
         f.add(new HeaderFieldDef("NUM_SAMPLES", 44, HeaderFieldDef.FieldType.UINT32));
         f.add(new HeaderFieldDef("SENSOR_MOVING", 48, HeaderFieldDef.FieldType.UINT8));
         return new HeaderSchema(f);

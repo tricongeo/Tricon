@@ -39,12 +39,12 @@ import java.util.Set;
  */
 public class TraceViewer extends JPanel {
 	private static final int BASE_TRACE_SPACING = 4;
-	private static final int MIN_HEADER_AREA_HEIGHT = 26;
-	private static final int LEFT_MARGIN = 50; // width of the fixed Y-axis (row header) column
+	private static final int MIN_HEADER_AREA_HEIGHT = 34;
+	private static final int LEFT_MARGIN = 60; // width of the fixed Y-axis (row header) column
 	private static final double BASE_PIXELS_PER_SAMPLE = 3.0;
-	private static final int HEADER_TEXT_ROW_HEIGHT = 11;
-	private static final int HEADER_GRAPH_HEIGHT = 70;
-	private static final int HEADER_GRAPH_LEGEND_HEIGHT = 12;
+	private static final int HEADER_TEXT_ROW_HEIGHT = 15;
+	private static final int HEADER_GRAPH_HEIGHT = 90;
+	private static final int HEADER_GRAPH_LEGEND_HEIGHT = 16;
 	private static final Color[] HEADER_COLORS = {
 		new Color(200, 30, 30), new Color(30, 100, 200), new Color(30, 150, 30),
 		new Color(200, 130, 0), new Color(150, 30, 180), new Color(0, 150, 150),
@@ -299,8 +299,44 @@ public class TraceViewer extends JPanel {
 	public void setTraces(SeismicTrace[] traces) {
 		this.traces = traces == null ? new SeismicTrace[0] : traces;
 		refreshAvailableHeaderNames();
+		defaultZoomYToFirstDataTrace();
 		invalidateCacheAndRepaint();
 		refreshAllPanels();
+	}
+
+	/**
+	 * Defaults the Y zoom so the full sample length of the first "data" (non-aux) trace in this batch
+	 * fits within the current viewport height, instead of the flat 1.0/100% default - which, for a
+	 * typical record, is far taller than any screen (see clampZoomValue()'s widened range, from the
+	 * earlier "unzoom" investigation, that made a fit this small even possible). "Non-aux" is
+	 * identified via the SENSOR_TYPE header (SEG-D Rev 3.1 - see SegdBufferedFileReader's class
+	 * javadoc: confirmed on a real file that 0 means an aux/pilot channel and any other value is a
+	 * real sensor); if that header isn't present at all (e.g. viewing a SEG-Y file, which has no
+	 * equivalent concept), this just falls back to the first trace in the batch. No-op if there are
+	 * no traces, that trace has no samples, or the viewport doesn't have a real size yet (e.g. called
+	 * before the window is first shown) - in any of those cases the existing zoom is left alone
+	 * rather than risk computing a nonsensical value.
+	 */
+	private void defaultZoomYToFirstDataTrace() {
+		if (traces.length == 0) return;
+
+		SeismicTrace target = traces[0];
+		for (SeismicTrace t : traces) {
+			double sensorType = t.getHeaderValue("SENSOR_TYPE");
+			if (!Double.isNaN(sensorType) && sensorType != 0) {
+				target = t;
+				break;
+			}
+		}
+		int samples = target.getData().length;
+		if (samples <= 0) return;
+
+		Dimension viewSize = scrollPane.getViewport().getExtentSize();
+		if (viewSize.height <= 0) return;
+
+		zoomY = clampZoomValue(viewSize.height / (samples * BASE_PIXELS_PER_SAMPLE));
+		updateZoomLabel();
+		scrollPane.getViewport().setViewPosition(new Point(scrollPane.getViewport().getViewPosition().x, 0));
 	}
 
 	/**
@@ -390,7 +426,7 @@ public class TraceViewer extends JPanel {
 	/** height in pixels of the stacked per-trace header-value text rows, or 0 if that display is off */
 	private int textRowsHeight() {
 		if (!headerCheck.isSelected() || !headerTextCheck.isSelected() || selectedHeaderNames.isEmpty()) return 0;
-		return 15 + selectedHeaderNames.size() * HEADER_TEXT_ROW_HEIGHT;
+		return HEADER_TEXT_ROW_HEIGHT + 4 + selectedHeaderNames.size() * HEADER_TEXT_ROW_HEIGHT;
 	}
 
 	/** height in pixels of the multi-header line graph (legend row + plot), or 0 if that display is off */
@@ -880,7 +916,7 @@ public class TraceViewer extends JPanel {
 			g2.drawRect(0, plotTop, width - 1, plotHeight);
 
 			Font old = g2.getFont();
-			g2.setFont(old.deriveFont(9f));
+			g2.setFont(old.deriveFont(12f));
 			FontMetrics fm = g2.getFontMetrics();
 			int legendX = 4;
 
@@ -912,8 +948,8 @@ public class TraceViewer extends JPanel {
 					? formatHeaderValue(traces[hoveredTraceIndex].getHeaderValue(name))
 					: "--";
 				String legend = name + ": " + hoveredValue;
-				g2.drawLine(legendX, legendTop + 5, legendX + 12, legendTop + 5);
-				g2.drawString(legend, legendX + 15, legendTop + 9);
+				g2.drawLine(legendX, legendTop + HEADER_GRAPH_LEGEND_HEIGHT / 2, legendX + 12, legendTop + HEADER_GRAPH_LEGEND_HEIGHT / 2);
+				g2.drawString(legend, legendX + 15, legendTop + HEADER_GRAPH_LEGEND_HEIGHT - 4);
 				legendX += 15 + fm.stringWidth(legend) + 12;
 			}
 
@@ -930,9 +966,9 @@ public class TraceViewer extends JPanel {
 			if (selectedHeaderNames.isEmpty())
 				return;
 			Font old = g2.getFont();
-			g2.setFont(old.deriveFont(9f));
+			g2.setFont(old.deriveFont(12f));
 			FontMetrics fm = g2.getFontMetrics();
-			int y = graphAreaHeight() + 11;
+			int y = graphAreaHeight() + HEADER_TEXT_ROW_HEIGHT;
 			int i = 0;
 			for (String name : selectedHeaderNames) {
 				String label = formatHeaderValue(trace.getHeaderValue(name));
@@ -972,7 +1008,7 @@ public class TraceViewer extends JPanel {
 
 			double pixelsPerSample = BASE_PIXELS_PER_SAMPLE * zoomY;
 			Font old = g2.getFont();
-			g2.setFont(old.deriveFont(9f));
+			g2.setFont(old.deriveFont(12f));
 			g2.setColor(Color.DARK_GRAY);
 			FontMetrics fm = g2.getFontMetrics();
 
@@ -1019,15 +1055,15 @@ public class TraceViewer extends JPanel {
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			Font old = g2.getFont();
-			g2.setFont(old.deriveFont(9f));
+			g2.setFont(old.deriveFont(12f));
 
 			g2.setColor(Color.BLACK);
-			g2.drawString("Amp:", 2, 10);
-			g2.drawString(hoveredAmplitudeText(), 2, 21);
+			g2.drawString("Amp:", 2, HEADER_TEXT_ROW_HEIGHT - 4);
+			g2.drawString(hoveredAmplitudeText(), 2, HEADER_TEXT_ROW_HEIGHT * 2 - 4);
 
 			if (headerCheck.isSelected() && headerTextCheck.isSelected() && !selectedHeaderNames.isEmpty()) {
 				String[] headerNameLabels = selectedHeaderNames.toArray(new String[0]);
-				int rowY = graphAreaHeight() + 11;
+				int rowY = graphAreaHeight() + HEADER_TEXT_ROW_HEIGHT;
 				for (int i = 0; i < headerNameLabels.length; i++) {
 					g2.setColor(headerColor(i));
 					g2.drawString(headerNameLabels[i], 2, rowY);

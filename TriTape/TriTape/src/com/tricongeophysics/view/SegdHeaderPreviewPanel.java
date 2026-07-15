@@ -1,5 +1,6 @@
 package com.tricongeophysics.view;
 
+import com.tricongeophysics.SeismicTrace;
 import com.tricongeophysics.model.SegdBufferedFileReader;
 import com.tricongeophysics.model.SegdConfig;
 import com.tricongeophysics.model.SegdHeaderPreview;
@@ -9,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -25,8 +27,8 @@ public class SegdHeaderPreviewPanel extends JPanel
 {
     private final SegdConfig config;
     private final Supplier<String> fileHintSupplier;
+    private final Consumer<SeismicTrace[]> onTracesLoaded;
 
-    private final JLabel fileLabel = new JLabel("File: (none)");
     private final JTextArea summaryArea = new JTextArea();
     private final JTextArea hexArea = new JTextArea();
     private final JComboBox<String> hexBlockCombo = new JComboBox<String>();
@@ -36,21 +38,28 @@ public class SegdHeaderPreviewPanel extends JPanel
 
     public SegdHeaderPreviewPanel(SegdConfig config, Supplier<String> fileHintSupplier)
     {
+        this(config, fileHintSupplier, traces -> { });
+    }
+
+    /**
+     * @param onTracesLoaded fires with the first few real, fully-decoded traces (via readSampleTraces()
+     *                        - a genuine SegdBufferedFileReader read, not the raw-bytes-only peekHeaders()
+     *                        used for the summary/hex panels above) every time headers are (re)loaded, so
+     *                        the trace-header schema table's sample-value columns have something to show -
+     *                        matches SegyHeaderPreviewPanel's equivalent mechanism.
+     */
+    public SegdHeaderPreviewPanel(SegdConfig config, Supplier<String> fileHintSupplier, Consumer<SeismicTrace[]> onTracesLoaded)
+    {
         super(new BorderLayout(4, 4));
         this.config = config;
         this.fileHintSupplier = fileHintSupplier;
+        this.onTracesLoaded = onTracesLoaded;
         setBorder(BorderFactory.createTitledBorder("Header preview (diagnostic)"));
         buildUI();
     }
 
     private void buildUI()
     {
-        JPanel fileRow = new JPanel(new BorderLayout(4, 4));
-        fileRow.add(fileLabel, BorderLayout.CENTER);
-        JButton load = new JButton("Load Headers");
-        load.addActionListener(e -> loadHeaders());
-        fileRow.add(load, BorderLayout.EAST);
-
         Font mono = new Font(Font.MONOSPACED, Font.PLAIN, 11);
         summaryArea.setFont(mono);
         summaryArea.setEditable(false);
@@ -77,7 +86,6 @@ public class SegdHeaderPreviewPanel extends JPanel
 
         statusLabel.setForeground(Color.DARK_GRAY);
 
-        add(fileRow, BorderLayout.NORTH);
         add(split, BorderLayout.CENTER);
         add(statusLabel, BorderLayout.SOUTH);
     }
@@ -94,7 +102,6 @@ public class SegdHeaderPreviewPanel extends JPanel
     private void loadHeaders()
     {
         String filename = fileHintSupplier.get().trim();
-        fileLabel.setText("File: " + (filename.isEmpty() ? "(none)" : filename));
         if (filename.isEmpty() || !new File(filename).isFile())
         {
             statusLabel.setText("Choose a valid file in the field above first.");
@@ -152,7 +159,11 @@ public class SegdHeaderPreviewPanel extends JPanel
             hexBlockCombo.setSelectedIndex(0);
             updateHexDisplay();
 
-            statusLabel.setText("Loaded diagnostic headers from " + filename + ".");
+            SeismicTrace[] sampleTraces = readSampleTraces(filename, 3);
+            onTracesLoaded.accept(sampleTraces);
+
+            statusLabel.setText("Loaded diagnostic headers from " + filename
+                + (sampleTraces.length > 0 ? " and " + sampleTraces.length + " sample trace(s)." : "."));
         }
         catch (IOException ex)
         {
@@ -160,6 +171,21 @@ public class SegdHeaderPreviewPanel extends JPanel
             summaryArea.setText("");
             hexArea.setText("");
             hexBlockCombo.removeAllItems();
+            onTracesLoaded.accept(new SeismicTrace[0]);
+        }
+    }
+
+    /** best-effort read of the first few real traces (via a genuine SegdBufferedFileReader), for the schema table's sample-value columns */
+    private SeismicTrace[] readSampleTraces(String filename, int count)
+    {
+        try (SegdBufferedFileReader reader = new SegdBufferedFileReader(filename, config))
+        {
+            reader.open();
+            return reader.readNextTraces(count);
+        }
+        catch (IOException ex)
+        {
+            return new SeismicTrace[0];
         }
     }
 

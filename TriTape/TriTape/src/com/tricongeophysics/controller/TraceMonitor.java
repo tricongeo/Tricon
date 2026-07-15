@@ -74,7 +74,7 @@ public class TraceMonitor
     {
         viewer = new TraceViewer();
 
-        outputSegySettingsPanel = new SegySettingsPanel(writerSegyConfig, () -> outputFileField.getText().trim(),
+        outputSegySettingsPanel = new SegySettingsPanel(writerSegyConfig, this::firstInputFile,
             preview -> { }, true);
         outputSegdSettingsPanel = new SegdSettingsPanel(writerSegdConfig, () -> outputFileField.getText().trim());
         inputSegySettingsPanel = new SegySettingsPanel(readerSegyConfig, this::firstInputFile, preview ->
@@ -162,13 +162,18 @@ public class TraceMonitor
             cardLayout.show(settingsCards, fmt.name());
             if (fmt == FileFormat.SEGY) inputSegySettingsPanel.refresh(); else inputSegdSettingsPanel.refresh();
             syncOutputSegyDefaultsFromInput();
-            autoReloadInputSegyHeaders();
+            autoReloadInputHeaders();
             scanInputMaxSamplesAndUpdateOutputField();
         });
-        // header preview is a cheap read (just the textual/binary header) so it's fine to redo on
-        // every keystroke; the output tab's max-trace-length scan is a full pass over the input file,
-        // so it only runs once the person is done editing this field (focus lost), not per keystroke
-        onTextChange(inputFileField, this::autoReloadInputSegyHeaders);
+        // header preview is a cheap read (just the textual/binary header, plus a few sample traces)
+        // so it's fine to redo on every keystroke; the output tab's max-trace-length scan is a full
+        // pass over the input file, so it only runs once the person is done editing this field (focus
+        // lost), not per keystroke. Note this deliberately calls syncOutputSampleTracesFromInput()
+        // rather than the broader syncOutputSegyDefaultsFromInput() here - the latter would also reset
+        // the output textual header default on every keystroke, fighting with any edits the person has
+        // already made there; only the (always read-only) sample-value columns are safe to keep
+        // refreshing this eagerly.
+        onTextChange(inputFileField, () -> { autoReloadInputHeaders(); syncOutputSampleTracesFromInput(); });
         inputFileField.addFocusListener(onFocusLost(this::scanInputMaxSamplesAndUpdateOutputField));
 
         panel.add(fileControls, BorderLayout.NORTH);
@@ -186,7 +191,7 @@ public class TraceMonitor
         browseOutput.addActionListener(e ->
         {
             browseFor(outputFileField, true);
-            autoReloadOutputSegyHeaders();
+            autoReloadOutputHeaders();
         });
         outputFormatCombo.setSelectedItem(FileFormat.SEGY);
 
@@ -216,10 +221,10 @@ public class TraceMonitor
             cardLayout.show(settingsCards, fmt.name());
             if (fmt == FileFormat.SEGY) outputSegySettingsPanel.refresh(); else outputSegdSettingsPanel.refresh();
             syncOutputSegyDefaultsFromInput();
-            autoReloadOutputSegyHeaders();
+            autoReloadOutputHeaders();
             scanInputMaxSamplesAndUpdateOutputField();
         });
-        onTextChange(outputFileField, this::autoReloadOutputSegyHeaders);
+        onTextChange(outputFileField, this::autoReloadOutputHeaders);
 
         panel.add(fileControls, BorderLayout.NORTH);
         panel.add(settingsCards, BorderLayout.CENTER);
@@ -275,7 +280,8 @@ public class TraceMonitor
             sb.append(files[i].getAbsolutePath());
         }
         inputFileField.setText(sb.toString());
-        autoReloadInputSegyHeaders();
+        autoReloadInputHeaders();
+        syncOutputSampleTracesFromInput();
         scanInputMaxSamplesAndUpdateOutputField();
     }
 
@@ -322,6 +328,21 @@ public class TraceMonitor
      * runs when the input or output format combo changes, not on every keystroke, so it
      * never overwrites edits the user has already made.
      */
+    /**
+     * Keeps the Output tab's SEG-Y settings in sync with whatever's selected on the Input tab -
+     * called whenever either format combo changes (see buildInputPane()/buildOutputPane()). Two
+     * cases for the textual/binary header preview: SEG-Y -> SEG-Y mirrors the input's actual
+     * config/headers (showMirroredPreview() handles the textual/binary header preview separately -
+     * see the input format combo listener); anything else -> SEG-Y (there's no equivalent source
+     * header to mirror at all - SEG-D has no textual header concept) instead defaults the output
+     * textual header preview to a generated description of the OUTPUT schema itself (name/offset/
+     * type per field, EBCDIC-encoded) - see HeaderSchema.describeAsTextualHeaderEbcdic() - so the
+     * person can see, and edit, the same default SegyWriter would otherwise generate invisibly at
+     * write time. Either way, also populates the output schema table's "Trace 1/2/3" sample-value
+     * columns from a few real INPUT traces (see syncOutputSampleTracesFromInput()) - the whole point
+     * of the output tab is to preview what's about to be written, so those columns should show real
+     * data regardless of whether the input happens to be SEG-Y or SEG-D.
+     */
     private void syncOutputSegyDefaultsFromInput()
     {
         FileFormat inFmt = (FileFormat) inputFormatCombo.getSelectedItem();
@@ -331,24 +352,71 @@ public class TraceMonitor
             writerSegyConfig.copyFrom(readerSegyConfig);
             outputSegySettingsPanel.refresh();
         }
-    }
-
-    /** re-reads the Input tab's SEG-Y header preview for whatever file is currently selected; no-op if input format isn't SEG-Y or no file is set */
-    private void autoReloadInputSegyHeaders()
-    {
-        if (inputFormatCombo.getSelectedItem() == FileFormat.SEGY)
+        else if (outFmt == FileFormat.SEGY)
         {
-            inputSegySettingsPanel.reloadHeaderPreview();
+            String text = writerSegyConfig.traceHeaderSchema.describeAsTextualHeaderForDisplay(writerSegyConfig.textualHeaderBytes);
+            byte[] raw = writerSegyConfig.traceHeaderSchema.describeAsTextualHeaderEbcdic(writerSegyConfig.textualHeaderBytes);
+            outputSegySettingsPanel.setTextualHeaderDefault(text, raw);
+        }
+        if (outFmt == FileFormat.SEGY)
+        {
+            syncOutputSampleTracesFromInput();
         }
     }
 
-    /** re-reads the Output tab's SEG-Y header preview for whatever file is currently selected; no-op if output format isn't SEG-Y or no file is set */
-    private void autoReloadOutputSegyHeaders()
+    /** re-reads the Input tab's header preview (SEG-Y or SEG-D, whichever format is currently selected) for whatever file is currently selected; no-op if no file is set */
+    private void autoReloadInputHeaders()
     {
-        if (outputFormatCombo.getSelectedItem() == FileFormat.SEGY)
+        FileFormat fmt = (FileFormat) inputFormatCombo.getSelectedItem();
+        if (fmt == FileFormat.SEGY) inputSegySettingsPanel.reloadHeaderPreview();
+        else inputSegdSettingsPanel.reloadHeaderPreview();
+    }
+
+    /**
+     * Reads a few real traces from the current input file(s) - via whatever reader the CURRENT input
+     * format actually needs (SegdBufferedFileReader or SegyBufferedFileReader), unlike
+     * SegyHeaderPreviewPanel's own internal readSampleTraces() which only understands SEG-Y - and
+     * pushes them into the Output tab's own schema table via SegySettingsPanel.setSampleTraces().
+     * This is what actually populates the "Trace 1/2/3" columns for the output preview: the schema
+     * table looks up each output field's value by NAME on these traces (same mechanism SegyWriter
+     * itself uses when actually writing), so a SEG-D input trace's "CHAN" header, say, shows up
+     * correctly under the output schema's "CHAN" row even though the underlying bytes came from a
+     * completely different file format. Best-effort: any read failure just clears the columns rather
+     * than surfacing an error, since this is a live preview, not an explicit user action.
+     */
+    private void syncOutputSampleTracesFromInput()
+    {
+        List<String> inputFiles = currentInputFiles();
+        if (inputFiles.isEmpty())
         {
-            outputSegySettingsPanel.reloadHeaderPreview();
+            outputSegySettingsPanel.setSampleTraces(new SeismicTrace[0]);
+            return;
         }
+        FileFormat format = (FileFormat) inputFormatCombo.getSelectedItem();
+        try (BufferedFileReader reader = ReaderFactory.create(format, inputFiles, readerSegyConfig, readerSegdConfig))
+        {
+            reader.open();
+            outputSegySettingsPanel.setSampleTraces(reader.readNextTraces(3));
+        }
+        catch (Exception ex)
+        {
+            outputSegySettingsPanel.setSampleTraces(new SeismicTrace[0]);
+        }
+    }
+
+    /**
+     * Re-reads the Output tab's header preview. For SEG-Y output, this reads from the INPUT file(s)
+     * (see outputSegySettingsPanel's construction - its fileHintSupplier is firstInputFile(), not the
+     * output file field), so the preview always reflects what's about to be written, not whatever
+     * might already exist on disk at the chosen output path from a previous run. SEG-D output has no
+     * equivalent "existing output file" concept to worry about, so its preview still reads from the
+     * output file field as before. No-op if the relevant file field is empty.
+     */
+    private void autoReloadOutputHeaders()
+    {
+        FileFormat fmt = (FileFormat) outputFormatCombo.getSelectedItem();
+        if (fmt == FileFormat.SEGY) outputSegySettingsPanel.reloadHeaderPreview();
+        else outputSegdSettingsPanel.reloadHeaderPreview();
     }
 
     /** attaches a listener that fires action (on the EDT) any time the field's text changes, including via setText() */
@@ -606,21 +674,29 @@ public class TraceMonitor
                             : scanMaxSamplesPerTrace(inputFormat, inputFiles))
                         : reader.getSamplesPerTrace();
                     WriterConfig config = new WriterConfig(reader.getSampleRateMicros(), targetSamplesPerTrace);
-                    if (inputFormat == FileFormat.SEGY && outputFormat == FileFormat.SEGY && !inputFiles.isEmpty())
+                    if (outputFormat == FileFormat.SEGY)
                     {
-                        try
+                        // the textual header is user-editable on the Output tab (defaulting either to
+                        // the mirrored input SEG-Y header, or - for non-SEG-Y input - the generated
+                        // schema-description text set up by syncOutputSegyDefaultsFromInput()); use
+                        // whatever's there, edited or not, rather than regenerating anything here
+                        if (outputTextualHeaderOverride != null)
                         {
-                            SegyHeaderPreview inputHeaders = SegyBufferedFileReader.peekHeaders(inputFiles.get(0), readerSegyConfig);
-                            config.binaryHeaderRaw = inputHeaders.binaryHeaderRaw;
-                            // the textual header is user-editable on the Output tab; use whatever's there
-                            // (edited or still the loaded/mirrored default) rather than re-peeking the input,
-                            // falling back to the input's raw bytes only if nothing was ever loaded there
-                            config.textualHeaderRaw = outputTextualHeaderOverride != null
-                                ? outputTextualHeaderOverride : inputHeaders.textualHeaderRaw;
+                            config.textualHeaderRaw = outputTextualHeaderOverride;
                         }
-                        catch (IOException ignored)
+                        if (inputFormat == FileFormat.SEGY && !inputFiles.isEmpty())
                         {
-                            // fall back to the writer's generic default textual/binary header
+                            try
+                            {
+                                SegyHeaderPreview inputHeaders = SegyBufferedFileReader.peekHeaders(inputFiles.get(0), readerSegyConfig);
+                                config.binaryHeaderRaw = inputHeaders.binaryHeaderRaw;
+                                if (config.textualHeaderRaw == null) config.textualHeaderRaw = inputHeaders.textualHeaderRaw;
+                            }
+                            catch (IOException ignored)
+                            {
+                                // fall back to the writer's generic default binary header; textualHeaderRaw
+                                // may already be set above, or SegyWriter falls back to its own generated one
+                            }
                         }
                     }
                     TraceWriter writer = WriterFactory.create(outputFormat, writerSegyConfig, writerSegdConfig);

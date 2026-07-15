@@ -3,6 +3,7 @@ package com.tricongeophysics.view;
 import com.tricongeophysics.SeismicTrace;
 import com.tricongeophysics.model.SegyBufferedFileReader;
 import com.tricongeophysics.model.SegyConfig;
+import com.tricongeophysics.model.SegyEbcdic;
 import com.tricongeophysics.model.SegyHeaderPreview;
 
 import javax.swing.*;
@@ -20,12 +21,17 @@ import java.util.function.Supplier;
  * bound to. Embedded directly inside SegySettingsPanel, right alongside the
  * byte-offset fields that decode it, so there's no separate window to open.
  *
- * Always reads whichever file is currently in TraceMonitor's input (or
- * output) file field, via fileHintSupplier - there's no file picker or
- * filename label here (the Browse section above already shows the chosen
- * file), and no "Load Headers" button either: TraceMonitor calls
- * reloadIfFileSet() automatically whenever the relevant file field or format
- * combo changes, so this panel just reflects whatever's currently selected.
+ * Always reads whichever file its fileHintSupplier currently points at - there's
+ * no file picker or filename label here (the Browse section above already
+ * shows the chosen file), and no "Load Headers" button either: TraceMonitor
+ * calls reloadIfFileSet() automatically whenever the relevant file field or
+ * format combo changes, so this panel just reflects whatever's currently
+ * selected. The Input tab's instance is seeded from the input file field;
+ * the Output tab's instance is ALSO seeded from the input file(s) (see
+ * TraceMonitor's construction of outputSegySettingsPanel), not the output
+ * file field - the point of this preview is to show what's about to be
+ * written, which should never depend on whatever might already exist on
+ * disk at the chosen output path from an earlier run.
  *
  * showMirroredPreview() lets another instance's already-loaded result be
  * displayed here without doing its own file read - used so that reloading
@@ -134,8 +140,13 @@ public class SegyHeaderPreviewPanel extends JPanel
         }
     }
 
-    /** replaces the textual header area's content programmatically, without counting it as a user edit */
-    private void setTextualHeaderDefault(String displayText, byte[] rawBytes)
+    /**
+     * Replaces the textual header area's content programmatically, without counting it as a user
+     * edit - public so TraceMonitor can populate the output tab's default for non-SEG-Y input (see
+     * HeaderSchema.describeAsTextualHeaderEbcdic()), the same way showMirroredPreview() already does
+     * for SEG-Y input.
+     */
+    public void setTextualHeaderDefault(String displayText, byte[] rawBytes)
     {
         suppressEditTracking = true;
         textualHeaderArea.setText(displayText);
@@ -146,18 +157,21 @@ public class SegyHeaderPreviewPanel extends JPanel
     }
 
     /**
-     * The textual header bytes that should actually be written: the user's edited text
-     * (re-encoded to bytes, with the display-only line breaks stripped back out) if
-     * they've changed the text area since it was last set programmatically; otherwise
-     * the exact raw bytes of whatever default was loaded/mirrored in. Returns null if
-     * nothing has been loaded/mirrored here yet and the user hasn't typed anything.
+     * The textual header bytes that should actually be written: the user's edited text, EBCDIC-
+     * encoded (via SegyEbcdic, matching the SEG-Y standard's own convention - a third-party reader
+     * expecting EBCDIC will otherwise silently misread hand-edited text that got encoded as plain
+     * ASCII/platform-default bytes instead) and sized to exactly config.textualHeaderBytes, if
+     * they've changed the text area since it was last set programmatically; otherwise the exact raw
+     * bytes of whatever default was loaded/mirrored/generated in (already correctly encoded whichever
+     * way its own source used - see setTextualHeaderDefault() callers). Returns null if nothing has
+     * been loaded/mirrored/generated here yet and the user hasn't typed anything.
      */
     public byte[] getEffectiveTextualHeaderRaw()
     {
         if (textualHeaderUserEdited)
         {
             String concatenated = textualHeaderArea.getText().replace("\n", "").replace("\r", "");
-            return concatenated.getBytes();
+            return SegyEbcdic.toEbcdic(concatenated, config.textualHeaderBytes);
         }
         return lastRawTextualHeaderBytes;
     }

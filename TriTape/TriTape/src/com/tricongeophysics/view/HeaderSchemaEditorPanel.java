@@ -30,10 +30,18 @@ public class HeaderSchemaEditorPanel extends JPanel
             new DefaultCellEditor(new JComboBox<HeaderFieldDef.FieldType>(HeaderFieldDef.FieldType.values())));
         table.getColumnModel().getColumn(3).setCellEditor(
             new DefaultCellEditor(new JComboBox<HeaderFieldDef.ScalarType>(HeaderFieldDef.ScalarType.values())));
+        ExtraRowShadingRenderer shadingRenderer = new ExtraRowShadingRenderer();
+        table.setDefaultRenderer(Object.class, shadingRenderer);
+        table.setDefaultRenderer(String.class, shadingRenderer);
+        table.setDefaultRenderer(Integer.class, shadingRenderer);
+        table.setDefaultRenderer(Double.class, shadingRenderer);
+        table.setDefaultRenderer(HeaderFieldDef.FieldType.class, shadingRenderer);
+        table.setDefaultRenderer(HeaderFieldDef.ScalarType.class, shadingRenderer);
         setColumnWidths();
 
-        add(new JLabel("Trace header field mapping (name, 1-based byte offset within the trace header, type, scalar, scale divisor):"),
-            BorderLayout.NORTH);
+        add(new JLabel("Trace header field mapping (name, 1-based byte offset within the trace header, type, scalar, scale divisor)."
+            + " Shaded rows are read-only fields the reader decodes dynamically (e.g. SEG-D Rev 3.1 position/timestamp blocks) -"
+            + " not editable here since no single fixed offset applies to them:"), BorderLayout.NORTH);
         add(new JScrollPane(table), BorderLayout.CENTER);
 
         JButton addButton = new JButton("Add Field");
@@ -78,5 +86,25 @@ public class HeaderSchemaEditorPanel extends JPanel
     public void setSampleTraces(SeismicTrace[] traces)
     {
         model.setSampleTraces(traces);
+    }
+
+    /** light gray background for the extra (non-schema, read-only) rows appended after model.getEditableRowCount() - see HeaderSchemaTableModel's class javadoc */
+    private class ExtraRowShadingRenderer extends javax.swing.table.DefaultTableCellRenderer
+    {
+        @Override
+        public Component getTableCellRendererComponent(JTable t, Object value, boolean isSelected, boolean hasFocus, int row, int col)
+        {
+            Component c = super.getTableCellRendererComponent(t, value, isSelected, hasFocus, row, col);
+            if (!isSelected)
+            {
+                c.setBackground(row >= model.getEditableRowCount() ? Color.LIGHT_GRAY : Color.DARK_GRAY);
+                c.setForeground(row >= model.getEditableRowCount() ? Color.black : Color.white);
+            }
+            // DefaultTableCellRenderer doesn't right-align numbers the way JTable's built-in
+            // per-class renderers do - replicate that here so numeric columns don't look worse
+            // than before now that this one renderer is registered for every column class
+            setHorizontalAlignment(value instanceof Number ? SwingConstants.RIGHT : SwingConstants.LEFT);
+            return c;
+        }
     }
 }

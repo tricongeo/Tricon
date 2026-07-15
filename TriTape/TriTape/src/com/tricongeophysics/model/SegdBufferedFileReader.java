@@ -60,17 +60,20 @@ import java.util.List;
  *     getSamplesPerTrace() before the first trace is read). Everything up
  *     through Extension #1 is decoded via the static, user-editable schema
  *     (see HeaderSchema.defaultSegdSchema()), but REC_X/REC_Y/REC_ELEV,
- *     SHOT_X/SHOT_Y/SHOT_ELEV, SHOT_VPID, and SHOT_YEAR/DAY/HOUR/MIN/
+ *     SHOT_X/SHOT_Y/SHOT_ELEV, FFID, and SHOT_YEAR/DAY/HOUR/MIN/
  *     SEC cannot be, since the Position (§6.4.7/6.4.8), VP-ID (§6.4.3), and
  *     Timestamp (§6.4.2) blocks that carry them sit after a variable-length,
  *     variable-content extension chain whose layout is NOT constant across
  *     traces or channel types - readOneTrace() instead walks that chain
  *     block-by-block, dispatching on each block's own type byte; see
  *     decodePositionAndVpFields() and decodeShotTimestamp() for the full
- *     details and the real-file evidence behind them. "aux" channel traces
+ *     details and the real-file evidence behind them. FFID comes from the
+ *     VP Identification Block's VP uuid (§6.4.3), NOT the trace header's own
+ *     "Extended file number" bytes (confirmed unused/sentinel for REV3_1 -
+ *     see HeaderSchema.defaultSegdSchema()'s comment). "aux" channel traces
  *     have a much shorter extension chain but were confirmed on a real file
  *     to still carry their own Timestamp block; they never reach a Position
- *     block at all though, so REC_/SHOT_X/Y/ELEV/SHOT_VPID simply read back
+ *     block at all though, so REC_/SHOT_X/Y/ELEV/FFID simply read back
  *     as 0.0 (unresolved) for them - expected, not an error.
  *   trace samples (thisTraceSamples * 4 bytes, per this trace's own count)
  *
@@ -403,13 +406,15 @@ public class SegdBufferedFileReader extends BufferedFileReader
         byte[] combined = allExtensions == null ? th : concat(th, allExtensions);
         List<HeaderFieldDef> fields = config.traceHeaderSchema.getFields();
         int recordFieldCount = config.version == SegdVersion.REV3_1 ? 5 : 0; //SHOT_YEAR/DAY/HOUR/MIN/SEC (field named SHOT_DAY, not SHOT_JULIAN_DAY - must match defaultSegySchema()'s name for SEG-D->SEG-Y pass-through), appended below
-        // REC_X/REC_Y/REC_ELEV, SHOT_X/SHOT_Y/SHOT_ELEV, SHOT_VPID, SHOTLINE, SHOTSTN - see
+        // REC_X/REC_Y/REC_ELEV, SHOT_X/SHOT_Y/SHOT_ELEV, FFID, SHOTLINE, SHOTSTN - see
         // decodePositionAndVpFields(); these can't be static-offset schema fields since the
         // Position/VP-ID/Source-Description blocks that carry them sit after a variable-length,
         // variable-content extension chain (see class javadoc and decodePositionAndVpFields() below),
         // so they're always appended in this fixed order/count for REV3_1 (0.0 default when
         // unresolved, e.g. aux-channel traces that never reach these blocks) so every trace in a file
-        // gets the same header set regardless of channel type.
+        // gets the same header set regardless of channel type. FFID here comes from the SERCEL VP
+        // Identification Block's VP uuid, NOT the (confirmed-unused, for REV3_1) trace header bytes
+        // 18-20 that used to feed a static-schema FFID field - see HeaderSchema.defaultSegdSchema().
         int positionFieldCount = config.version == SegdVersion.REV3_1 ? 9 : 0;
         String[] names = new String[fields.size() + recordFieldCount + positionFieldCount];
         double[] values = new double[fields.size() + recordFieldCount + positionFieldCount];
@@ -447,7 +452,7 @@ public class SegdBufferedFileReader extends BufferedFileReader
             names[i + 3] = "SHOT_X";    values[i + 3] = pos[3];
             names[i + 4] = "SHOT_Y";    values[i + 4] = pos[4];
             names[i + 5] = "SHOT_ELEV"; values[i + 5] = pos[5];
-            names[i + 6] = "SHOT_VPID"; values[i + 6] = pos[6];
+            names[i + 6] = "FFID";      values[i + 6] = pos[6];
             names[i + 7] = "SHOTLINE";  values[i + 7] = pos[7];
             names[i + 8] = "SHOTSTN";   values[i + 8] = pos[8];
         }
@@ -503,7 +508,10 @@ public class SegdBufferedFileReader extends BufferedFileReader
      * The VP-ID block's 16-byte "VP uuid" field (§6.4.3) was confirmed on a real file to be almost
      * entirely zero-padded with the meaningful VP/vibrator-point number in the low bytes (e.g. raw
      * ...00000006fd = 1789 decimal), so only the low 8 bytes are decoded, as an unsigned integer -
-     * comfortably exact as a double for any realistic VP count.
+     * comfortably exact as a double for any realistic VP count. Exposed as FFID (readOneTrace()) -
+     * the trace header's own "Extended file number" bytes (18-20, 1-based) were confirmed unused
+     * (sentinel/garbage) for REV3_1, so this VP-ID-derived value is the closest real substitute, and
+     * SEG-Y's own FFID field (byte 9) is exactly what a SEG-D->SEG-Y reformat should carry it into.
      * <p>
      * The Source Description block (§6.4.5 documents it as type 0x17, "Source Air Gun Block" -
      * confirmed on a real vibroseis file's live-channel trace that Sercel also emits it as type
@@ -516,7 +524,7 @@ public class SegdBufferedFileReader extends BufferedFileReader
      *
      * @param allExtensions this trace's full concatenated extension-block chain (may be null if the
      *                       trace has zero extension blocks, e.g. a malformed/truncated trace)
-     * @return double[9]: {REC_X, REC_Y, REC_ELEV, SHOT_X, SHOT_Y, SHOT_ELEV, SHOT_VPID, SHOTLINE,
+     * @return double[9]: {REC_X, REC_Y, REC_ELEV, SHOT_X, SHOT_Y, SHOT_ELEV, FFID, SHOTLINE,
      *         SHOTSTN}, with 0.0 in any slot that couldn't be resolved from this trace's chain (e.g.
      *         aux-channel traces, which never reach these blocks at all)
      */
@@ -555,7 +563,7 @@ public class SegdBufferedFileReader extends BufferedFileReader
             }
             else if (type == 0xBB && i + BLOCK <= allExtensions.length)
             {
-                result[6] = HeaderCodec.readInt64(allExtensions, i + 8) & Long.MAX_VALUE; //low 8 bytes of the 16-byte VP uuid; SHOT_VPID
+                result[6] = HeaderCodec.readInt64(allExtensions, i + 8) & Long.MAX_VALUE; //low 8 bytes of the 16-byte VP uuid; FFID
                 i += BLOCK;
             }
             else if ((type == 0x15 || type == 0x17) && i + BLOCK <= allExtensions.length)

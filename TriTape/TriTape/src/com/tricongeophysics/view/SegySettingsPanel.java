@@ -1,5 +1,6 @@
 package com.tricongeophysics.view;
 
+import com.tricongeophysics.SeismicTrace;
 import com.tricongeophysics.model.ConfigXmlIO;
 import com.tricongeophysics.model.SegyConfig;
 import com.tricongeophysics.model.SegyHeaderPreview;
@@ -272,6 +273,27 @@ public class SegySettingsPanel extends JPanel
     public void showMirroredPreview(SegyHeaderPreview preview, String sourceDescription)
     {
         headerPreviewPanel.showMirroredPreview(preview, sourceDescription);
+    }
+
+    /** sets the textual header area's default content programmatically (not counted as a user edit) - see SegyHeaderPreviewPanel.setTextualHeaderDefault() */
+    public void setTextualHeaderDefault(String displayText, byte[] rawBytes)
+    {
+        headerPreviewPanel.setTextualHeaderDefault(displayText, rawBytes);
+    }
+
+    /**
+     * Populates this panel's own schema table's "Trace 1/2/3" sample-value columns directly, bypassing
+     * the header-preview panel's own file-read entirely - used by TraceMonitor to preview the OUTPUT
+     * tab with real trace data read via whatever the INPUT format actually is (SEG-D or SEG-Y; the
+     * header-preview panel's own readSampleTraces() only understands SEG-Y, so it can't be reused for
+     * SEG-D input - see TraceMonitor.syncOutputSampleTracesFromInput()). The schema table looks values
+     * up by NAME (HeaderSchemaTableModel.sampleValueText() -> SeismicTrace.getHeaderValue()), the
+     * exact same mechanism SegyWriter itself uses at actual write time, so this shows precisely what
+     * each output field would actually resolve to for these traces.
+     */
+    public void setSampleTraces(SeismicTrace[] traces)
+    {
+        schemaEditor.setSampleTraces(traces);
     }
 
     /**

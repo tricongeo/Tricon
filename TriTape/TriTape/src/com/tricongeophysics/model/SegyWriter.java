@@ -13,13 +13,18 @@ import java.util.List;
  * rev 1 standard layout). When the input file was also SEG-Y, TraceMonitor
  * supplies the input's actual textual/binary header bytes via WriterConfig,
  * and this writer uses them as the starting point (see writeTextualHeader()/
- * writeBinaryHeader()) rather than generating generic defaults - the sample
- * rate, samples/trace, and format-code fields are still always overwritten
- * at this writer's own configured offsets, since those must match the
- * output's actual data regardless of what the input said. Coordinate/
- * elevation values in SeismicTrace headers are assumed already descaled (as
- * produced by SegyBufferedFileReader), so this writer always writes a scalar
- * of 1 (no re-scaling on output).
+ * writeBinaryHeader()) rather than generating generic defaults; for any other
+ * input (no equivalent header bytes exist to carry through - SEG-D has no
+ * textual header concept at all) the textual header instead documents this
+ * writer's own trace-header schema (name/offset/type per field), EBCDIC-
+ * encoded per the SEG-Y standard's own convention - see
+ * HeaderSchema.describeAsTextualHeader(). Either way, sample rate, samples/
+ * trace, and format-code fields are still always overwritten at this
+ * writer's own configured offsets, since those must match the output's
+ * actual data regardless of what the input said. Coordinate/elevation
+ * values in SeismicTrace headers are assumed already descaled (as produced
+ * by SegyBufferedFileReader), so this writer always writes a scalar of 1 (no
+ * re-scaling on output).
  */
 public class SegyWriter implements TraceWriter
 {
@@ -65,8 +70,13 @@ public class SegyWriter implements TraceWriter
      * Writes the raw textual header bytes physically read from the input file when
      * available (byte-for-byte, preserving whatever encoding - EBCDIC or ASCII - the
      * input used), padding/truncating to config.textualHeaderBytes if the lengths
-     * differ. Falls back to writerConfig.textualHeader (a plain ASCII string) when no
-     * raw bytes were supplied, e.g. for non-SEG-Y input.
+     * differ. Falls back to a generated textual header describing this writer's own
+     * trace-header schema (name/offset/type per field - see
+     * HeaderSchema.describeAsTextualHeader()) when no raw bytes were supplied - this is
+     * always the case for non-SEG-Y input (SEG-D has no equivalent header concept at
+     * all), and the generated text is encoded as EBCDIC (via SegyEbcdic), matching the
+     * SEG-Y standard's own convention for textual headers rather than writing plain
+     * ASCII bytes into a field every real SEG-Y reader will try to decode as EBCDIC.
      */
     private void writeTextualHeader(WriterConfig writerConfig) throws IOException
     {
@@ -79,9 +89,7 @@ public class SegyWriter implements TraceWriter
         }
         else
         {
-            java.util.Arrays.fill(raw, (byte) ' ');
-            byte[] textBytes = writerConfig.textualHeader.getBytes();
-            System.arraycopy(textBytes, 0, raw, 0, Math.min(textBytes.length, raw.length));
+            System.arraycopy(config.traceHeaderSchema.describeAsTextualHeaderEbcdic(config.textualHeaderBytes), 0, raw, 0, raw.length);
         }
         file.write(raw);
     }

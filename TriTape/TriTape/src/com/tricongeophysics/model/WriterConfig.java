@@ -6,9 +6,12 @@ package com.tricongeophysics.model;
  * physically read from the input file (see TraceMonitor.submitReformat(),
  * which populates these when both input and output are SEG-Y) so the output
  * file's textual/binary headers default to the input's actual content rather
- * than SegyWriter's generic fallback - textualHeader is only used as a
- * fallback when textualHeaderRaw is null (e.g. non-SEG-Y input, or the input
- * headers couldn't be read).
+ * than SegyWriter's generic fallback. textualHeader (a plain string) is kept
+ * for backward compatibility but is NOT used by SegyWriter's own fallback
+ * anymore - when textualHeaderRaw is null (e.g. non-SEG-Y input, which has no
+ * equivalent header concept at all, or the input headers couldn't be read),
+ * SegyWriter instead generates and EBCDIC-encodes a textual header describing
+ * its own trace-header schema - see HeaderSchema.describeAsTextualHeader().
  */
 public class WriterConfig
 {

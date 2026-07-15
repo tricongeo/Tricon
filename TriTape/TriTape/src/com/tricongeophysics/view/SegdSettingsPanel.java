@@ -64,6 +64,8 @@ public class SegdSettingsPanel extends JPanel
 
     private final CardLayout versionCardLayout = new CardLayout();
     private final JPanel versionCards = new JPanel(versionCardLayout);
+    private final JPanel advancedContent; //fields + versionCards, shown in a pop-up (see showAdvancedDialog()) rather than inline
+    private JDialog advancedDialog; //built lazily on first "Advanced..." click, once this panel has a real Window ancestor
 
     public SegdSettingsPanel(SegdConfig config)
     {
@@ -75,7 +77,7 @@ public class SegdSettingsPanel extends JPanel
         super(new BorderLayout(4, 4));
         this.config = config;
         this.schemaEditor = new HeaderSchemaEditorPanel(config.traceHeaderSchema);
-        this.headerPreviewPanel = new SegdHeaderPreviewPanel(config, fileHintSupplier);
+        this.headerPreviewPanel = new SegdHeaderPreviewPanel(config, fileHintSupplier, traces -> schemaEditor.setSampleTraces(traces));
 
         traceHeaderBytes = boundSpinner(config.traceHeaderBytes, v -> config.traceHeaderBytes = v, false);
         channelSetsOffset = boundSpinner(config.channelSetsPerScanTypeByteOffset, v -> config.channelSetsPerScanTypeByteOffset = v, true);
@@ -93,13 +95,17 @@ public class SegdSettingsPanel extends JPanel
         rev3TraceHeaderExtCountOffset = boundSpinner(config.rev3TraceHeaderExtensionCountByteOffset, v -> config.rev3TraceHeaderExtensionCountByteOffset = v, true);
         rev3NumSamplesOffset = boundSpinner(config.rev3NumSamplesByteOffsetInTraceHeaderExt1, v -> config.rev3NumSamplesByteOffsetInTraceHeaderExt1 = v, true);
 
-        JButton saveButton = new JButton("Save Settings...");
+        JButton saveButton = new JButton("Save...");
         saveButton.addActionListener(e -> saveSettings());
-        JButton loadButton = new JButton("Load Settings...");
+        JButton loadButton = new JButton("Load...");
         loadButton.addActionListener(e -> loadSettings());
+        JButton advancedButton = new JButton("Advanced...");
+        advancedButton.setToolTipText("Byte offsets that rarely need to change (General Header block 1/2/3 field offsets)");
+        advancedButton.addActionListener(e -> showAdvancedDialog());
         JPanel saveLoadRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
         saveLoadRow.add(saveButton);
         saveLoadRow.add(loadButton);
+        saveLoadRow.add(advancedButton);
 
         JPanel versionRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
         versionRow.add(new JLabel("SEG-D version:"));
@@ -142,13 +148,17 @@ public class SegdSettingsPanel extends JPanel
 
         versionCardLayout.show(versionCards, config.version.name());
 
+        // these panels rarely need to change day-to-day, so they live in the "Advanced..." pop-up
+        // (showAdvancedDialog()) instead of taking up space in the main panel; versionCards keeps
+        // switching between rev1Rev2Panel/rev3Panel via the version combo (which stays in the main
+        // panel) exactly as before, it's just not inline anymore
+        advancedContent = new JPanel(new BorderLayout(4, 4));
+        advancedContent.add(fields, BorderLayout.NORTH);
+        advancedContent.add(versionCards, BorderLayout.CENTER);
+
         JPanel fieldsAndButtons = new JPanel(new BorderLayout(4, 4));
         fieldsAndButtons.add(saveLoadRow, BorderLayout.NORTH);
-        JPanel fieldsMiddle = new JPanel(new BorderLayout(4, 4));
-        fieldsMiddle.add(versionRow, BorderLayout.NORTH);
-        fieldsMiddle.add(fields, BorderLayout.CENTER);
-        fieldsMiddle.add(versionCards, BorderLayout.SOUTH);
-        fieldsAndButtons.add(fieldsMiddle, BorderLayout.CENTER);
+        fieldsAndButtons.add(versionRow, BorderLayout.CENTER);
 
         JPanel left = new JPanel(new BorderLayout(4, 4));
         left.add(fieldsAndButtons, BorderLayout.NORTH);
@@ -159,6 +169,30 @@ public class SegdSettingsPanel extends JPanel
         split.setDividerLocation(360);
 
         add(split, BorderLayout.CENTER);
+    }
+
+    /**
+     * Builds (once, lazily - needs a real Window ancestor, which this panel doesn't have yet at
+     * construction time) and shows the modeless "Advanced" dialog containing the byte-offset fields
+     * panel plus whichever version-specific card (Rev 1/2 or Rev 3.1) is currently selected -
+     * versionCards keeps responding to the version combo (still in the main panel) the same way it
+     * always did, it's just not inline in the main panel anymore. Modeless so it can be left open
+     * alongside the rest of the UI; edits still write straight through to the SegdConfig via the same
+     * spinners/listeners as before.
+     */
+    private void showAdvancedDialog()
+    {
+        if (advancedDialog == null)
+        {
+            Window owner = SwingUtilities.getWindowAncestor(this);
+            advancedDialog = new JDialog(owner, "Advanced SEG-D byte offsets", Dialog.ModalityType.MODELESS);
+            advancedDialog.setLayout(new BorderLayout());
+            advancedDialog.add(advancedContent, BorderLayout.CENTER);
+            advancedDialog.pack();
+            advancedDialog.setLocationRelativeTo(this);
+        }
+        advancedDialog.setVisible(true);
+        advancedDialog.toFront();
     }
 
     private void saveSettings()
@@ -258,6 +292,18 @@ public class SegdSettingsPanel extends JPanel
     public void commitEdits()
     {
         schemaEditor.commitEdits();
+    }
+
+    /**
+     * Re-reads the header preview for whatever file is currently in the bound file field - called by
+     * TraceMonitor whenever that file field changes, since there's no "Load Headers" button anymore
+     * to trigger this manually. No-op if the file field is currently empty. (Version changes are
+     * already handled internally by versionCombo's own listener above, which calls
+     * headerPreviewPanel.reloadIfFileSet() directly.)
+     */
+    public void reloadHeaderPreview()
+    {
+        headerPreviewPanel.reloadIfFileSet();
     }
 
 	public void setVersion(SegdVersion version) {
