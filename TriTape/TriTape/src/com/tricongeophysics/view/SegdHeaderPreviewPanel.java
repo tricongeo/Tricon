@@ -141,6 +141,21 @@ public class SegdHeaderPreviewPanel extends JPanel
                     sb.append(" the manual's byte 25-28 field by hand if needed.)\n");
                 }
             }
+            else if (config.version == SegdVersion.REV2_1)
+            {
+                sb.append("\n--- Rev 2.1 (SmartSolo, from GH1) ---\n");
+                sb.append("Extended header blocks (GH1, count of 32-byte blocks): ").append(preview.extendedHeaderBlocks).append('\n');
+                sb.append("External header blocks (GH1, count of 32-byte blocks): ").append(preview.externalHeaderBlocks).append('\n');
+                sb.append("Computed first trace header offset: ").append(preview.headerSizeOffset).append('\n');
+                sb.append("First trace: extension block count: ").append(preview.firstTraceExtensionCount).append('\n');
+                sb.append("First trace: num samples (from Ext #1): ").append(preview.firstTraceNumSamples).append('\n');
+                if (preview.firstTraceHeaderRaw == null)
+                {
+                    sb.append("\n(Couldn't reach the first trace - the computed offset is likely wrong for\n");
+                    sb.append(" this file. Compare the channel-set-count/extended-header-length/external-\n");
+                    sb.append(" header-length byte offsets above against the manual by hand if needed.)\n");
+                }
+            }
             else
             {
                 sb.append("\n--- Rev 1/2 (from GHB2) ---\n");

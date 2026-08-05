@@ -60,12 +60,19 @@ public class SegdSettingsPanel extends JPanel
     private final JSpinner rev3HeaderSizeOffset;
     private final JSpinner rev3TraceHeaderExtCountOffset;
     private final JSpinner rev3NumSamplesOffset;
+    private final JSpinner rev21ChannelSetsOffset;
+    private final JSpinner rev21BaseScanIntervalOffset;
+    private final JSpinner rev21ExtendedHeaderLengthOffset;
+    private final JSpinner rev21ExternalHeaderLengthOffset;
+    private final JSpinner rev21TraceHeaderExtCountOffset;
+    private final JSpinner rev21NumSamplesOffset;
     private final HeaderSchemaEditorPanel schemaEditor;
 
     private final CardLayout versionCardLayout = new CardLayout();
     private final JPanel versionCards = new JPanel(versionCardLayout);
     private final JPanel advancedContent; //fields + versionCards, shown in a pop-up (see showAdvancedDialog()) rather than inline
     private JDialog advancedDialog; //built lazily on first "Advanced..." click, once this panel has a real Window ancestor
+    private final Runnable onVersionChanged; //fires (in addition to the header-preview reload below) whenever the version combo changes - see TraceMonitor's wiring
 
     public SegdSettingsPanel(SegdConfig config)
     {
@@ -74,8 +81,27 @@ public class SegdSettingsPanel extends JPanel
 
     public SegdSettingsPanel(SegdConfig config, Supplier<String> fileHintSupplier)
     {
+        this(config, fileHintSupplier, () -> { });
+    }
+
+    /**
+     * @param onVersionChanged fires whenever the SEG-D version combo actually changes (in addition to
+     *                          this panel's own header-preview reload) - critical for TraceMonitor to
+     *                          wire up, since a version change is just as impactful as a format change
+     *                          to what a downstream OUTPUT tab's sample-value preview would show, but
+     *                          (unlike the format combo) nothing else here re-triggers that resync on
+     *                          its own. Confirmed as a real bug: the OUTPUT tab's schema preview could
+     *                          get stuck showing values decoded under the PREVIOUS version (e.g. still
+     *                          REV1_REV2's generic offsets misapplied to a Rev 2.1 file) if the version
+     *                          is changed after the input file is already set, since nothing was
+     *                          calling back out to TraceMonitor.syncOutputSegyDefaultsFromInput() (or
+     *                          equivalent) on a pure version switch before this was added.
+     */
+    public SegdSettingsPanel(SegdConfig config, Supplier<String> fileHintSupplier, Runnable onVersionChanged)
+    {
         super(new BorderLayout(4, 4));
         this.config = config;
+        this.onVersionChanged = onVersionChanged == null ? () -> { } : onVersionChanged;
         this.schemaEditor = new HeaderSchemaEditorPanel(config.traceHeaderSchema);
         this.headerPreviewPanel = new SegdHeaderPreviewPanel(config, fileHintSupplier, traces -> schemaEditor.setSampleTraces(traces));
 
@@ -94,6 +120,12 @@ public class SegdSettingsPanel extends JPanel
         rev3HeaderSizeOffset = boundSpinner(config.rev3HeaderSizeByteOffsetInHeader3, v -> config.rev3HeaderSizeByteOffsetInHeader3 = v, true);
         rev3TraceHeaderExtCountOffset = boundSpinner(config.rev3TraceHeaderExtensionCountByteOffset, v -> config.rev3TraceHeaderExtensionCountByteOffset = v, true);
         rev3NumSamplesOffset = boundSpinner(config.rev3NumSamplesByteOffsetInTraceHeaderExt1, v -> config.rev3NumSamplesByteOffsetInTraceHeaderExt1 = v, true);
+        rev21ChannelSetsOffset = boundSpinner(config.rev21ChannelSetsPerScanTypeByteOffset, v -> config.rev21ChannelSetsPerScanTypeByteOffset = v, true);
+        rev21BaseScanIntervalOffset = boundSpinner(config.rev21BaseScanIntervalByteOffset, v -> config.rev21BaseScanIntervalByteOffset = v, true);
+        rev21ExtendedHeaderLengthOffset = boundSpinner(config.rev21ExtendedHeaderLengthByteOffset, v -> config.rev21ExtendedHeaderLengthByteOffset = v, true);
+        rev21ExternalHeaderLengthOffset = boundSpinner(config.rev21ExternalHeaderLengthByteOffset, v -> config.rev21ExternalHeaderLengthByteOffset = v, true);
+        rev21TraceHeaderExtCountOffset = boundSpinner(config.rev21TraceHeaderExtensionCountByteOffset, v -> config.rev21TraceHeaderExtensionCountByteOffset = v, true);
+        rev21NumSamplesOffset = boundSpinner(config.rev21NumSamplesByteOffsetInTraceHeaderExt1, v -> config.rev21NumSamplesByteOffsetInTraceHeaderExt1 = v, true);
 
         JButton saveButton = new JButton("Save...");
         saveButton.addActionListener(e -> saveSettings());
@@ -116,6 +148,7 @@ public class SegdSettingsPanel extends JPanel
             config.version = selected;
             versionCardLayout.show(versionCards, selected.name());
             headerPreviewPanel.reloadIfFileSet();
+            onVersionChanged.run();
         });
         versionRow.add(versionCombo);
 
@@ -145,6 +178,17 @@ public class SegdSettingsPanel extends JPanel
         addRow(rev3Panel, "Trace header: extension count offset:", rev3TraceHeaderExtCountOffset);
         addRow(rev3Panel, "Trace hdr ext. #1: num samples offset:", rev3NumSamplesOffset);
         versionCards.add(rev3Panel, SegdVersion.REV3_1.name());
+
+        JPanel rev21Panel = new JPanel(new GridLayout(0, 2, 4, 4));
+        rev21Panel.setBorder(BorderFactory.createTitledBorder(
+            "Rev 2.1 (SmartSolo): General Header block 1 + trace header offsets"));
+        addRow(rev21Panel, "GH1: Channel sets/scan type offset (BCD):", rev21ChannelSetsOffset);
+        addRow(rev21Panel, "GH1: Base scan interval offset:", rev21BaseScanIntervalOffset);
+        addRow(rev21Panel, "GH1: Extended header length offset (BCD, x32 bytes):", rev21ExtendedHeaderLengthOffset);
+        addRow(rev21Panel, "GH1: External header length offset (BCD, x32 bytes):", rev21ExternalHeaderLengthOffset);
+        addRow(rev21Panel, "Trace header: extension count offset:", rev21TraceHeaderExtCountOffset);
+        addRow(rev21Panel, "Trace hdr ext. #1: num samples offset:", rev21NumSamplesOffset);
+        versionCards.add(rev21Panel, SegdVersion.REV2_1.name());
 
         versionCardLayout.show(versionCards, config.version.name());
 
@@ -285,6 +329,12 @@ public class SegdSettingsPanel extends JPanel
         rev3HeaderSizeOffset.setValue(config.rev3HeaderSizeByteOffsetInHeader3 + 1);
         rev3TraceHeaderExtCountOffset.setValue(config.rev3TraceHeaderExtensionCountByteOffset + 1);
         rev3NumSamplesOffset.setValue(config.rev3NumSamplesByteOffsetInTraceHeaderExt1 + 1);
+        rev21ChannelSetsOffset.setValue(config.rev21ChannelSetsPerScanTypeByteOffset + 1);
+        rev21BaseScanIntervalOffset.setValue(config.rev21BaseScanIntervalByteOffset + 1);
+        rev21ExtendedHeaderLengthOffset.setValue(config.rev21ExtendedHeaderLengthByteOffset + 1);
+        rev21ExternalHeaderLengthOffset.setValue(config.rev21ExternalHeaderLengthByteOffset + 1);
+        rev21TraceHeaderExtCountOffset.setValue(config.rev21TraceHeaderExtensionCountByteOffset + 1);
+        rev21NumSamplesOffset.setValue(config.rev21NumSamplesByteOffsetInTraceHeaderExt1 + 1);
         schemaEditor.refresh();
     }
 

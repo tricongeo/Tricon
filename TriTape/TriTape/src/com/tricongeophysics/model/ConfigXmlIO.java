@@ -122,6 +122,12 @@ public final class ConfigXmlIO
             appendOffset(doc, root, "rev3HeaderSizeByteOffsetInHeader3", config.rev3HeaderSizeByteOffsetInHeader3);
             appendOffset(doc, root, "rev3TraceHeaderExtensionCountByteOffset", config.rev3TraceHeaderExtensionCountByteOffset);
             appendOffset(doc, root, "rev3NumSamplesByteOffsetInTraceHeaderExt1", config.rev3NumSamplesByteOffsetInTraceHeaderExt1);
+            appendOffset(doc, root, "rev21ChannelSetsPerScanTypeByteOffset", config.rev21ChannelSetsPerScanTypeByteOffset);
+            appendOffset(doc, root, "rev21BaseScanIntervalByteOffset", config.rev21BaseScanIntervalByteOffset);
+            appendOffset(doc, root, "rev21ExtendedHeaderLengthByteOffset", config.rev21ExtendedHeaderLengthByteOffset);
+            appendOffset(doc, root, "rev21ExternalHeaderLengthByteOffset", config.rev21ExternalHeaderLengthByteOffset);
+            appendOffset(doc, root, "rev21TraceHeaderExtensionCountByteOffset", config.rev21TraceHeaderExtensionCountByteOffset);
+            appendOffset(doc, root, "rev21NumSamplesByteOffsetInTraceHeaderExt1", config.rev21NumSamplesByteOffsetInTraceHeaderExt1);
             appendOffset(doc, root, "samplesFieldByteOffsetInChannelSetDescriptor", config.samplesFieldByteOffsetInChannelSetDescriptor);
             appendOffset(doc, root, "recordYearByteOffset", config.recordYearByteOffset);
             appendOffset(doc, root, "recordJulianDayByteOffset", config.recordJulianDayByteOffset);
@@ -163,6 +169,12 @@ public final class ConfigXmlIO
             config.rev3HeaderSizeByteOffsetInHeader3 = readOffset(root, "rev3HeaderSizeByteOffsetInHeader3", config.rev3HeaderSizeByteOffsetInHeader3);
             config.rev3TraceHeaderExtensionCountByteOffset = readOffset(root, "rev3TraceHeaderExtensionCountByteOffset", config.rev3TraceHeaderExtensionCountByteOffset);
             config.rev3NumSamplesByteOffsetInTraceHeaderExt1 = readOffset(root, "rev3NumSamplesByteOffsetInTraceHeaderExt1", config.rev3NumSamplesByteOffsetInTraceHeaderExt1);
+            config.rev21ChannelSetsPerScanTypeByteOffset = readOffset(root, "rev21ChannelSetsPerScanTypeByteOffset", config.rev21ChannelSetsPerScanTypeByteOffset);
+            config.rev21BaseScanIntervalByteOffset = readOffset(root, "rev21BaseScanIntervalByteOffset", config.rev21BaseScanIntervalByteOffset);
+            config.rev21ExtendedHeaderLengthByteOffset = readOffset(root, "rev21ExtendedHeaderLengthByteOffset", config.rev21ExtendedHeaderLengthByteOffset);
+            config.rev21ExternalHeaderLengthByteOffset = readOffset(root, "rev21ExternalHeaderLengthByteOffset", config.rev21ExternalHeaderLengthByteOffset);
+            config.rev21TraceHeaderExtensionCountByteOffset = readOffset(root, "rev21TraceHeaderExtensionCountByteOffset", config.rev21TraceHeaderExtensionCountByteOffset);
+            config.rev21NumSamplesByteOffsetInTraceHeaderExt1 = readOffset(root, "rev21NumSamplesByteOffsetInTraceHeaderExt1", config.rev21NumSamplesByteOffsetInTraceHeaderExt1);
             config.samplesFieldByteOffsetInChannelSetDescriptor = readOffset(root, "samplesFieldByteOffsetInChannelSetDescriptor", config.samplesFieldByteOffsetInChannelSetDescriptor);
             config.recordYearByteOffset = readOffset(root, "recordYearByteOffset", config.recordYearByteOffset);
             config.recordJulianDayByteOffset = readOffset(root, "recordJulianDayByteOffset", config.recordJulianDayByteOffset);

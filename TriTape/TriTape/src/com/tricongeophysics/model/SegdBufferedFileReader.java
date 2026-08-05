@@ -77,6 +77,64 @@ import java.util.List;
  *     as 0.0 (unresolved) for them - expected, not an error.
  *   trace samples (thisTraceSamples * 4 bytes, per this trace's own count)
  *
+ * REV2_1 (SmartSolo/DTCC's SEG-D Rev 2.1 (V5) "SG" format, format code 8058 -
+ * see "SmartSolo_segd_format_Rev2.1_description"):
+ *   General Header block 1 (32 bytes) - also gives the Channel Set count
+ *     (byte 29, BCD) and the Extended/External Header block counts (bytes
+ *     31/32, BCD, each counting 32-byte blocks) directly, unlike REV1_REV2
+ *   General Header blocks 2 and 3 (32 bytes each, present per the
+ *     additional-block nibble in block 1) - skipped unread; nothing this
+ *     reader needs isn't already in General Header block 1
+ *   Channel Set Descriptor blocks (32 bytes each, count from above)
+ *   Extended Header block (single block, byte-31 BCD count * 32 bytes)
+ *   External Header block (single block, byte-32 BCD count * 32 bytes)
+ *   repeating Trace blocks: Demultiplexed Trace Header (20 bytes) - byte 10
+ *     (1-based) gives this trace's own extension-block count (always 7 per
+ *     the manual, but read per-trace defensively, same as REV3_1) - followed
+ *     by that many Trace Header Extension blocks (32 bytes each), then
+ *     samples. Extension Header #1 must be read (not skipped, unlike
+ *     REV1_REV2) since it carries "Number of samples per trace" (bytes 8-10,
+ *     1-based, 3-byte binary) and the Extended Receiver Line/Point number
+ *     fields (bytes 11-15/16-20, 1-based, each a 3-byte-integer + 2-byte-
+ *     fraction pair, /65536 to get the human-readable number) that
+ *     HeaderSchema.defaultSegdSchema()'s RECLINE/RECSTN fields already
+ *     decode - confirmed these are the SAME byte-offset convention Sercel's
+ *     Rev 3.1 uses in its own Extension Header #1, so no new schema fields
+ *     were needed for RECLINE/RECSTN, just reading (rather than skipping)
+ *     the extension block they live in. Unlike REV3_1, Rev 2.1's Extension
+ *     Headers #2-#7 are all fixed-position/fully documented (TB GPS time,
+ *     FFID, receiver/source position X/Y/Z, IGU GPS, unit info) rather than
+ *     a variable dynamic chain - not yet wired into the schema/appended
+ *     fields here since only RECLINE/RECSTN were requested initially, but a
+ *     straightforward follow-up (fixed HeaderFieldDef offsets, no block-
+ *     type-byte walking needed) if those fields are wanted later. UPDATE:
+ *     CHAN (Extension Header #2, "Extended Trace Number", bytes 29-32
+ *     1-based), REC_X/REC_Y/REC_ELEV/SHOT_X/SHOT_Y/SHOT_ELEV (Extension
+ *     Header #3, Receiver/Source file Easting/Northing/Elevation, bytes
+ *     1-4/5-8/9-12/13-16/17-20/21-24 1-based - the manual's own elevation
+ *     byte range overlaps the Northing field's, corrected to a
+ *     non-overlapping byte 9 start), and SHOTLINE/SHOTSTN (General Header
+ *     block 3's "Source Line/Point Number" integer parts, bytes 4-6/9-11
+ *     1-based, record-level - NOT the same value as RECLINE/RECSTN, which
+ *     are per-trace from Extension #1; confirmed on a real file these
+ *     differ by 1) are now decoded too - see decodeRev21ExtraFields() and
+ *     rev21ShotLine/rev21ShotStn. Confirmed against a real file: CHAN read
+ *     back as 1 (plausible). REC_X read back as the raw 0x80000000
+ *     sentinel ("not populated" - same convention used elsewhere in this
+ *     format, so treated as 0.0/unresolved); REC_Y/SHOT_X/SHOT_Y on that
+ *     same trace read back as large-but-plausible values once interpreted
+ *     as hundredths of a US survey foot rather than centimeters (per the
+ *     manual) - consistent with State Plane coordinates, a common
+ *     convention for onshore US surveys; the /100 divisor is unchanged
+ *     either way, only the resulting unit label changed from meters to
+ *     feet.
+ *   All general-header and trace-header-extension offsets above were cross-
+ *   checked against a real file: the computed byte offset to the first
+ *   trace header landed exactly on a valid Demux Trace Header (extension
+ *   count = 7, matching the manual's fixed value), and that trace header's
+ *   own "Extended file number" (bytes 18-20) exactly matched General Header
+ *   block 1's file number - see doOpenRev21()'s javadoc for the full chain.
+ *
  * SEG-D varies significantly by revision and recording-system vendor, and
  * Sercel's Rev 3.1 implementation itself goes well beyond what's modeled
  * above (its own general-header blocks for vessel/job/line identification,
@@ -111,6 +169,14 @@ public class SegdBufferedFileReader extends BufferedFileReader
     private int recordHour;
     private int recordMinute;
     private int recordSecond;
+    // REV2_1 only: record-level (General Header block 3), read once at file-open in doOpenRev21() -
+    // same "Source Line/Point Number" integer-part fields the person asked for by exact byte range
+    // (bytes 4-6 / 9-11, 1-based); NOT the same value as RECLINE/RECSTN (which are per-trace, from
+    // Extension Header #1) - confirmed against a real file these differ by 1 (GH3's Source Point
+    // Number read 102 vs Extension #1's Receiver Point of 101), so this is knowingly a distinct,
+    // separately-sourced field despite the conceptual overlap, per the person's explicit request.
+    private double rev21ShotLine;
+    private double rev21ShotStn;
 
     public SegdBufferedFileReader(String filename)
     {
@@ -141,9 +207,16 @@ public class SegdBufferedFileReader extends BufferedFileReader
 
             int fileNumber = HeaderCodec.bcdToInt(gh1, config.fileNumberByteOffset, 2);
             int formatCode = HeaderCodec.bcdToInt(gh1, config.formatCodeByteOffset, 2);
-            int channelSets = gh1[config.channelSetsPerScanTypeByteOffset] & 0xFF;
             int additionalNibble = (gh1[config.additionalGeneralHeaderBlocksByteOffset] >> 4) & 0x0F;
-            int baseScanInterval = gh1[config.baseScanIntervalByteOffset] & 0xFF;
+
+            // Rev 2.1's equivalent-looking fields are BCD (not raw binary) and live at different GH1
+            // offsets than the REV1_REV2 generic assumption - see SegdConfig's rev21... field javadocs.
+            int channelSets = config.version == SegdVersion.REV2_1
+                ? HeaderCodec.bcdToInt(gh1, config.rev21ChannelSetsPerScanTypeByteOffset, 1)
+                : (gh1[config.channelSetsPerScanTypeByteOffset] & 0xFF);
+            int baseScanInterval = config.version == SegdVersion.REV2_1
+                ? (gh1[config.rev21BaseScanIntervalByteOffset] & 0xFF)
+                : (gh1[config.baseScanIntervalByteOffset] & 0xFF);
             int sampleRateFromGh1 = (int) Math.round((baseScanInterval / 16.0) * 1000.0);
 
             byte[] gh2 = null;
@@ -158,7 +231,40 @@ public class SegdBufferedFileReader extends BufferedFileReader
             int firstTraceExtCount = -1;
             int firstTraceNumSamples = -1;
 
-            if (additionalNibble >= 1 && f.length() >= f.getFilePointer() + config.generalHeaderBlockBytes)
+            if (config.version == SegdVersion.REV2_1)
+            {
+                // Rev 2.1: GH2/GH3 (if present) are just skipped-but-shown - everything needed
+                // (channel sets, Extended/External Header block counts) is already in GH1 itself.
+                // See doOpenRev21()'s javadoc for the full, real-file-confirmed offset chain below.
+                if (additionalNibble >= 1 && f.length() >= f.getFilePointer() + config.generalHeaderBlockBytes)
+                {
+                    gh2 = new byte[config.generalHeaderBlockBytes];
+                    f.readFully(gh2);
+                }
+                if (additionalNibble >= 2 && f.length() >= f.getFilePointer() + config.generalHeaderBlockBytes)
+                {
+                    gh3 = new byte[config.generalHeaderBlockBytes];
+                    f.readFully(gh3);
+                }
+                for (int i = 2; i < additionalNibble; i++)
+                {
+                    if (f.length() < f.getFilePointer() + config.generalHeaderBlockBytes) break;
+                    f.skipBytes(config.generalHeaderBlockBytes);
+                }
+
+                extendedHeaderBlocks = HeaderCodec.bcdToInt(gh1, config.rev21ExtendedHeaderLengthByteOffset, 1);
+                externalHeaderBlocks = HeaderCodec.bcdToInt(gh1, config.rev21ExternalHeaderLengthByteOffset, 1);
+                long afterHeaderBlocks = f.getFilePointer()
+                    + (long) Math.max(1, channelSets) * config.generalHeaderBlockBytes
+                    + (long) extendedHeaderBlocks * config.generalHeaderBlockBytes
+                    + (long) externalHeaderBlocks * config.generalHeaderBlockBytes;
+                if (afterHeaderBlocks <= f.length())
+                {
+                    f.seek(afterHeaderBlocks);
+                    headerSizeOffset = afterHeaderBlocks;
+                }
+            }
+            else if (additionalNibble >= 1 && f.length() >= f.getFilePointer() + config.generalHeaderBlockBytes)
             {
                 gh2 = new byte[config.generalHeaderBlockBytes];
                 f.readFully(gh2);
@@ -184,18 +290,25 @@ public class SegdBufferedFileReader extends BufferedFileReader
                 }
             }
 
-            if (config.version == SegdVersion.REV3_1 && headerSizeOffset > 0
-                && headerSizeOffset + config.traceHeaderBytes + config.traceHeaderExtensionBytes <= f.length())
+            boolean atTraceHeader = (config.version == SegdVersion.REV3_1 || config.version == SegdVersion.REV2_1)
+                && headerSizeOffset > 0
+                && headerSizeOffset + config.traceHeaderBytes + config.traceHeaderExtensionBytes <= f.length();
+            if (atTraceHeader)
             {
                 f.seek(headerSizeOffset);
                 firstTraceHeader = new byte[config.traceHeaderBytes];
                 f.readFully(firstTraceHeader);
-                firstTraceExtCount = firstTraceHeader[config.rev3TraceHeaderExtensionCountByteOffset] & 0xFF;
+                int extCountOffset = config.version == SegdVersion.REV2_1
+                    ? config.rev21TraceHeaderExtensionCountByteOffset
+                    : config.rev3TraceHeaderExtensionCountByteOffset;
+                firstTraceExtCount = firstTraceHeader[extCountOffset] & 0xFF;
                 if (firstTraceExtCount > 0)
                 {
                     firstTraceExt1 = new byte[config.traceHeaderExtensionBytes];
                     f.readFully(firstTraceExt1);
-                    firstTraceNumSamples = SegyBufferedFileReader.readInt(firstTraceExt1, config.rev3NumSamplesByteOffsetInTraceHeaderExt1);
+                    firstTraceNumSamples = config.version == SegdVersion.REV2_1
+                        ? readUInt24(firstTraceExt1, config.rev21NumSamplesByteOffsetInTraceHeaderExt1)
+                        : SegyBufferedFileReader.readInt(firstTraceExt1, config.rev3NumSamplesByteOffsetInTraceHeaderExt1);
                 }
             }
 
@@ -219,6 +332,10 @@ public class SegdBufferedFileReader extends BufferedFileReader
         if (config.version == SegdVersion.REV3_1)
         {
             doOpenRev3();
+        }
+        else if (config.version == SegdVersion.REV2_1)
+        {
+            doOpenRev21(gh1);
         }
         else
         {
@@ -289,6 +406,73 @@ public class SegdBufferedFileReader extends BufferedFileReader
                 samplesPerTrace = ((csd[off] & 0xFF) << 8) | (csd[off + 1] & 0xFF);
             }
         }
+    }
+
+    /**
+     * REV2_1 (SmartSolo/DTCC): General Header block 1 gives everything needed to find the first
+     * trace header directly - unlike REV1_REV2's generic assumption, this vendor's channel-set
+     * count, Extended Header length, and External Header length all live in GH1 itself (bytes 29,
+     * 31, 32 1-based respectively - the latter two BCD-encoded counts of 32-byte blocks, e.g. a BCD
+     * value of 32 means 32 blocks = 1024 bytes), so General Header blocks 2/3 (present per the
+     * additional-block nibble, same as REV1_REV2) are simply skipped rather than parsed - nothing
+     * this reader needs (file/format code, the record timestamp, revision number) isn't already in
+     * GH1 or duplicated there. Confirmed against a real file: GH1(32) + GH2+GH3(64, from a nibble
+     * of 2) + 16 Channel Set Descriptor blocks (512, from BCD 16) + Extended Header (1024, from BCD
+     * 32) + External Header (1024, from BCD 32) = byte offset 2656 landed exactly on a valid
+     * Demultiplexed Trace Header (extension count byte = 7, matching the manual's fixed value, and
+     * the extended file number in its Extension Header #1 exactly matched GH1's own BCD file
+     * number) - i.e. every count field below was independently cross-checked via where they landed.
+     * samplesPerTrace is read from the first trace's own Extension Header #1 (3-byte binary field,
+     * "Number of samples per trace") purely as an initial estimate, same as REV3_1's doOpenRev3();
+     * actual reads always re-derive each trace's own sample count fresh in readOneTrace().
+     */
+    private void doOpenRev21(byte[] gh1) throws IOException
+    {
+        rev21ShotLine = 0;
+        rev21ShotStn = 0;
+        if (additionalGeneralHeaderBlocks >= 1)
+        {
+            file.skipBytes(config.generalHeaderBlockBytes); //General Header block 2 - not needed for anything read here
+            if (additionalGeneralHeaderBlocks >= 2)
+            {
+                // General Header block 3: "Source Line/Point Number" integer parts - record-level
+                // (same for every trace in the file), requested by exact byte range (4-6/9-11,
+                // 1-based) - see rev21ShotLine/rev21ShotStn field javadoc above.
+                byte[] gh3 = new byte[config.generalHeaderBlockBytes];
+                file.readFully(gh3);
+                rev21ShotLine = readUInt24(gh3, config.rev21ShotLineByteOffsetInGh3);
+                rev21ShotStn = readUInt24(gh3, config.rev21ShotStnByteOffsetInGh3);
+            }
+            for (int i = 2; i < additionalGeneralHeaderBlocks; i++)
+            {
+                file.skipBytes(config.generalHeaderBlockBytes);
+            }
+        }
+
+        int channelSets = Math.max(1, HeaderCodec.bcdToInt(gh1, config.rev21ChannelSetsPerScanTypeByteOffset, 1));
+        int extendedHeaderBlocks32ByteUnits = HeaderCodec.bcdToInt(gh1, config.rev21ExtendedHeaderLengthByteOffset, 1);
+        int externalHeaderBlocks32ByteUnits = HeaderCodec.bcdToInt(gh1, config.rev21ExternalHeaderLengthByteOffset, 1);
+
+        file.skipBytes(channelSets * config.generalHeaderBlockBytes);
+        file.skipBytes(extendedHeaderBlocks32ByteUnits * config.generalHeaderBlockBytes);
+        file.skipBytes(externalHeaderBlocks32ByteUnits * config.generalHeaderBlockBytes);
+
+        //peek the first trace's own header + Trace Header Extension #1 to learn samplesPerTrace, then rewind
+        long tracesStart = file.getFilePointer();
+        if (tracesStart + config.traceHeaderBytes + config.traceHeaderExtensionBytes <= totalBytes)
+        {
+            byte[] th = new byte[config.traceHeaderBytes];
+            file.readFully(th);
+            int extCount = th[config.rev21TraceHeaderExtensionCountByteOffset] & 0xFF;
+            if (extCount > 0)
+            {
+                byte[] ext1 = new byte[config.traceHeaderExtensionBytes];
+                file.readFully(ext1);
+                int n = readUInt24(ext1, config.rev21NumSamplesByteOffsetInTraceHeaderExt1);
+                if (n > 0) samplesPerTrace = n;
+            }
+        }
+        file.seek(tracesStart);
     }
 
     /**
@@ -371,7 +555,7 @@ public class SegdBufferedFileReader extends BufferedFileReader
         byte[] th = new byte[config.traceHeaderBytes];
         file.readFully(th);
 
-        byte[] allExtensions = null; //REV3_1: every extension block for this trace, concatenated in order
+        byte[] allExtensions = null; //REV3_1/REV2_1: every extension block for this trace, concatenated in order
         int thisTraceSamples;
         if (config.version == SegdVersion.REV3_1)
         {
@@ -389,6 +573,24 @@ public class SegdBufferedFileReader extends BufferedFileReader
                 allExtensions = new byte[extensionBlocksThisTrace * config.traceHeaderExtensionBytes];
                 file.readFully(allExtensions);
                 int n = SegyBufferedFileReader.readInt(allExtensions, config.rev3NumSamplesByteOffsetInTraceHeaderExt1);
+                if (n > 0) thisTraceSamples = n;
+            }
+        }
+        else if (config.version == SegdVersion.REV2_1)
+        {
+            // Rev 2.1 (SmartSolo): the manual documents a fixed 7 extension blocks per trace, but
+            // this is still read per-trace (byte 10, 1-based, of the trace's own Demux Trace Header)
+            // rather than hardcoded, same defensive approach as REV3_1 above. Extension Header #1
+            // must be read (not skipped) since RECLINE/RECSTN (HeaderSchema.defaultSegdSchema()) and
+            // samples-per-trace live there - confirmed against a real file (see SegdBufferedFileReader
+            // class javadoc / doOpenRev21()).
+            int extensionBlocksThisTrace = th[config.rev21TraceHeaderExtensionCountByteOffset] & 0xFF;
+            thisTraceSamples = samplesPerTrace; //fallback if there's no extension #1 to read it from
+            if (extensionBlocksThisTrace > 0)
+            {
+                allExtensions = new byte[extensionBlocksThisTrace * config.traceHeaderExtensionBytes];
+                file.readFully(allExtensions);
+                int n = readUInt24(allExtensions, config.rev21NumSamplesByteOffsetInTraceHeaderExt1);
                 if (n > 0) thisTraceSamples = n;
             }
         }
@@ -416,11 +618,31 @@ public class SegdBufferedFileReader extends BufferedFileReader
         // Identification Block's VP uuid, NOT the (confirmed-unused, for REV3_1) trace header bytes
         // 18-20 that used to feed a static-schema FFID field - see HeaderSchema.defaultSegdSchema().
         int positionFieldCount = config.version == SegdVersion.REV3_1 ? 9 : 0;
-        String[] names = new String[fields.size() + recordFieldCount + positionFieldCount];
-        double[] values = new double[fields.size() + recordFieldCount + positionFieldCount];
-        for (int i = 0; i < fields.size(); i++)
+        // CHAN, REC_X, REC_Y, REC_ELEV, SHOT_X, SHOT_Y, SHOT_ELEV, SHOTLINE, SHOTSTN, FFID - see
+        // decodeRev21ExtraFields() and rev21ShotLine/rev21ShotStn. These share names with
+        // defaultSegdSchema()'s REV3_1-tuned static fields (which sit at different combined-buffer offsets, appropriate for REV3_1's differently
+        // -shaped buffer, not REV2_1's) - so those particular schema fields are filtered out below for
+        // REV2_1, to avoid a silently-wrong duplicate earlier in the names/values arrays (by-name
+        // lookups return the FIRST match - see SegyWriter.getHeaderValueByName() or equivalent).
+        int rev21FieldCount = config.version == SegdVersion.REV2_1 ? 10 : 0;
+        List<HeaderFieldDef> effectiveFields = fields;
+        if (rev21FieldCount > 0)
         {
-            HeaderFieldDef f = fields.get(i);
+            effectiveFields = new ArrayList<HeaderFieldDef>();
+            for (HeaderFieldDef fd : fields)
+            {
+                String n = fd.getName();
+                if (n.equals("CHAN") || n.equals("REC_X") || n.equals("REC_Y") || n.equals("REC_ELEV")
+                    || n.equals("SHOT_X") || n.equals("SHOT_Y") || n.equals("SHOT_ELEV")
+                    || n.equals("SHOTLINE") || n.equals("SHOTSTN") || n.equals("FFID")) continue;
+                effectiveFields.add(fd);
+            }
+        }
+        String[] names = new String[effectiveFields.size() + recordFieldCount + positionFieldCount + rev21FieldCount];
+        double[] values = new double[effectiveFields.size() + recordFieldCount + positionFieldCount + rev21FieldCount];
+        for (int i = 0; i < effectiveFields.size(); i++)
+        {
+            HeaderFieldDef f = effectiveFields.get(i);
             names[i] = f.getName();
             values[i] = (f.getByteOffset() + f.getType().byteLength <= combined.length)
                 ? HeaderCodec.decode(combined, f)
@@ -435,7 +657,7 @@ public class SegdBufferedFileReader extends BufferedFileReader
             // a genuine, distinct GPS timestamp per trace). Falls back to the record-level fields
             // only if this particular trace's chain doesn't contain a Timestamp block at all.
             int[] shotTime = decodeShotTimestamp(allExtensions);
-            int i = fields.size();
+            int i = effectiveFields.size();
             names[i] = "SHOT_YEAR";        values[i] = shotTime != null ? shotTime[0] : recordYear;
             names[i + 1] = "SHOT_DAY";      values[i + 1] = shotTime != null ? shotTime[1] : recordJulianDay;
             names[i + 2] = "SHOT_HOUR";     values[i + 2] = shotTime != null ? shotTime[2] : recordHour;
@@ -445,7 +667,7 @@ public class SegdBufferedFileReader extends BufferedFileReader
         if (positionFieldCount > 0)
         {
             double[] pos = decodePositionAndVpFields(allExtensions);
-            int i = fields.size() + recordFieldCount;
+            int i = effectiveFields.size() + recordFieldCount;
             names[i] = "REC_X";         values[i] = pos[0];
             names[i + 1] = "REC_Y";     values[i + 1] = pos[1];
             names[i + 2] = "REC_ELEV";  values[i + 2] = pos[2];
@@ -455,6 +677,21 @@ public class SegdBufferedFileReader extends BufferedFileReader
             names[i + 6] = "FFID";      values[i + 6] = pos[6];
             names[i + 7] = "SHOTLINE";  values[i + 7] = pos[7];
             names[i + 8] = "SHOTSTN";   values[i + 8] = pos[8];
+        }
+        if (rev21FieldCount > 0)
+        {
+            double[] extra = decodeRev21ExtraFields(combined);
+            int i = effectiveFields.size() + recordFieldCount + positionFieldCount;
+            names[i] = "CHAN";      values[i] = extra[0];
+            names[i + 1] = "REC_X";    values[i + 1] = extra[1];
+            names[i + 2] = "REC_Y";    values[i + 2] = extra[2];
+            names[i + 3] = "REC_ELEV"; values[i + 3] = extra[3];
+            names[i + 4] = "SHOT_X";   values[i + 4] = extra[4];
+            names[i + 5] = "SHOT_Y";   values[i + 5] = extra[5];
+            names[i + 6] = "SHOT_ELEV"; values[i + 6] = extra[6];
+            names[i + 7] = "SHOTLINE"; values[i + 7] = rev21ShotLine;
+            names[i + 8] = "SHOTSTN";  values[i + 8] = rev21ShotStn;
+            names[i + 9] = "FFID";     values[i + 9] = extra[7];
         }
 
         float[] data = new float[thisTraceSamples];
@@ -593,6 +830,83 @@ public class SegdBufferedFileReader extends BufferedFileReader
             Double.longBitsToDouble(HeaderCodec.readInt64(buf, off + 8)),
             Double.longBitsToDouble(HeaderCodec.readInt64(buf, off + 16))
         };
+    }
+
+    /**
+     * Rev 2.1 (SmartSolo) only: decodes CHAN (Extension Header #2, "Extended Trace Number", bytes
+     * 29-32 1-based), REC_X/REC_Y/REC_ELEV/SHOT_X/SHOT_Y/SHOT_ELEV (Extension Header #3,
+     * Receiver/Source file Easting/Northing/Elevation, bytes 1-4/5-8/9-12/13-16/17-20/21-24
+     * 1-based - the manual's own elevation byte range overlaps REC_Y's, corrected to a
+     * non-overlapping byte 9 start, see rev21RecElevByteOffsetInTraceHeaderExt3), and FFID (the
+     * Demux Trace Header's own plain BCD file number, bytes 1-2 1-based, section 2.2.1 - with the
+     * manual's documented fallback to the Extended file number, bytes 18-20 1-based same header,
+     * when the file number reads as the 0xFFFF "greater than 9999" sentinel) from this trace's
+     * combined buffer. Unlike REV3_1's equivalent fields, Rev 2.1's Extension Headers are fully
+     * fixed-position per the manual (no block-type-byte walking needed), so these are just fixed
+     * offsets within {@code combined} - see the config.rev21...InTraceHeaderExt2/3 fields and the
+     * class javadoc.
+     * <p>
+     * Confirmed against a real file: CHAN read back as 1 (a plausible channel number). REC_X read
+     * back as the raw sentinel 0x80000000 (INT32_MIN) - the same "not populated" convention seen
+     * elsewhere in this format - so that specific raw value is treated as unresolved (0.0) here
+     * rather than converted into a huge bogus coordinate; REC_Y/SHOT_X/SHOT_Y on that same trace
+     * read back as large-but-plausible values once interpreted as hundredths of a US survey foot
+     * rather than centimeters (see rev21RecXByteOffsetInTraceHeaderExt3's javadoc) - consistent with
+     * State Plane coordinates, a common convention for onshore US surveys.
+     *
+     * @param combined this trace's 20-byte header + all its extension blocks, concatenated
+     * @return double[8]: {CHAN, REC_X, REC_Y, REC_ELEV, SHOT_X, SHOT_Y, SHOT_ELEV, FFID} - position
+     *         fields in feet (raw hundredths-of-a-foot / 100, see above), 0.0 for any field outside
+     *         the available buffer or reading the 0x80000000 "not populated" sentinel
+     */
+    private double[] decodeRev21ExtraFields(byte[] combined)
+    {
+        double[] result = new double[8];
+        if (combined == null) return result;
+
+        int ext2Base = 20 + config.traceHeaderExtensionBytes; //Ext2 starts after the trace header (20) + Ext1
+        int chanOff = ext2Base + config.rev21ChanByteOffsetInTraceHeaderExt2;
+        if (chanOff >= 0 && chanOff + 4 <= combined.length)
+        {
+            result[0] = SegyBufferedFileReader.readInt(combined, chanOff) & 0xFFFFFFFFL;
+        }
+
+        int ext3Base = 20 + config.traceHeaderExtensionBytes * 2; //Ext3 starts after Ext1 and Ext2
+        result[1] = readRev21Coord(combined, ext3Base + config.rev21RecXByteOffsetInTraceHeaderExt3);
+        result[2] = readRev21Coord(combined, ext3Base + config.rev21RecYByteOffsetInTraceHeaderExt3);
+        result[3] = readRev21Coord(combined, ext3Base + config.rev21RecElevByteOffsetInTraceHeaderExt3);
+        result[4] = readRev21Coord(combined, ext3Base + config.rev21ShotXByteOffsetInTraceHeaderExt3);
+        result[5] = readRev21Coord(combined, ext3Base + config.rev21ShotYByteOffsetInTraceHeaderExt3);
+        result[6] = readRev21Coord(combined, ext3Base + config.rev21ShotElevByteOffsetInTraceHeaderExt3);
+
+        // FFID: plain BCD file number from the trace header itself, with the manual's own documented
+        // fallback to the Extended file number when the file number exceeds 9999 (reads as 0xFFFF).
+        int ffidOff = config.rev21FfidByteOffsetInTraceHeader;
+        if (ffidOff >= 0 && ffidOff + 2 <= combined.length)
+        {
+            boolean sentinel = (combined[ffidOff] & 0xFF) == 0xFF && (combined[ffidOff + 1] & 0xFF) == 0xFF;
+            if (sentinel)
+            {
+                int extOff = config.rev21ExtendedFileNumberByteOffsetInTraceHeader;
+                if (extOff >= 0 && extOff + 3 <= combined.length)
+                {
+                    result[7] = readUInt24(combined, extOff);
+                }
+            }
+            else
+            {
+                result[7] = HeaderCodec.bcdToInt(combined, ffidOff, 2);
+            }
+        }
+        return result;
+    }
+
+    /** reads a 4-byte signed hundredths-of-a-US-survey-foot coordinate/elevation and converts to feet; 0x80000000 (INT32_MIN) is the confirmed "not populated" sentinel, decoded as 0.0 */
+    private static double readRev21Coord(byte[] buf, int off)
+    {
+        if (off < 0 || off + 4 > buf.length) return 0.0;
+        int raw = SegyBufferedFileReader.readInt(buf, off);
+        return raw == Integer.MIN_VALUE ? 0.0 : raw / 100.0;
     }
 
     /** an unpopulated coordinate tuple reads back as IEEE-754 +Infinity (confirmed on real files) or NaN */

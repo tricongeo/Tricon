@@ -84,15 +84,28 @@ public class TraceMonitor
                 outputSegySettingsPanel.showMirroredPreview(preview, "input");
             }
         });
-        inputSegdSettingsPanel = new SegdSettingsPanel(readerSegdConfig, this::firstInputFile);
+        inputSegdSettingsPanel = new SegdSettingsPanel(readerSegdConfig, this::firstInputFile, this::syncOutputSegyDefaultsFromInput);
 
         frame = new JFrame("TriTape");
         buildUI();
         syncOutputSegyDefaultsFromInput();
-//        inputFileField.setText("/home/scott/Projects/develop/tritape/jetson_test_shots.sgy");
-        inputFileField.setText("/bdata/proc/koloma_test/data/Accel data/LinearSweep_corr/CRG_Year-2026_Jday-145_Vibro_vibro4_LN-7003_PN-2396_PI-1_SN-4774477_02-28UTC_01.segd");
+        // NOTE: order matters here. inputFileField.setText() below fires a document-change listener
+        // that immediately calls syncOutputSampleTracesFromInput() using whatever format/version are
+        // currently selected - so format and SEG-D version must be set FIRST, or that first (and,
+        // for the SEG-D version specifically, previously the ONLY) resync runs against stale/default
+        // settings (e.g. REV1_REV2's generic offsets misapplied to a Rev 2.1 file) and the OUTPUT
+        // tab's schema preview is left showing garbage decoded under the wrong version - confirmed as
+        // the actual cause of a bad FFID value shown there. (Also fixed at the structural level:
+        // SegdSettingsPanel now takes an onVersionChanged callback, wired below to
+        // syncOutputSegyDefaultsFromInput(), so this reordering isn't the only thing preventing a
+        // repeat - but keeping the natural/correct order here too, rather than relying solely on that.)
         inputFormatCombo.setSelectedItem(FileFormat.SEGD);
-        this.inputSegdSettingsPanel.setVersion(SegdVersion.REV3_1);
+        //this.inputSegdSettingsPanel.setVersion(SegdVersion.REV3_1);
+        this.inputSegdSettingsPanel.setVersion(SegdVersion.REV2_1);
+//        inputFileField.setText("/home/scott/Projects/develop/tritape/jetson_test_shots.sgy");
+        //inputFileField.setText("/bdata/proc/koloma_test/data/Accel data/LinearSweep_corr/CRG_Year-2026_Jday-145_Vibro_vibro4_LN-7003_PN-2396_PI-1_SN-4774477_02-28UTC_01.segd");
+        inputFileField.setText("/bdata/proc/KWR_Ventures/Line_1/data/00000001.00000324.00000001.00000232.segd");
+
         this.outputFileField.setText("/bdata/proc/koloma_test/test_out.sgy");
         previewButton.doClick();
     }
